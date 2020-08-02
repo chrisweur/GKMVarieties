@@ -1,5 +1,5 @@
 restart
--- Symplectic grassmannian    
+-- Symplectic Grassmannian    
  
 -- Creates the list of all 0,1 vectors of a fixed size
 vecList = k -> (
