@@ -1,4 +1,4 @@
-newPackage("EquivariantLocalizations1",
+newPackage("EquivariantLocalizations",
 	Version => "0.1",
 	Date => "August xx, 2020",
 	Authors => {
