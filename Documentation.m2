@@ -1,6 +1,6 @@
 newPackage("EquivariantLocalizations",
 	Version => "0.1",
-	Date => "August xx, 2020",
+	Date => "August 1, 2020",
 	Authors => {
 	    {Name => "Chris Eur",
        	     Email => "ceur@math.berkeley.edu",
