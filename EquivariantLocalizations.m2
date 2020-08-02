@@ -6,4 +6,3 @@ Contributors: Tim Seynnaeve, Mateusz Michalek
 
 Last update:
 ------------------------------------------------------------------------------------------*-
-

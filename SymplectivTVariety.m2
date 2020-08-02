@@ -112,11 +112,124 @@ tSymplecticFlagVariety(List,ZZ,Ring) := TVariety => (K,n,R) -> (
 	chrts = join(chrts,{L}));
     X := tVariety(pts,chrts,R);
     -- The class of O(1)
-    -- I think this is wrong I'll fix it later
     L := apply(X.points, p -> (Exps := flagToVec(p,2*n); product(#Exps, i -> 
 		 if i < n then R_i^(Exps_i) else 1/(R_(i-n)^(Exps_i)))));
     assignAmpleTKClass tKClass(X,L);
     X
 )
+
+
+
+------------------------------------------------------------------------------------ 
+--Code for 1-dimensional T-orbits
+------------------------------------------------------------------------------------ 
+
+--- 1) Symplectic variety
+
+-- Base case of SGr(k,2n)
+-- A pair of T-fixed points (I,J) lie in the boundary of a 1-dim orbit iff
+-- the following is true:
+--  i) I - J  = {i} and J - I = {j}
+-- ii) I - J = {i,j} and J - I = {k+i,k+j}
+
+
+-- More generally for a flag FGr({k_1,..,k_s},2n), the projection onto Gr(k_i,2n), denoted Pr_i,
+-- is T-equivariant. A pair of T-fixed points (I,J) lie in the boundary of a 1-dim orbit 
+-- in the *flag* iff 
+-- a) The image, (Pr_i(I), Pr_j(J)) in Gr(k_i,2n) satisfies conditions (i), (ii) above or 
+-- the Pr_i(I) = Pr_j(J)
+-- b) There is some i for which Pr_i(I) \ne Pr_i(J)
+
+
+
+-- Computing the Torus fixed points of the flag symplectic grassmannian, FSGr(K,2n)
+
+fixedPts = (K,n) -> (
+    vecL = vecList(K#-1);
+    topPtsSigned = flatten apply(subsets(n,K#-1), v -> apply(vecL, w -> pairwiseList(v,w)));
+    -- Computes the fixed points of SG(k_s;n) first:
+    topPts = apply(apply(topPtsSigned, v -> apply(v, w -> (first w) + n*(last w))), v -> {set v});
+    i = #K-2;
+    pts = topPts;
+    while i >=0 do (
+	pts = flatten apply(pts, v -> apply(subsets(toList v_0,K_i), w -> flatten join({set w}, {v})));
+	i = i - 1);
+    return pts
+    )
+
+
+-- Set of edges of the moment graph
+boundaryPts = (K,n) -> (
+    flatten apply(fixedPts(K,n), w -> (
+	    ptsAtInfinity := select(fixedPts(K,n), v -> 
+	    	all(apply(#w, u-> (
+			    setDiff := toList(v_u - w_u) - toList(w_u-v_u);
+			    (#(v_u * w_u) >= K#u-1) or (#setDiff == 2 and abs(first setDiff) == n))
+		    	), b -> b == true));
+	    apply(delete(w,ptsAtInfinity), v -> (w,v))
+	    )    
+    	)
+    )
+
+-- Hash table of characters (TBD)
+
+
+-- Test
+netList boundaryPts({1,2},2)
+
+
+
+
+-- 2) Standard flag variety.
+
+-- Base case of Gr(k,2n)
+-- A pair of T-fixed points (I,J) lie in the boundary of a 1-dim orbit iff
+-- the following is true:
+--  i) I - J  = {i} and J - I = {j}
+
+-- The general case is then similar to 1)
+
+-- The set of edges of the moment graph 
+fixedPts = (K,n) -> (unique permutations sum(K/(k -> toList(k:1) | toList(n-k:0))))/vecToFlag
+
+
+boundaryPts = (K,n) -> (
+    flatten apply(fixedPts(K,n), w -> (
+	    ptsAtInfinity := select(fixedPts(K,n), v -> 
+	    	all(apply(#w, u-> #(v_u * w_u) >= K#u-1), b -> b == true));
+	    apply(delete(w,ptsAtInfinity), v -> (w,v))
+	    )    
+    	)
+    )
+
+
+
+-- The key is a pair (I,J) such that I - J = {i} and J - I = {j}. The value is the 
+-- e_i - e_j correspnding to the character of the orbit, t_j^{-1}t_i. This is the character
+-- *if* we restrict to the open set P_I \ne 0. 
+orbits = hashTable apply(boundaryPts(k,n), u -> (u,{setIndicator(toList(u_0 - u_1),n) - setIndicator(toList(u_1 - u_0),n)}))
+
+
+
+--- Test
+netList boundaryPts({2,3},4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
