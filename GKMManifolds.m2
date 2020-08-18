@@ -52,7 +52,10 @@ export {
 	"makeHTpt",
 	"tGeneralizedFlagVariety",
 	"signedPermutations",
-	"lieType"
+	"lieType",
+	"cellOrder",
+	"bruhatOrder",
+	"tGeneralizedSchubertVariety"
 }
 
 
@@ -129,6 +132,8 @@ MomentGraph.synonym = "moment graph"
 globalAssignment MomentGraph
 net MomentGraph := G -> net ofClass class G | " on " | toString(#G.vertices) | " vertices with " | toString(#G.edges) | " edges "
 
+--given a list V representing the vertices, E a hash table of edges, and H a ring for HTpt
+--outputs a moment graph with such data
 momentGraph = method()
 momentGraph(List,HashTable,Ring) := MomentGraph => (V,E,H) -> (
     new MomentGraph from {
@@ -139,7 +144,32 @@ momentGraph(List,HashTable,Ring) := MomentGraph => (V,E,H) -> (
 	}
     )
 
+
+--outputs the graph underlying a moment graph G
 graph(MomentGraph) := Graph => opts -> G -> graph(G.vertices, keys G.edges, EntryMode => "edges")
+
+
+--If a moment graph G comes from a singular GKM variety with a T-invariant Whitney stratification
+--consisting of affine spaces, the vertices of G correspond to each strata, and are ordered
+--v1 <= v2 if the closure of stratum of v2 is contained in that of v1.
+cellOrder = method()
+cellOrder(MomentGraph,Poset) := (G,P) -> (
+    if G.cache.?cellOrder then (
+	print "warning: overwriting a previously defined cell order on this moment graph "
+	);
+    if G.vertices =!= P.GroundSet then (
+	<< "the ground set of the poset is not the vertices of this moment graph " <<
+	return error
+	);
+    G.cache.cellOrder = P;
+    )
+
+
+cellOrder(MomentGraph) := Poset => G -> (
+    if G.cache.?cellOrder then G.cache.cellOrder
+    else << " no cell order defined on this moment graph" << error
+    )
+
 
 
 --------------------------------------< T-varieties >-------------------------------------------
@@ -214,8 +244,7 @@ momentGraph(TVariety) := MomentGraph => X -> (
 --moment graph of X, granted that the two sanity checks (charRing dimension, fixed points) work out
 momentGraph(TVariety,MomentGraph) := (X,G) -> (
     if X.?momentGraph then (
-	<< "moment graph already defined for this T-variety" <<
-	return error
+	print " warning: overwriting a previously defined moment graph on this T-variety "
 	);
     if #(gens X.charRing) != #(gens G.HTpt) then (
 	<< "HTpt not compatible with the character ring" <<
@@ -253,8 +282,7 @@ charts(TVariety) := X -> (
 
 charts(TVariety,List) := (X,L) -> (
     if X.?charts then (
-	<< "charts already defined for this T-variety" <<
-	return error
+	print " warning: overwriting previously defined charts on this T-variety " 
 	);
     if not #X.points == #L then (
 	<< "number of charts in the list not equal to number of points" <<
@@ -466,8 +494,7 @@ ampleTKClass(TVariety) := TKClass => X -> (
 --sets the ampleTKClass of X to be C
 ampleTKClass(TVariety,TKClass) := (X,C) -> (
     if X.cache?ampleTKClass then (
-	<< "an ampleTKClass already defined for this T-variety" <<
-	return error
+	print " warning: overwriting a previously defined ampleTKClasson this T-variety "
 	);
     if C.tvar =!= X then << "not a TKClass of this T-variety" << return error;
     X.cache.ampleTKClass = C
@@ -782,12 +809,54 @@ tGeneralizedFlagVariety(String,ZZ,List,Ring) := TVariety => (LT,d,L,R) -> (
     X
     )
 
+--if a TVariety is a generalized flag variety, returns its Lie type
 lieType = method()
 lieType(TVariety) := String => X -> (
     if X.cache.?lieType then X.cache.lieType
     else << " no Lie Type defined for this T-variety " << return error
     )
 
+--given a generalized flag variety, computes & stores the bruhat order for its moment graph
+--and then returns the poset
+bruhatOrder = method()
+bruhatOrder(TVariety) := Poset => X -> (
+    if not X.cache.?lieType then (
+	<< " not a generalized flag variety " <<
+	return error
+	);
+    if X.momentGraph.cache.?cellOrder then return X.momentGraph.cache.cellOrder;
+    LT := lieType X;
+    G := X.momentGraph;
+    n := #(gens X.charRing);
+    posWt := apply(n, i -> n - i);
+    negRoots := select(values G.edges, v -> sum(n, i -> v_i * posWt_i) < 0);
+    ground := G.vertices;
+    rels := apply(keys G.edges, k -> if member(G.edges#k,negRoots) then k else reverse k);
+    P := poset(ground,rels);
+    cellOrder(X.momentGraph, P);
+    P
+    )
+
+--Schubert variety of a generalized flag variety
+--input: is (X,v), where X is a generalized flag variety and v is a vertex in its moment graph
+--output: a TVariety representing a Schubert variety whose T-fixed points correspond to all
+--vertices w in the moment graph of X where v <= w
+
+--NOT TESTED YET
+tGeneralizedSchubertVariety = method()
+tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
+    G := momentGraph X;
+    if not member(v,G.vertices) then (
+	<< " the second entry must be a vertex of the moment graph of the TVariety " <<
+	return error
+	);
+    P := bruhatOrder X;
+    V := principalFilter(P,v);
+    E := hashTable apply(select(keys G.edges, k -> all(k, i -> member(i,V))), j -> (j,G.edges#j));
+    Y := tVariety(momentGraph(V,E,G.HTpt),X.charRing);
+    cellOrder(Y.momentGraph, subposet(P,V));
+    Y
+    )
 
 --------------------------------< ordinary flag varieties >-----------------------------------
 
@@ -1171,6 +1240,8 @@ C = ampleTKClass X
 peek C
 isWellDefined C
 lieType X
+P = bruhatOrder X
+displayPoset(P, SuppressLabels => false)
 
 --if a character ring is pre-determined
 R = makeCharRing 3
@@ -1179,6 +1250,18 @@ C = ampleTKClass X
 ring first values C.hilb === R
 peek C
 isWellDefined C
+
+--ordinary Grassmannian(2,4)
+X = tGeneralizedFlagVariety("A",3,{2})
+peek X
+Y = tGeneralizedSchubertVariety(X,{set{0,1}}) --basically same as X
+peek Y
+Z = tGeneralizedSchubertVariety(X,{set{0,2}})
+peek Z
+W = tGeneralizedSchubertVariety(X,{set{1,2}})
+peek W
+displayPoset cellOrder momentGraph X
+displayPoset cellOrder momentGraph Z
 
 
 --same variety but embedded differently in P14
@@ -1202,6 +1285,9 @@ graph G
 C = ampleTKClass X
 peek C
 isWellDefined C
+lieType X
+P = bruhatOrder X
+displayPoset(P, SuppressLabels => false)
 
 --Lagrangian Grassmannian(3,6)
 X = tGeneralizedFlagVariety("C",3,{3})
@@ -1214,8 +1300,8 @@ G.edges
 C = ampleTKClass X
 peek C
 
---isotropic Grassmannian(1,2;6) (i.e. SpGr(1,2;6))
-X = tGeneralizedFlagVariety("C",3,{1,2})
+--isotropic Grassmannian(1,2,3;6) (i.e. SpGr(1,2,3;6))
+X = tGeneralizedFlagVariety("C",3,{1,2,3})
 peek X
 H = X.charts
 netList {(first keys H), H#(first keys H)}
@@ -1225,7 +1311,8 @@ G.edges
 C = ampleTKClass X
 peek C
 isWellDefined C
-
+P = bruhatOrder X
+displayPoset P
 
 X = tGeneralizedFlagVariety("B",3,{2})
 peek X

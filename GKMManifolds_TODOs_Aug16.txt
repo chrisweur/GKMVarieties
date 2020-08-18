@@ -11,6 +11,8 @@ CHECK
 
 * also, why is the generalized flag variety command soooooo slow? is there a way to speed it up?
 
+* the generalized Schubert variety command (again, need many checks!)
+
 
 MAKE
 
@@ -18,7 +20,7 @@ MAKE
 
 * torus-orbit closure as a TKClass for generalized flag varieties.
 
-* for both functions above, the function "lieType" may have to be used
+(for both functions above, the function "lieType" may have to be used)
 
 * given smooth toric variety, make a T-variety
 
@@ -27,7 +29,7 @@ MISC
 
 * import K-Tutte for flag matroid stuff
 
-opt. import Braden stuff (optional)
+opt. import Braden stuff
 
 opt. add functionalities from "How is a graph like a manifold?"
 
