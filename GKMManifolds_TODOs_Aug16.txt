@@ -1,0 +1,39 @@
+TODO LIST
+
+
+CHECK
+
+* Product: if X,Y both have moment graphs, then should also compute the moment graph for the product.  please check my code; this was trickier than first imagined.
+
+* isWellDefined(TKClass): is there any better way to test for "equals 0 mod 1 - T^lambda"?  Because M2 does not do fraction rings over Laurent rings, I had to do the "toFraction" trick
+
+* the generalized flag variety command (many many checks!).  In doing so, should verify the claims about the (even) orthogonal Grassmannians.  For example is SOGr(n,2n) disconnected?!? Also, need check the T-fixed points and charts for the SOGr(n-1,2n) case as well.
+
+* also, why is the generalized flag variety command soooooo slow? is there a way to speed it up?
+
+
+MAKE
+
+* maps between generalized flag varieties, just like the usual one.
+
+* torus-orbit closure as a TKClass for generalized flag varieties.
+
+* for both functions above, the function "lieType" may have to be used
+
+* given smooth toric variety, make a T-variety
+
+
+MISC
+
+* import K-Tutte for flag matroid stuff
+
+opt. import Braden stuff (optional)
+
+opt. add functionalities from "How is a graph like a manifold?"
+
+
+
+TESTS & DOCUMENTATION
+
+
+

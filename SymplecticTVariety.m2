@@ -38,7 +38,7 @@ pmFunction = (L,n) -> (
       )
   )
 )
-  
+
 
 -- Let K = {k_1,...,k_s} and consider a T-fixed point P = (V_1,..,V_s) in flag-SGr(K,2n). Consider the usual
 -- affine neighbourhood of P in the standard flag variety. This corresponds to a sequence of matrices of variables
@@ -120,15 +120,18 @@ tSymplecticFlagVariety(List,ZZ,Ring) := TVariety => (K,n,R) -> (
 	chrts = join(chrts,{L}));
     X := tVariety(pts,chrts,R);
     -- The class of O(1)
-    L := apply(X.points, p -> (
+    -*--L := apply(X.points, p -> (
 	    Exps := flagToVec(p,2*n); 
 	    product(#Exps, i -> if i < n then R_i^(Exps_i) else ((frac R)_(i-n))^(-Exps_i)))
 	);
     -- The following doesn't work. tKClass doesn't like negative powers. We can just 
     -- modify tKClass later.
-     X.cache.ampleTKClass = tKClass(X,L);
+     X.cache.ampleTKClass = tKClass(X,L);--*-
      X
 )
+
+end
+
 
 
 
@@ -315,7 +318,7 @@ isWellDefined(TKClass) := Boolean => C -> (
 
 -- Generalized version of topTchart defined above 
 -- m = 1,2,3,4 corresponds to Type A, B, C,D respectively 
-topTchart = (A,n,m) -> (
+genTopTchart = (A,n,m) -> (
     I0' = sort select(toList A, v -> v<= n-1);
     I0 = sort apply(select(toList A, v -> v<= n-1), v-> v+n);
     p =  #I0;
@@ -346,7 +349,7 @@ topTchart = (A,n,m) -> (
 
 
 tIsotropicFlagVariety = method();
-tIsotropicFlagVariety(List,ZZ,Ring,Integer) := TVariety => (K,n,R,m) -> (
+tIsotropicFlagVariety(List,ZZ,Ring,ZZ) := TVariety => (K,n,R,m) -> (
     -- Checking presentation of input
     if not #(gens R) == n then << "check character ring" << return error;
     if not all(K, w -> 1<= w and w <=n) then << "check rank sequence K" << return error;

@@ -347,11 +347,11 @@ TKClass + TKClass := (C1,C2) -> (
     tKClass(X1,L)
 )
 
---if a TVariety X has a distinguished O(1) T-equivariant bundle, then returns its TKClass
+--if a TVariety X has a distinguished O(1) T-equivariant line bundle, then returns its TKClass
 ampleTKClass = method();
 ampleTKClass(TVariety) := TKClass => X -> (
     if X.cache.?ampleTKClass then return X.cache.ampleTKClass
-    else << "no distinguished ample bundle defined on this T-variety" << return error;
+    else << "no distinguished ample line bundle on this T-variety" << return error;
 )
 
 
@@ -519,7 +519,8 @@ tFlagVariety(List,ZZ) := TVariety => (K,n) -> tFlagVariety(K,n,makeCharRing n)
 
 
 --Given two lists Kso, Kta (for rank sequences of source and target flag varieties) and n,
---creates the two TVarieties and makes a TMap between them (given the charRing R).
+--creates the two TVarieties and makes a TMap between them (given the charRing R)
+--corresponding to the "forgetting appropriate linear subspaces map"
 tFlagMap = method();
 tFlagMap(List,List,ZZ,Ring) := TMap => (Kso,Kta,n,R) -> (
     Flso := tFlagVariety(Kso,n,R);
