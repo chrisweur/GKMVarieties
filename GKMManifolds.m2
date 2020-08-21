@@ -35,11 +35,9 @@ export {
 	"hilb",
 	"tvar",
 	"charts",
-	"monomialRing",
 	"points",
 	"ptsMap",
 	"charRing",
-	"matToIdeal",
 	"HTpt",
 	"tProjectiveSpace",
 	"MomentGraph",
@@ -330,6 +328,9 @@ tProjectiveSpace(ZZ) := TVariety => n -> (
     )
 
 
+
+
+
 --product of two TVarieties X,Y with an action of a common torus T
 --the product is endowed with the diagonal action of T
 TVariety ** TVariety := TVariety => (X,Y) -> (
@@ -380,9 +381,9 @@ MomentGraph ** MomentGraph := MomentGraph => (G1,G2) -> (
 tHilbNumer = method();
 tHilbNumer(TVariety,List) := RingElement => (X,L) -> (
     if L == {} then return toCharRing(X,1);
-    R := monomialRing(L);
-    I := matToIdeal transpose matrix L;
-    f := value numerator hilbertSeries (map(R,ring I,gens R))I;
+    A := affineToricRing L;
+    I := ideal A;
+    f := value numerator hilbertSeries I;
     toCharRing(X,f)
 )
 
@@ -1049,7 +1050,6 @@ rank(FlagMatroid,Set) := ZZ => (M,A) -> sum(M.constituents, m -> rank(m,A))
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 
--*--- commented out for now
 beginDocumentation()
 
 -- Documentation --
@@ -1091,7 +1091,7 @@ doc ///
 doc ///
 	Key
 		tVariety
-		(tVariety, List, HashTable, List, Ring)
+		(tVariety, List, List, Ring)
 	Headline
 		constructs a T-variety
 	Usage
@@ -1118,11 +1118,11 @@ doc ///
 			Here...
 
 	Caveat
-		This function does not check if X defines a T-variety - see 
-		@TO2{(isWellDefined, TVariety), "isWellDefined"}@.
+		This function does not check if X defines a T-variety
+		-- see @TO2{(isWellDefined, TVariety), "isWellDefined"}@.
 	
 	SeeAlso
-		(isWellDefined, TVariety)
+		--(isWellDefined, TVariety)
 		(symbol **, TVariety, TVariety)
 		tFlagVariety
 		tMap
@@ -1207,8 +1207,6 @@ doc ///
 		pushforward
 ///
 
-
----*-
 
 
 end
