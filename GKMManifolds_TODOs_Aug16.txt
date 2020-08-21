@@ -13,6 +13,8 @@ CHECK
 
 * the generalized Schubert variety command (again, need many checks!)
 
+*tChi for the T-equivariant Euler characteristic (i.e. the Lefschetz trace <-- maybe call it that?)
+
 
 MAKE
 
@@ -22,7 +24,6 @@ MAKE
 
 (for both functions above, the function "lieType" may have to be used)
 
-* given smooth toric variety, make a T-variety
 
 
 MISC
