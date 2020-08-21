@@ -328,6 +328,56 @@ tProjectiveSpace(ZZ) := TVariety => n -> (
     )
 
 
+--given a NormalToricVariety X, outputs a T-variety Y with the data
+--Y.points are lists where each list is the indices of the rays defining the T-fixed point
+--X need be smooth, non-degenerate, and must have fixed-points.
+
+--WARNING: as usual, if an affine chart AA^m has characters a_1, ... , a_m, the torus (kk^*)^n
+--acts on AA^m by t * (x_1, ... , x_m) = (t^(-a_1)x_1, ... , t^(-a_m)x_m)
+--in other words, to agree with the usual normal toric variety literature,
+--one should consider OUTER normal cones of cones, not inner normal cones
+tVariety(NormalToricVariety,Ring) := TVariety => (X,R) -> (
+    if not isSmooth X then (
+	<< " the normal toric variety is not smooth " <<
+	return error
+	);
+    n := dim X;
+    if not n == #(gens R) then (
+	<< " the character ring is incompatible with the torus of the toric variety " <<
+	return error
+	);
+    pts := select(max X, i -> #i == n);
+    if pts == {} then (
+	<< " no torus-fixed points on this normal toric variety " <<
+	return error
+	);
+    rys := rays X;
+    chrts := apply(pts, p -> - entries transpose inverse matrix rys_p);
+    Y := tVariety(pts,chrts,R);
+    GEdgePairs := select(subsets(pts,2), i -> #(unique flatten i) == #(first i) + 1);
+    GEdges := hashTable apply(GEdgePairs, i -> (
+	    p := first i;
+	    q := last i;
+	    (i, first select(Y.charts#p, i -> member(-i,Y.charts#q)))
+	    )
+	);
+    momentGraph(Y,momentGraph(Y.points, GEdges, makeHTpt n));
+    Y
+    )
+
+
+tVariety(NormalToricVariety) := TVariety => X -> tVariety(X,makeCharRing dim X)
+
+
+
+--given a T-variety X, returns a normal toric variety if X was constructed from one
+normalToricVariety(TVariety) := NormalToricVariety => X -> (
+    if X.cache.?normalToricVariety then X.cache.normalToricVariety
+    else (
+	<< " no normal toric variety structure on this T-variety " <<
+	return error
+	)
+    )
 
 
 
@@ -1047,16 +1097,17 @@ rank(FlagMatroid,Set) := ZZ => (M,A) -> sum(M.constituents, m -> rank(m,A))
 
 
 
-------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+--------------------------------------< Documentation >------------------------------------
+-------------------------------------------------------------------------------------------
+
 
 beginDocumentation()
 
--- Documentation --
--- <<docTemplate
+
 doc ///
 	Key
-		EquivariantLocalizations
+		GKMManifolds
 	Headline
 		a package for computations with flag matroids and equivariant localization
 	Description
@@ -1080,8 +1131,7 @@ doc ///
 		Text
 			To see how to specify a T-variety, see @TO tVariety@.
 
-			Describe basic functionality of the package...
-		
+			Describe basic functionality of the package...		
 		Example
 			Here....
 
@@ -1119,10 +1169,8 @@ doc ///
 
 	Caveat
 		This function does not check if X defines a T-variety
-		-- see @TO2{(isWellDefined, TVariety), "isWellDefined"}@.
 	
 	SeeAlso
-		--(isWellDefined, TVariety)
 		(symbol **, TVariety, TVariety)
 		tFlagVariety
 		tMap
@@ -1150,11 +1198,8 @@ doc ///
 			Here...
 
 	Caveat
-		This function does not check if X defines a T-variety - see 
-		@TO2{(isWellDefined, TVariety), "isWellDefined"}@.
+		This function does not check if X defines a T-variety
 	
-	SeeAlso
-		(isWellDefined, TVariety)
 ///
 
 
@@ -1202,7 +1247,6 @@ doc ///
 		(isWellDefined, TKClass)
 		(symbol *, TKClass, TKClass)
 		(symbol +, TKClass, TKClass)
-		assignAmpleTKClass
 		pullback
 		pushforward
 ///
@@ -1460,6 +1504,14 @@ time X = tGeneralizedFlagVariety("C", 5, {1,2,4}) -- 7 seconds
 time X = tGeneralizedFlagVariety("D", 5, {2,3,4,5}) -- 5 seconds
 
 
+--a test for normal toric varieties: Hirezebruch surface H_2
+restart
+needsPackage "GKMManifolds"
+X = kleinschmidt(2,{2})
+peek X
+Y = tVariety X
+peek Y
+peek momentGraph Y
 
 --a sanity check with projective space P^3
 P3 = tProjectiveSpace 3
