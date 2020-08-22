@@ -1,3 +1,13 @@
+-*-------------------------------------------------------------------------------------------
+   Copyright 2020 Christopher Eur and Ritvik Ramkumar.
+
+   You may redistribute this file under the terms of the GNU General Public
+   License as published by the Free Software Foundation, either version 2 of
+   the License, or any later version.
+-------------------------------------------------------------------------------------------*-
+
+
+
 newPackage("GKMManifolds",
 	Version => "0.1",
 	Date => "August 1, 2020",
@@ -9,8 +19,8 @@ newPackage("GKMManifolds",
 	     Email => "ritvik@math.berkeley.edu",
 	     HomePage => "https://math.berkeley.edu/~ritvik"}
 	    },
-	Headline => "a package for computations with torus-equivariant formal spaces like toric varieties flag matroids",
-	HomePage => "https://github.com/chrisweur/EquivariantLocalizations",
+	Headline => "a package for computations with GKM manifolds and moment graphs",
+	HomePage => "https://github.com/chrisweur/GKMManifolds",
 	PackageExports => {"Graphs","Matroids", "NormalToricVarieties"},	
 	DebuggingMode => true
 )
@@ -111,11 +121,14 @@ toFraction(RingElement,RingElement,Ring) := (f,g,S) -> (
 
 --------------------------------------< moment graphs >-----------------------------------------
 
+--makes a polynomial ring with n variables, representing T-equivariant cohomology 
+--ring of a point where T =  = (kk^*)^n.
 makeHTpt = method()
 makeHTpt(ZZ) := Ring => n -> (
     t := symbol t;
     QQ[t_0..t_(n-1)]
     )
+
 
 --a MomentGraph G is a MutableHashTable with the minimal data of:
 --G.vertices : a list representing vertices of the graph G
@@ -148,9 +161,10 @@ momentGraph(List,HashTable,Ring) := MomentGraph => (V,E,H) -> (
 graph(MomentGraph) := Graph => opts -> G -> graph(G.vertices, keys G.edges, EntryMode => "edges")
 
 
---If a moment graph G comes from a singular GKM variety with a T-invariant Whitney stratification
---consisting of affine spaces, the vertices of G correspond to each strata, and are ordered
---v1 <= v2 if the closure of stratum of v2 is contained in that of v1.
+--If a moment graph G comes from a possibly singular GKM variety with a T-invariant
+-- Whitney stratification consisting of affine spaces,
+--the vertices of G correspond to each strata,
+--and are ordered v1 <= v2 if the closure of stratum of v2 is contained in that of v1.
 cellOrder = method()
 cellOrder(MomentGraph,Poset) := (G,P) -> (
     if G.cache.?cellOrder then (
@@ -1147,15 +1161,43 @@ doc ///
 	Key
 		GKMManifolds
 	Headline
-		a package for computations with flag matroids and equivariant localization
+		a package for computations with GKM manifolds and moment graphs
 	Description
 		Text
-			Define in words T-Varieties and equivariant localization......
-
-			This Macaulay2 package is designed to .....
-
-			References.....
+			A GKM manifold is a variety X, often assumed smooth and complete, with an 
+			action of an algebraic torus T satisfying the following conditions:
+			(i) X is equivariantly formal with respect to the the action of T,
+			(ii) X has finitely many T-fixed points, and (iii) X has finitely
+			many one-dimensional T-orbits.  The data of the zero and one dimensional
+			T-orbits of X defines a moment graph, with which one can carry out
+			T-equivariant cohomology and T-equivariant K-theory computations by
+			combinatorial means.  This package provides methods for these computations
+			in Macaulay2.
 			
+		Text
+			For mathematical background see:
+			
+			@UL{
+			{"T. Braden and R. MacPherson", EM "From moment graphs to intersection cohomology", "Math. Ann. 321 (2001), 533-551."},
+			{"E. Bolker, V. Guillemin, and T. Holm", EM "How is a graph like a manifold?", 	"arXiv:math/0206103"},
+			{"M. Goresky, R. Kottwitz, and R. MacPherson", EM "Equivariant cohomology, Koszul duality, and the localization theorem", " Invent. Math. 131 (1998), no. 1, 25-83."},
+			{"I. Rosu", EM "Equivariant K-theory and equivariant cohomology", "with an Appendix by I. Rosu and A. Knutson",  "Math. Z. 243 (2003), 423-448."},
+			{"J. Tymoczko", EM "An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson", "Contemp. Math. 388 (2005), 169-188."},
+			{"G. Vezzosi and A. Vistoli", EM "Higher algebraic K-theory for actions of diagonalizable groups", "Invent. Math. 153 (2003), no. 1, 1–44."}
+			}@ 
+		    
+		SeeAlso
+			"Example: toric varieties"
+			"Example: generalized flag varieties"
+			--"Example: generalized Schubert varieties"
+
+		SUBSECTION "Contributors"
+		Text
+			The following people have contributed code, improved existing code, or enhanced the documentation:
+			@UL{
+			{HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")}
+			}@
+
 
 ///
 
@@ -1303,6 +1345,7 @@ end
 -----------------------------< some tests while developing >---------------------------------
 ---------------------------------------------------------------------------------------------
 
+
 ----------< tGeneralizedFlagVariety tests >-------------
 restart
 needsPackage "GKMManifolds"
@@ -1334,6 +1377,8 @@ isWellDefined C
 --ordinary Grassmannian(2,4)
 X = tGeneralizedFlagVariety("A",3,{2})
 peek X
+C = ampleTKClass X
+tChi C
 Y = tGeneralizedSchubertVariety(X,{set{0,1}}) --basically same as X
 peek Y
 Z = tGeneralizedSchubertVariety(X,{set{0,2}})
