@@ -1,0 +1,23 @@
+TODO LIST
+
+
+
+CHECK
+
+* mini-checks: product, tChi, generalizedSchubertVariety -- Ritvik write some tests
+
+* TOrbClosure -- Chris update small thing and Ritvik write some tests
+
+* TMaps of tGeneralizedFlagVariety -- Chris
+
+
+
+MISC
+
+* import K-Tutte for flag matroid stuff -- Chris will do this
+
+
+
+
+TESTS & DOCUMENTATION
+
