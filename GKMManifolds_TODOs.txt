@@ -8,7 +8,7 @@ CHECK
 
 * TOrbClosure -- Chris update small thing and Ritvik write some tests
 
-* TMaps of tGeneralizedFlagVariety -- Chris
+* TMaps of tGeneralizedFlagVariety -- Ritvik write and Chris check
 
 
 
