@@ -182,7 +182,7 @@ tGeneralizedMap(TVariety,TVariety) := TMap => (X,Y) -> (
     m := numgens X.charRing;
     rk := if Typ === "A" then m-1 else m;
     T := symbol T;
-    R := ZZ[T_0..T_(m-1)];
+    R := makeCharRing(m);
     X' := tGeneralizedFlagVariety(TypX,rk,LX,R);
     Y' := tGeneralizedFlagVariety(TypY,rk,LY,R);
     ptPairs := apply(X'.points, p -> (p,first select(Y'.points, q -> isSubset(q,p))));
@@ -201,9 +201,7 @@ Y = tGeneralizedFlagVariety("A",2,{2})
 tGeneralizedMap(X,Y)
 
 
---- Character ring issue?
 X = tGeneralizedFlagVariety("B",3,{1,2})
 Y = tGeneralizedFlagVariety("B",3,{1})
-tGeneralizedMap(X,Y)
-tGeneralizedFlagVariety(TypX,rk,LX,R)
+peek tGeneralizedMap(X,Y)
 
