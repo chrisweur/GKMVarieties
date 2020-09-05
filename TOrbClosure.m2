@@ -1,4 +1,6 @@
-
+restart
+uninstallPackage "GKMManifolds"
+installPackage "GKMManifolds"
 needsPackage "GKMManifolds"
 
 --------------------------------------------------------------------------------------------------
@@ -20,8 +22,9 @@ rowRed = M -> (
 
 
 --the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
---input: X a tGeneralizedFlagVariety
---output:
+--input:  X a tGeneralizedFlagVariety and MatLst a list of matrices, {M1,...,Mn}, that defines a point in X.
+--    	  For convenience we assume that the ranks of the M_i are distinct.    	
+--output: The tKClass of the closure of the orbit of the point corresponding to {M1,...,Mn}
 TOrbClosure = method()
 TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> ( 
     if X.cache.?lieType then Typ := X.cache.lieType else (
@@ -56,104 +59,67 @@ TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> (
 		    M := mutableMatrix sub((reverse MatLst)#j,QS);
 		    for i in toList(0..#L-1) do M = columnSwap(M,i,L#i);
 		    M = rowRed M;
-		    for i in toList(0..#L-1) do M = columnSwap(M,i,L#i);
+		    for i in reverse toList(0..#L-1) do M = columnSwap(M,i,L#i);
 		    for i in L do M = columnMult(M,i,0);
 		    for v in toList(0..#L-1) do M = rowMult(M,v,sub(Gens_(L_v)^(-1),ring M));
 		    for v in toList(0..#Gens-1) do M = columnMult(M,v,sub(Gens_v, ring M));
 		    degList = degList | apply(flatten entries M, v-> degree v);
 		    );
 		degs := - unique delete(-infinity, degList);
-		-*-- uncomment the next five lines once bug for "degs" is fixed
 		tHilbSer := hilbertSeries affineToricRing degs;
 		numer := toCharRing(X,value numerator tHilbSer);
 		denom := toCharRing(X,value denominator tHilbSer);
 		fracVal := toFraction(numer * product(X.charts#pt, l -> (1-R_l)), denom, S);
 		(last fracVal)(first fracVal)
-		--*-
-		degs --comment out this line then
+		-* degs *-
 	    	)
 	    )
     	);
-    -*-- uncomment this too then
     tKClass(X,Lst)
-    --*-
-    hashTable apply(#X.points, i -> (X.points_i, Lst_i)) --and comment this
+    -* hashTable apply(#X.points, i -> (X.points_i, Lst_i)) --and comment this *-
     )
 
 
-end
+
+
 
 ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
 
 
-restart
-load "TOrbClosure.m2"
-
-
--- Easy test (can compre with Speyer/Fink pg 17)
+-- Type "A"
 M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
 X = tGeneralizedFlagVariety("A",3,{2})
-time C = TOrbClosure(X,{M})
-peek C --the degrees at {set{1,2}} is incorrect: {1,0,-1,0} must be replaced with {1,-1,0,0}
+time C = TOrbClosure(X,{M}); peek C
 
-
-Creal = tKClass(X,flagMatroid(M,{2}))
-peek Creal
-isWellDefined Creal
-
-
---matrix with same underlying matroid as M above
-N = matrix(QQ,{{1,1,1,3},{1,1,2,1}})
-CN = TOrbClosure(X,{N})
-C === CN
+Y = tGeneralizedFlagVariety("A",2,{2,1})
+M = matrix(QQ,{{1,0,0},{0,1,1}})
+N = matrix(QQ,{{1,1,1}})
+time C = TOrbClosure(Y,{N,M}); peek C
 
 
 
-
-
---A Lagrangian Grassmannian example
-M = matrix(QQ,{{1,0,1,2},{0,1,2,1}})
+-- Type "C"
+M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
 N = matrix(QQ,{{1,0,1,0},{0,1,0,1}})
 X = tGeneralizedFlagVariety("C",2,{2})
-CM = TOrbClosure(X,{M})
-CN = TOrbClosure(X,{N})
-
-
-
-
---- Basic functionality tests (not checked for math yet)
-M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
-N = matrix(QQ,{{1,1,0,1}})
-X = tGeneralizedFlagVariety("A",3,{1,2})
-peek X
-time C = TOrbClosure(X,{N,M})
+time C = TOrbClosure(X,{M}); D = TOrbClosure(X,{N});
 peek C
+peek D
 
 
-M = matrix(QQ,{{1,1,0,1},{1,1,0,1}})
-M = matrix(QQ,{{1,1,0,1}})
-X = tGeneralizedFlagVariety("A",3,{1})
-peek X
+M = matrix{{1,1,1,0,0,0},{0,0,0,1,1,-2}}
+X = tGeneralizedFlagVariety("C",3,{2})
 time C = TOrbClosure(X,{M})
-peek C
 
-
---
-M = random(QQ^2,QQ^4)
-X = tGeneralizedFlagVariety("A",3,{2})
-TOrbClosure(X,{M})
-peek C
+N = matrix{{1,1,1,1,1,-2}}
+Y = tGeneralizedFlagVariety("C",3,{2,1})
+time D = TOrbClosure(Y,{N,M});
+peek D
 
 
 
-
--- 
-X = tProjectiveSpace 3
-C = TOrbClosure(X,{M})
-
-
---
+-- Type "B"
 X = tGeneralizedFlagVariety("B",3,{1})
 peek X
 M = matrix(QQ,{{-2,0,0,1,0,0,2}})
@@ -163,14 +129,81 @@ peek C
 
 
 
+-- Error testing
+M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
+X = tProjectiveSpace 3
+C = TOrbClosure(X,{M})
+
+X = tGeneralizedFlagVariety("A",3,{3})
+C = TOrbClosure(X,{M})
+
 
 
 
 -- Sanity check
+-- The closure of the following is just a point
 M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
 X = tGeneralizedFlagVariety("A",3,{2})
 C = TOrbClosure(X,{M}); peek C
-X = tGeneralizedFlagVariety("C",2,{2})
+
+Y = tGeneralizedFlagVariety("A",3,{2,2})
+C = TOrbClosure(Y,{M,M}); peek C
+
+Z = tGeneralizedFlagVariety("C",2,{2})
+C = TOrbClosure(Z,{M}); peek C
+
+
+
+M = matrix(QQ,{{1,2,0,0},{1,2,0,0}})
+X = tGeneralizedFlagVariety("A",3,{1})
 C = TOrbClosure(X,{M}); peek C
 
+
+
+
+
+
+
+
+
+--- 
+-- Needs a better name? Projection maps?
+tGeneralizedMap = method()
+tGeneralizedMap(TVariety,TVariety) := TMap => (X,Y) -> (
+    if not (X.cache.?lieType and Y.cache.?lieType) then << "projection maps are only implemented for Lie types" << return error;
+    if not numgens X.charRing === numgens Y.charRing then << "character ring need be same" << return error;
+    TypX := X.cache.lieType;
+    TypY := Y.cache.lieType;
+    if not TypX === TypY then << "the varieties are of different Lie types" << return error;
+    LX := apply(first X.points, v -> #(elements v));
+    LY := apply(first Y.points, v -> #(elements v));
+    if not isSubset(LY,LX) then << "there is no projection map" << return error;
+    Typ := X.cache.lieType;
+    m := numgens X.charRing;
+    rk := if Typ === "A" then m-1 else m;
+    T := symbol T;
+    R := ZZ[T_0..T_(m-1)];
+    X' := tGeneralizedFlagVariety(TypX,rk,LX,R);
+    Y' := tGeneralizedFlagVariety(TypY,rk,LY,R);
+    ptPairs := apply(X'.points, p -> (p,first select(Y'.points, q -> isSubset(q,p))));
+    tMap(X',Y',ptPairs)
+)
+
+-- Tests
+X = tGeneralizedFlagVariety("A",3,{1,2})
+Y = tGeneralizedFlagVariety("A",3,{2})
+peek tGeneralizedMap(X,Y)
+tGeneralizedMap(Y,X)
+
+
+X = tGeneralizedFlagVariety("B",3,{2})
+Y = tGeneralizedFlagVariety("A",2,{2})
+tGeneralizedMap(X,Y)
+
+
+--- Character ring issue?
+X = tGeneralizedFlagVariety("B",3,{1,2})
+Y = tGeneralizedFlagVariety("B",3,{1})
+tGeneralizedMap(X,Y)
+tGeneralizedFlagVariety(TypX,rk,LX,R)
 
