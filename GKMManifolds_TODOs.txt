@@ -4,11 +4,11 @@ TODO LIST
 
 CHECK
 
-* mini-checks: product, tChi, generalizedSchubertVariety -- Ritvik write some tests
+* TOrbClosure in alternate way -- Chris will do and cross-check with the original method
 
-* TOrbClosure -- Chris update small thing and Ritvik write some tests
+* Bug fix on the tHilbNumer -- Chris will do
 
-* TMaps of tGeneralizedFlagVariety -- Ritvik write and Chris check
+* TMaps of tGeneralizedFlagVariety -- Chris check
 
 
 
@@ -20,4 +20,32 @@ MISC
 
 
 TESTS & DOCUMENTATION
+
+- (later) Main page
+- (R) Example: normal toric varieties
+- (E) Example: generalized flag varieties
+- (R) TVariety
+- (R) tVariety
+- (E) TKClass
+- (E) tKClass
+- (E) MomentGraph
+- (E) momentGraph
+- (R) TMap
+- (R) tMap
+- (E) tGeneralizedFlagVariety
+- (E) tGeneralizedSchubertVariety
+- (R) pushforward
+- (R) pullback
+- (R) tChi
+- (R) tProjectiveSpace
+- (E) cellOrder
+- (E) bruhatOrder
+- (R) ampleTKClass
+- (E) diagonalTMap
+- (R) makeCharRing
+- (R) makeHTpt
+- signed set stuff?
+- (R) tFlagMap
+- (R) TOrbClosure
+
 
