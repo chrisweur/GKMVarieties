@@ -64,7 +64,8 @@ export {
 	"bruhatOrder",
 	"tGeneralizedSchubertVariety",
 	"tChi",
-	--"TOrbClosure",
+	"TOrbClosure",
+	"tOrbitClosure",
 	"toFraction",
 	"affineToricRing",
 	"setIndicator",
@@ -91,8 +92,8 @@ affineToricRing = method();
 affineToricRing(List) := QuotientRing => L -> (
     d := #L;
     x := symbol x;
-    R := QQ[x_1..x_d, Degrees => L];
-    I := toricGroebner(transpose matrix L, R);
+    R := QQ[apply(#L, i -> x_i), Degrees => L];
+    I := if #L == 0 then ideal(0_R) else toricGroebner(transpose matrix L, R);
     R/I
     )
 
@@ -948,8 +949,6 @@ bruhatOrder(TVariety) := Poset => X -> (
 --input: is (X,v), where X is a generalized flag variety and v is a vertex in its moment graph
 --output: a TVariety representing a Schubert variety whose T-fixed points correspond to all
 --vertices w in the moment graph of X where v <= w
-
---NOT TESTED YET
 tGeneralizedSchubertVariety = method()
 tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
     G := momentGraph X;
@@ -965,8 +964,146 @@ tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
     Y
     )
 
+--------------------------------------------------------------------------------------------------
+--------------------------------< T-orbit closures of points >------------------------------------
+
+---------------------------< auxiliary functions for TOrbClosure >--------------------------------
+convertToNum = (n,L) -> (
+    return apply(toList L, v -> if v === unastrsk(v) then v else n + unastrsk v)
+    )
+
+revMat = M -> return matrix apply( reverse entries M, v-> reverse v)
+
+-- Takes in a mutable matrix and outputs the RREF with the identitiy block in the beginning
+rowRed = M -> (
+    Mat := matrix revMat(M) ;
+    return mutableMatrix revMat transpose gens gb image transpose Mat;
+    )
 
 
+
+--the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
+--input:  X a tGeneralizedFlagVariety and MatLst a list of matrices, {M1,...,Mn}, that defines a point in X.
+--    	  For convenience we assume that the ranks of the M_i are distinct.    	
+--output: The tKClass of the closure of the orbit of the point corresponding to {M1,...,Mn}
+TOrbClosure = method()
+TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> ( 
+    if X.cache.?lieType then Typ := X.cache.lieType else (
+	 << "T-orbit closures are only implemented for Lie types" << 
+	 return error
+	 );
+    R := X.charRing;
+    m := numgens X.charRing;
+    x := symbol x;
+    S := QQ[x_0..x_(m-1)];
+    QS := frac(QQ[x_0..x_(m-1), Degrees => apply(m, i -> setIndicator(set {i},m))]);
+    rks :=  apply(first X.points, v -> #(elements v));
+    if not all(MatLst, v -> numcols v == (
+	    if Typ === "A" then m
+	    else if Typ === "B" then 2*m+1
+	    else 2*m )
+	) then << "the column size of the matrices are incorrect" << return error;
+    if not rks === apply(MatLst, v -> rank v) then (
+	<< " the rank of the matrices are incorrect" << 
+	return error
+	);
+    (if Typ === "A" then Gens := apply(gens QS, v -> v^(-1))
+	else if Typ  === "C" or Typ === "D" then Gens = apply(gens QS, v -> v^(-1)) | gens QS
+	else if Typ === "B" then Gens = apply(gens QS, v -> v^(-1)) | gens QS |{1}
+	);
+    Lst := apply(X.points, pt -> (
+	    degList := {};
+	    convertPt := apply(pt, v -> convertToNum(m,v));
+	    if any(#rks, v -> determinant (rowRed MatLst_v)_(convertPt_v) == 0) then 0_R else (
+		for j in toList(0..#rks-1) do (
+		    L := (reverse convertPt)#j;
+		    M := mutableMatrix sub((reverse MatLst)#j,QS);
+		    for i in toList(0..#L-1) do M = columnSwap(M,i,L#i);
+		    M = rowRed M;
+		    for i in reverse toList(0..#L-1) do M = columnSwap(M,i,L#i);
+		    for i in L do M = columnMult(M,i,0);
+		    for v in toList(0..#L-1) do M = rowMult(M,v,sub(Gens_(L_v)^(-1),ring M));
+		    for v in toList(0..#Gens-1) do M = columnMult(M,v,sub(Gens_v, ring M));
+		    degList = degList | apply(flatten entries M, v-> degree v);
+		    );
+		degs := - unique delete(-infinity, degList);
+		tHilbSer := hilbertSeries affineToricRing degs;
+		numer := toCharRing(X,value numerator tHilbSer);
+		denom := toCharRing(X,value denominator tHilbSer);
+		fracVal := toFraction(numer * product(X.charts#pt, l -> (1-R_l)), denom, S);
+		(last fracVal)(first fracVal)
+		-* degs *-
+	    	)
+	    )
+    	);
+    tKClass(X,Lst)
+    -* hashTable apply(#X.points, i -> (X.points_i, Lst_i)) --and comment this *-
+    )
+
+--same as the TOrbClosure but computed in the different way
+--(without row reducing but just computing minors)
+--given a TVariety X that is a generalized flag variety consisting of linear subspaces of
+--dimensions rks = {r_1, ... , r_k}, and a matrix A that is k' x (appropriate numcols),
+--where k' >= k, and the first r_i rows span an appropriate isotropic subspace,
+--outputs the TKClass of the torus-orbit closure.
+tOrbitClosure = method()
+tOrbitClosure(TVariety,Matrix) := TKClass => (X,A) -> (
+    if X.cache.?lieType then Typ := X.cache.lieType else (
+	 << "T-orbit closures are only implemented for Lie types" << 
+	 return error
+	 );
+    R := X.charRing;
+    n := numgens R;
+    col := (
+	if Typ === "A" then n
+	else if Typ === "B" then 2*n+1
+	else 2*n
+	);
+    if not numcols A == col then (
+	<< "the column size of the matrices are incorrect" <<
+	return error
+	);
+    rks :=  apply(first X.points, v -> #(elements v));
+    MatLst := apply(rks, i -> A^(apply(i, j -> j)));
+    if not rks === apply(MatLst, v -> rank v) then (
+	<< " the rank of the matrices are incorrect" << 
+	return error
+	);
+    nonzeroMinors := Mat -> select(subsets(numcols Mat, numrows Mat), l -> determinant Mat_l != 0);
+    toWeights := l -> (
+	if Typ === "A" then setIndicator(set l,n)
+	else if Typ === "B" then (
+	    setIndicator(set select(l, i -> i < n),n) - setIndicator(set select(l, i -> i > n-1 and i < 2*n),n)
+	    )
+	else setIndicator(set select(l, i -> i < n),n) - setIndicator(set select(l, i -> i > n-1),n)
+	);
+    weightLst := apply(MatLst, m -> (unique ((nonzeroMinors m)/toWeights))/(i -> R_i));
+    basePolytopeWeights := (
+	init := matrix{{1_R}};
+	apply(weightLst, l -> init = init ** matrix{l});
+	(unique flatten entries init)/(f -> first exponents f)
+	);
+    x := symbol x;
+    S := QQ[x_0..x_(n-1)];
+    Lst := apply(X.points, pt -> (
+	    start := sum(pt, i -> setIndicator(i,n));
+	    if not member(start,basePolytopeWeights) then return 0_R;
+	    --degs := delete(apply(n, i -> 0), basePolytopeWeights/(w -> w - start));
+	    --above "degs" is mathematically easier to verify but is slower
+	    degs := select(X.charts#pt, i -> member(start+i,basePolytopeWeights));
+	    tHilbSer := hilbertSeries affineToricRing degs;
+	    numer := toCharRing(X,value numerator tHilbSer);
+	    denom := toCharRing(X,value denominator tHilbSer);
+	    fracVal := toFraction(numer * product(X.charts#pt, l -> (1-R_l)), denom, S);
+	    (last fracVal)(first fracVal)
+	    )
+	);
+    tKClass(X,Lst)
+    )
+
+
+
+----------------------------------------------------------------------------------------------
 --------------------------------< ordinary flag varieties >-----------------------------------
 
 
@@ -1487,9 +1624,97 @@ time C1 = TOrbClosure(X,{M})
 time C2 = TOrbClosure(X,{M})
 peek C1
 peek C2
+C = tKClass(X,flagMatroid(M,{2})); peek C
+
 
 --Lagrangian Grassmannian test
 M = matrix(QQ,{{1,0,1,2},{0,1,2,1}})
 X = tGeneralizedFlagVariety("C",2,{2})
 C = TOrbClosure(X,{M})
 peek C
+isWellDefined C
+
+
+-- Type "A"
+M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
+N = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
+X = tGeneralizedFlagVariety("A",3,{2})
+time C = TOrbClosure(X,{M});
+peek C
+isWellDefined C
+time D = TOrbClosure(X,{N}); --example where the matroid has only one basis
+peek D
+D.hilb#{set{0,1}}
+factor oo
+
+Y = tGeneralizedFlagVariety("A",2,{2,1})
+M = matrix(QQ,{{1,0,0},{0,1,1}})
+N = matrix(QQ,{{1,1,1}})
+time C = TOrbClosure(Y,{N,M}); peek C
+
+
+
+-- Type "C"
+M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
+N = matrix(QQ,{{1,0,1,0},{0,1,0,1}})
+X = tGeneralizedFlagVariety("C",2,{2})
+time C = TOrbClosure(X,{M}); D = TOrbClosure(X,{N});
+peek C
+peek D
+{C,D}/isWellDefined
+
+
+
+M = matrix{{1,1,1,0,0,0},{0,0,0,1,1,-2}}
+X = tGeneralizedFlagVariety("C",3,{2})
+time C = TOrbClosure(X,{M})
+
+N = matrix{{1,1,1,1,1,-2}}
+Y = tGeneralizedFlagVariety("C",3,{2,1})
+time D = TOrbClosure(Y,{N,M});
+peek D
+
+
+
+-- Type "B"
+X = tGeneralizedFlagVariety("B",3,{1})
+peek X
+M = matrix(QQ,{{-2,0,0,1,0,0,2}})
+--matrix{{-2,0,0}} * transpose matrix{{1,0,0}}  + ( matrix{{1,0,0}} * transpose matrix{{-2,0,0}} ) + 4
+C = TOrbClosure(X,{M})
+peek C
+
+
+
+-- Error testing
+M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
+X = tProjectiveSpace 3
+C = TOrbClosure(X,{M})
+
+X = tGeneralizedFlagVariety("A",3,{3})
+C = TOrbClosure(X,{M})
+
+
+
+
+-- Sanity check
+-- The closure of the following is just a point
+M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
+X = tGeneralizedFlagVariety("A",3,{2})
+C = TOrbClosure(X,{M}); peek C
+
+Y = tGeneralizedFlagVariety("A",3,{2,2})
+C = TOrbClosure(Y,{M,M}); peek C
+
+Z = tGeneralizedFlagVariety("C",2,{2})
+C = TOrbClosure(Z,{M}); peek C
+
+
+
+M = matrix(QQ,{{1,2,0,0},{1,2,0,0}})
+X = tGeneralizedFlagVariety("A",3,{1})
+C = TOrbClosure(X,{M}); peek C
+
+
+
+

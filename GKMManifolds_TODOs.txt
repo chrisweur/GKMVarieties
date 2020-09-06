@@ -1,17 +1,6 @@
 TODO LIST
 
 
-
-CHECK
-
-* TOrbClosure in alternate way -- Chris will do and cross-check with the original method
-
-* Bug fix on the tHilbNumer -- Chris will do
-
-* TMaps of tGeneralizedFlagVariety -- Chris check
-
-
-
 MISC
 
 * import K-Tutte for flag matroid stuff -- Chris will do this

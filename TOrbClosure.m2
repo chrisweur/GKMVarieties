@@ -86,11 +86,25 @@ TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> (
 ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
 
+restart
+needsPackage "GKMManifolds"
+
 
 -- Type "A"
 M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
 X = tGeneralizedFlagVariety("A",3,{2})
-time C = TOrbClosure(X,{M}); peek C
+C = tOrbitClosure(X,M)
+peek C
+D = TOrbClosure(X,{M})
+peek D
+
+
+M = random(QQ^2,QQ^4)
+X = tGeneralizedFlagVariety("A",3,{1,2})
+time C = tOrbitClosure(X,M); peek C
+time D = TOrbClosure(X,{M^{0},M}); peek D
+C === D
+
 
 Y = tGeneralizedFlagVariety("A",2,{2,1})
 M = matrix(QQ,{{1,0,0},{0,1,1}})
