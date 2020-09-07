@@ -8,7 +8,7 @@
 
 beginDocumentation()
 
-
+-*--
 doc ///
 	Key
 		GKMManifolds
@@ -38,13 +38,11 @@ doc ///
 			{"G. Vezzosi and A. Vistoli", EM "Higher algebraic K-theory for actions of diagonalizable groups", "Invent. Math. 153 (2003), no. 1, 1–44."}
 			}@ 
 		    
-		SUBSECTION "Examples"
 		Text
 			"smooth toric varieties"
 			"generalized flag varieties"
 			--"Example: generalized Schubert varieties"
 
-		SUBSECTION "Contributors"
 		Text
 			The following people have contributed code, improved existing code, or enhanced the documentation:
 			@UL{
@@ -53,7 +51,7 @@ doc ///
 
 
 ///
-
+--*-
 
 doc ///
 	Key
@@ -65,7 +63,7 @@ doc ///
 			To see how to specify a T-variety, see @TO tVariety@.
 
 			Describe basic functionality of the package...		
-		Example
+		--Example
 			Here....
 
 ///
@@ -97,7 +95,7 @@ doc ///
 		Text
 			Here..
 			
-		Example
+		--Example
 			Here...
 
 	Caveat
@@ -127,7 +125,7 @@ doc ///
 		Text
 			Here..
 			
-		Example
+		--Example
 			Here...
 
 	Caveat
@@ -140,10 +138,17 @@ doc ///
 	Key
 		TKClass
 	Headline
-		a type of HashTable
+		the class of all T-equivariant K-classes
 	Description
 		Text
-			Describe it...
+			A T-equivariant K-class $C \in K_T^0(X)$ of a @TO "TVariety"@ $X$ is encoded by its image in $K_T^0(X^T)$
+			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  A @TO "TKClass"@ $C$ is a @TO "HashTable"@
+			consisting of two keys "tvar" and "hilb," where $C.tvar$ is the @TO "TVariety"@ on which the K-class lives on,
+			and $C.hilb$ is a @TO "HashTable"@ whose keys are $X.points$ and the values are Laurent polynomials representing
+			the value of the $C$ under the restriction map.
+		
+		--Example
+			--{1,2,3}
 			
 	SeeAlso
 	    
@@ -169,7 +174,7 @@ doc ///
 		Text
 			Here..
 			
-		Example
+		--Example
 			Here...
 
 	Caveat
@@ -183,4 +188,7 @@ doc ///
 		pullback
 		pushforward
 ///
+
+
+
 

@@ -1309,6 +1309,10 @@ tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
 )
 
 
+load "Documentations_GKMManifolds.m2"
+
+
+
 
 
 end
@@ -1323,6 +1327,9 @@ end
 -----------------------------< some tests while developing >---------------------------------
 ---------------------------------------------------------------------------------------------
 
+restart
+uninstallPackage "GKMManifolds"
+installPackage "GKMManifolds"
 
 ----------< tGeneralizedFlagVariety tests >-------------
 restart
@@ -1528,7 +1535,9 @@ peek C
 
 
 restart
-needsPackage "GKMManifolds"
+uninstallPackage"GKMManifolds"
+installPackage "GKMManifolds"
+
 
 --Grassmannians
 time X = tGeneralizedFlagVariety("A", 8, {3}) -- 3 seconds
