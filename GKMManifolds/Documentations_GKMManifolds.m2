@@ -165,13 +165,14 @@ doc ///
 			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  See REFERENCE HERE.
 
 		Text
-			A @TO "TKClass"@ TT "C" is a @TO "HashTable"@
+			A @TO "TKClass"@ @TT "C"@ is a @TO "HashTable"@
 			consisting of two keys:
 			UL{
-			{TT "tvar",  whose value is a @TO "TVariety"@ of which TT "C" is a $K$-class of},
+			{@TT "tvar"@, "whose value is a " @TO "TVariety"@ " of which ", @TT "C"@, " is a $K$-class of"},
 			{TT "hilb", whose value is a @TO "HashTable"@; its keys are TT "X.points" and the values are
-			Laurent polynomials in the character ring $R$ representing the values of the $C$ under the restriction map}.
+			Laurent polynomials in the character ring $R$ representing the values of the $C$ under the restriction map}
 			}
+
 
 	SeeAlso
 		tKClass
@@ -369,3 +370,7 @@ doc ///
 --*-
 
 
+TEST ///
+PP3 = tProjectiveSpace 3
+assert (3 == #gens PP3.charRing)
+///

@@ -21,7 +21,7 @@ newPackage("GKMManifolds",
 	    },
 	Headline => "a package for computations with GKM manifolds and moment graphs",
 	HomePage => "https://github.com/chrisweur/GKMManifolds",
-	PackageExports => {"Graphs","Matroids", "NormalToricVarieties"},
+	PackageExports => {"Graphs", "Matroids", "NormalToricVarieties"},
 	AuxiliaryFiles => true,
 	DebuggingMode => true
 )
@@ -1179,7 +1179,7 @@ globalAssignment FlagMatroid
 net FlagMatroid := M -> net ofClass class M | " with rank sequence " | toString((M.constituents)/rank) | " on " | toString(#M.groundSet) | " elements "
 
 
-flagMatroid = method();
+flagMatroid = method()
 
 --Given a list L of concordant matroids (M_1, ... , M_k) returns the flag matroid object
 --Convention: M_i is quotient of M_(i+1)
@@ -1198,14 +1198,14 @@ flagMatroid(List) := FlagMatroid => L -> (
 flagMatroid(Matrix,List) := FlagMatroid => (A,r) -> (
     k := #r; l := numcols A;
     if r == {} or any(k-1, i -> r_i > r_(i+1)) or r_(k-1) > l then << "check rank sequence" << return error;
-    ML := apply(k, i -> matroid A^(apply(r_i, j -> j)) );
+    ML := apply(k, i -> matroid A^(toList(0..(r_i-1))) );
     flagMatroid ML
 )
 
 --checks that the constituents of a flag matroid M are concordant
 isWellDefined(FlagMatroid) := Boolean => M -> (
     L := M.constituents; k := #L;
-    all(k-1, i -> isQuot(L_i,L_(i+1))) 
+    all(k-1, i -> isQuot(L_i,L_(i+1))) and all(L, isWellDefined)
 )
 
 --for a flag matroid F, outputs a list of chains of bases of the constituent matroids
@@ -1222,7 +1222,7 @@ bases(FlagMatroid) := List => M -> (
 
 
 --computes the lattice points of the base polytope of a flag matroid M
-latticePts = method();
+latticePts = method()
 latticePts(FlagMatroid) := M -> (
     n := #M.groundSet;
     BL := M.constituents/bases/(B -> B/(b -> setIndicator(b,n)));
