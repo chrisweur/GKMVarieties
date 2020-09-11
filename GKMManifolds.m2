@@ -1573,7 +1573,6 @@ time X = tGeneralizedFlagVariety("D", 7, {6,7}) -- 3 seconds
 time X = tGeneralizedFlagVariety("C", 5, {1,2,4}) -- 7 seconds
 time X = tGeneralizedFlagVariety("D", 5, {2,3,4,5}) -- 5 seconds
 
-
 --a test for normal toric varieties: Hirezebruch surface H_2
 restart
 needsPackage "GKMManifolds"
@@ -1598,7 +1597,7 @@ G.edges
 peek G
 graph G
 
-C = ampleTKClass P3
+
 assert isWellDefined C
 badTKC = tKClass(P3,{R_0,R_0,R_0,R_1})
 peek badTKC
