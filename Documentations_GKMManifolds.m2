@@ -69,14 +69,14 @@ doc ///
 		the class of all GKM manifolds
 	Description
 		Text
-			A @TO "TVariety" @TT "X"@ is a @TO "MutableHashTable"@ representing a GKM manifold $X$ with an action of a torus $T$.
+			A @TO "TVariety"@ @TT "X"@ is a @TO "MutableHashTable"@ representing a GKM manifold $X$ with an action of a torus $T$.
 			Its keys include:
 			@UL{
-			{@TT "points"@, whose value is a list representing the $T$-fixed points of $X$},
-			{@TT "charRing"@, whose value is a ring representing the character ring of $T$},
-			{@TT "momentGraph"@, whose value is the @TO "MomentGraph"@ of $X$},
-			{@TT "charts"@, whose value is a @TO "HashTable"@ representing the (negatives of) characters of the action of $T$
-			on each $T$-invariant affine chart around a $T$-fixed point.  The keys of @TT "X.charts"@ are @TT "X.points"@, and the values are lists consisting of lists of integers}.
+			{@TT "points"@ ", whose value is a list representing the $T$-fixed points of $X$"},
+			{@TT "charRing"@ ", whose value is a ring representing the character ring of $T$"},
+			{@TT "momentGraph"@ ", whose value is the @TO "MomentGraph"@ of $X$"},
+			{@TT "charts"@ ", whose value is a @TO "HashTable"@ representing the (negatives of) characters of the action of $T$
+			on each $T$-invariant affine chart around a $T$-fixed point.  The keys of @TT "X.charts"@ are @TT "X.points"@, and the values are lists consisting of lists of integers."}
 			}@
 
 	SeeAlso
@@ -170,7 +170,7 @@ doc ///
 			A @TO "TKClass"@ @TT "C"@ is a @TO "HashTable"@
 			consisting of two keys:
 			@UL{
-			{@TT "tvar"@, whose value is a @TO "TVariety"@ of which @TT "C"$ is a $K$-class of},
+			{@TT "tvar"@,  whose value is a @TO "TVariety"@ of which @TT "C"$ is a $K$-class of},
 			{@TT "hilb"@, whose value is a @TO "HashTable"@; its keys are @TT "X.points"@ and the values are
 			Laurent polynomials in the character ring $R$ representing the values of the $C$ under the restriction map}.
 			}@
@@ -215,9 +215,6 @@ doc ///
 			C = tKClass(PP3,L) --the class of O(1) on PP3
 			assert (C === ampleTKClass P33)
 			assert (isWellDefined C)
-
-
-
 
 	Caveat
 		This function does not check if X defines a T-variety - see 
