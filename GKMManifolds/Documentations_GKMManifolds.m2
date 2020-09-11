@@ -1,13 +1,8 @@
 -*----
 Things to ask Justin:
 
-Why does UL not work?
-The main page will not work
-What's up with the @something@
+
 How to send version 0.1 to be on the M2 website
-Printing on isWellDefined
-
-
 
 ----*-
 
@@ -41,23 +36,25 @@ doc ///
 			For mathematical background see:
 			
 			@UL{
-			{"T. Braden and R. MacPherson", EM "From moment graphs to intersection cohomology", "Math. Ann. 321 (2001), 533-551."},
-			{"E. Bolker, V. Guillemin, and T. Holm", EM "How is a graph like a manifold?", 	"arXiv:math/0206103"},
-			{"M. Goresky, R. Kottwitz, and R. MacPherson", EM "Equivariant cohomology, Koszul duality, and the localization theorem", " Invent. Math. 131 (1998), no. 1, 25-83."},
-			{"I. Rosu", EM "Equivariant K-theory and equivariant cohomology", "with an Appendix by I. Rosu and A. Knutson",  "Math. Z. 243 (2003), 423-448."},
-			{"J. Tymoczko", EM "An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson", "Contemp. Math. 388 (2005), 169-188."},
-			{"G. Vezzosi and A. Vistoli", EM "Higher algebraic K-theory for actions of diagonalizable groups", "Invent. Math. 153 (2003), no. 1, 1–44."}
-			}@ 
-		    
-		SUBSECTION "Examples"
-			"Example: generalized flag varieties"
-			"Example: smooth toric varieties"
+			{"T. Braden and R. MacPherson, ", EM "From moment graphs to intersection cohomology. ", "Math. Ann. 321 (2001), 533-551."},
+			{"E. Bolker, V. Guillemin, and T. Holm, ", EM "How is a graph like a manifold? ", 	"arXiv:math/0206103"},
+			{"M. Goresky, R. Kottwitz, and R. MacPherson, ", EM "Equivariant cohomology, Koszul duality, and the localization theorem. ", " Invent. Math. 131 (1998), no. 1, 25-83."},
+			{"I. Rosu, ", EM "Equivariant K-theory and equivariant cohomology ", "with an Appendix by I. Rosu and A. Knutson. ",  "Math. Z. 243 (2003), 423-448."},
+			{"J. Tymoczko, ", EM "An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson. ", "Contemp. Math. 388 (2005), 169-188."},
+			{"G. Vezzosi and A. Vistoli, ", EM "Higher algebraic K-theory for actions of diagonalizable groups. ", "Invent. Math. 153 (2003), no. 1, 1–44."}
+			}@
 
 		Text
+			@SUBSECTION "Contributors"@
+		Text
 			The following people have contributed code, improved existing code, or enhanced the documentation:
-			@UL{
-			{HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")}
-			}@
+			@HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")@
+		    .
+	SeeAlso
+		"Example: generalized flag varieties"
+		"Example: smooth toric varieties"
+
+		
 
 ///
 
@@ -69,15 +66,15 @@ doc ///
 		the class of all GKM manifolds
 	Description
 		Text
-			A @TO "TVariety"@ @TT "X"@ is a @TO "MutableHashTable"@ representing a GKM manifold $X$ with an action of a torus $T$.
+			A @TO "TVariety"@ TT "X" is a @TO "MutableHashTable"@ representing a GKM manifold $X$ with an action of a torus $T$.
 			Its keys include:
-			@UL{
-			{@TT "points"@ ", whose value is a list representing the $T$-fixed points of $X$"},
-			{@TT "charRing"@ ", whose value is a ring representing the character ring of $T$"},
-			{@TT "momentGraph"@ ", whose value is the @TO "MomentGraph"@ of $X$"},
-			{@TT "charts"@ ", whose value is a @TO "HashTable"@ representing the (negatives of) characters of the action of $T$
-			on each $T$-invariant affine chart around a $T$-fixed point.  The keys of @TT "X.charts"@ are @TT "X.points"@, and the values are lists consisting of lists of integers."}
-			}@
+			UL{
+			{TT "points", "whose value is a list representing the $T$-fixed points of $X$"},
+			{TT "charRing", "whose value is a ring representing the character ring of $T$"},
+			{TT "momentGraph", "whose value is the @TO "MomentGraph"@ of $X$"},
+			{TT "charts", "whose value is a @TO "HashTable"@ representing the (negatives of) characters of the action of $T$
+			on each $T$-invariant affine chart around a $T$-fixed point.  The keys of TT "X.charts" are TT "X.points", and the values are lists consisting of lists of integers."}
+			}
 
 	SeeAlso
 		tVariety
@@ -163,17 +160,18 @@ doc ///
 	Description
 		Text
 			For $X$ a GKM manifold with an action of a torus $T$ whose character ring is $R$,
-			a $T$-equivariant $K$-class $C \in K_T^0(X)$ of is encoded by its image in $K_T^0(X^T) \simeq \prod_{x\in X^T} R$
+			a $T$-equivariant $K$-class $C \in K_T^0(X)$ of is encoded by its image in $K_T^0(X^T)$, which is isomorphic
+			to $\prod_{x\in X^T} R$,
 			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  See REFERENCE HERE.
 
 		Text
-			A @TO "TKClass"@ @TT "C"@ is a @TO "HashTable"@
+			A @TO "TKClass"@ TT "C" is a @TO "HashTable"@
 			consisting of two keys:
-			@UL{
-			{@TT "tvar"@,  whose value is a @TO "TVariety"@ of which @TT "C"$ is a $K$-class of},
-			{@TT "hilb"@, whose value is a @TO "HashTable"@; its keys are @TT "X.points"@ and the values are
+			UL{
+			{TT "tvar",  whose value is a @TO "TVariety"@ of which TT "C" is a $K$-class of},
+			{TT "hilb", whose value is a @TO "HashTable"@; its keys are TT "X.points" and the values are
 			Laurent polynomials in the character ring $R$ representing the values of the $C$ under the restriction map}.
-			}@
+			}
 
 	SeeAlso
 		tKClass
@@ -213,7 +211,7 @@ doc ///
 			R = PP3.charRing;
 			L = gens R
 			C = tKClass(PP3,L) --the class of O(1) on PP3
-			assert (C === ampleTKClass P33)
+			assert (C === ampleTKClass PP3)
 			assert (isWellDefined C)
 
 	Caveat
@@ -278,7 +276,7 @@ doc ///
 	Inputs
 		C1:TKClass
 		C2:TKClass
-	Output
+	Outputs
 		:TKClass
 			the product of C1 and C2
 	Description
@@ -286,7 +284,7 @@ doc ///
 			This method computes the product of two $T$-equivariant $K$-classes.
 
 		Example
-			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			Gr24 = tGeneralizedFlagVariety("A",3,{2}); --the Grassmannian of projective lines in projective 3-space
 			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
 			O2 = O1 * O1
 			peek O2
@@ -307,7 +305,7 @@ doc ///
 	Inputs
 		C:TKClass
 		n:ZZ
-	Output
+	Outputs
 		:TKClass
 			the n-th power of C
 	Description
@@ -315,10 +313,10 @@ doc ///
 			This method computes the $n$-th power of a $T$-equivariant $K$-class $C$.
 
 		Example
-			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			Gr24 = tGeneralizedFlagVariety("A",3,{2}); --the Grassmannian of projective lines in projective 3-space
 			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
 			O2 = O1 * O1
-			peek O
+			peek O2
 
 	Caveat
 		$n$ is allowed to be negative only when $C$ is a line bundle, or a direct sum of copies of a line bundle.
@@ -340,7 +338,7 @@ doc ///
 	Inputs
 		C1:TKClass
 		C2:TKClass
-	Output
+	Outputs
 		:TKClass
 			the sum of C1 and C2
 	Description
@@ -348,7 +346,7 @@ doc ///
 			This method computes the sum of two $T$-equivariant $K$-classes.
 
 		Example
-			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			Gr24 = tGeneralizedFlagVariety("A",3,{2}); --the Grassmannian of projective lines in projective 3-space
 			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
 			E = O1 + (O1*O1)
 			peek E
@@ -358,7 +356,16 @@ doc ///
 		(symbol *, TKClass, TKClass)
 ///
 
+-*--
+doc ///
+	Key
+		(pullback, TMap)
+	Headline
+		computes the pullback map
+	Usage
+		pullback(f)
 
-
+///
+--*-
 
 

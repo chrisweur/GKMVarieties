@@ -21,7 +21,8 @@ newPackage("GKMManifolds",
 	    },
 	Headline => "a package for computations with GKM manifolds and moment graphs",
 	HomePage => "https://github.com/chrisweur/GKMManifolds",
-	PackageExports => {"Graphs","Matroids", "NormalToricVarieties"},	
+	PackageExports => {"Graphs","Matroids", "NormalToricVarieties"},
+	AuxiliaryFiles => true,
 	DebuggingMode => true
 )
 export {
@@ -1309,7 +1310,7 @@ tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
 )
 
 
-load "Documentations_GKMManifolds.m2"
+load "GKMManifolds/Documentations_GKMManifolds.m2"
 
 
 
