@@ -124,7 +124,7 @@ doc ///
 	
 	SeeAlso
 		(symbol **, TVariety, TVariety)
-		tFlagVariety
+		tGeneralizedFlagVariety
 		tMap
 ///
 
@@ -269,6 +269,96 @@ doc ///
 		tKClass		
 
 
+///
+
+doc ///
+	Key
+		(symbol *, TKClass, TKClass)
+	Headline
+		computes the product of two T-equivariant K-classes
+	Usage
+		C1 * C2
+	Inputs
+		C1:TKClass
+		C2:TKClass
+	Output
+		:TKClass
+			the product of C1 and C2
+	Description
+		Text
+			This method computes the product of two $T$-equivariant $K$-classes.
+
+		Example
+			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
+			O2 = O1 * O1
+			peek O2
+
+	SeeAlso
+		tKClass
+		(symbol ^, TKClass, ZZ)
+		(symbol +, TKClass, TKClass)
+///
+
+doc ///
+	Key
+		(symbol ^, TKClass, ZZ)
+	Headline
+		computes powers of a T-equivariant K-classes
+	Usage
+		C^n
+	Inputs
+		C:TKClass
+		n:ZZ
+	Output
+		:TKClass
+			the n-th power of C
+	Description
+		Text
+			This method computes the $n$-th power of a $T$-equivariant $K$-class $C$.
+
+		Example
+			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
+			O2 = O1 * O1
+			peek O
+
+	Caveat
+		$n$ is allowed to be negative only when $C$ is a line bundle, or a direct sum of copies of a line bundle.
+
+	SeeAlso
+		tKClass
+		(symbol *, TKClass, TKClass)
+		(symbol +, TKClass, TKClass)
+///
+
+
+doc ///
+	Key
+		(symbol +, TKClass, TKClass)
+	Headline
+		computes the sum of two T-equivariant K-classes
+	Usage
+		C1 + C2
+	Inputs
+		C1:TKClass
+		C2:TKClass
+	Output
+		:TKClass
+			the sum of C1 and C2
+	Description
+		Text
+			This method computes the sum of two $T$-equivariant $K$-classes.
+
+		Example
+			Gr24 = tGeneralizedFlagVariety(3,{2}); --the Grassmannian of projective lines in projective 3-space
+			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
+			E = O1 + (O1*O1)
+			peek E
+
+	SeeAlso
+		tKClass
+		(symbol *, TKClass, TKClass)
 ///
 
 

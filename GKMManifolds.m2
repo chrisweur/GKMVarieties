@@ -482,7 +482,7 @@ TKClass ^ ZZ := (C,d) -> (
     else if d == 0 then return trivialTKClass C.tvar
     else if d < 0 then (
 	if not all(values C.hilb, f -> 1 == #terms f) then (
-	    << "the TKClass is not a line bundle" <<
+	    << "unable to compute the inverse of this K-class" <<
 	    return error
 	    );
 	L := apply(C.tvar.points, p -> (C.hilb#p)^(-1));
