@@ -31,9 +31,9 @@ export {
     	"TKClass",
 	"tKClass",
 	"ampleTKClass",
+	"trivialTKClass",
 	"TMap",
 	"tMap",
-	"pullback",
 	"pushforward",	
 	"diagonalTMap",
 	"FlagMatroid",
@@ -413,7 +413,7 @@ tHilbNumer(TVariety,List) := RingElement => (X,L) -> (
 --C.hilb = a hash table whose keys are points of X and values are the Hilbert series at the point
 TKClass = new Type of HashTable
 
-TKClass.synonym = "equivariant K-class"
+TKClass.synonym = "T-equivariant K-class"
 
 globalAssignment TVariety
 net TKClass := C -> net ofClass class C | " on a T-variety "
@@ -465,7 +465,8 @@ isWellDefined(TKClass) := Boolean => C -> (
 --in other words, the TKClass of the structure sheaf of X
 trivialTKClass = method();
 trivialTKClass(TVariety) := TKClass => X -> (
-    L := apply(X.points, p -> 1_X.charRing);
+    R := X.charRing;
+    L := apply(X.points, p -> 1_R);
     tKClass(X,L)
 )
 
@@ -962,6 +963,7 @@ tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
     E := hashTable apply(select(keys G.edges, k -> all(k, i -> member(i,V))), j -> (j,G.edges#j));
     Y := tVariety(momentGraph(V,E,G.HTpt),X.charRing);
     cellOrder(Y.momentGraph, subposet(P,V));
+    Y.cache.lieType = lieType X;
     Y
     )
 
@@ -1331,7 +1333,7 @@ end
 
 restart
 uninstallPackage "GKMManifolds"
-installPackage "GKMManifolds";
+installPackage "GKMManifolds"
 viewHelp GKMManifolds
 
 ----------< tGeneralizedFlagVariety tests >-------------

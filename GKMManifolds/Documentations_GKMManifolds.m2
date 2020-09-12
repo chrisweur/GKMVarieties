@@ -75,10 +75,13 @@ doc ///
 			For type $A_{n-1}$, the group $G$ is $GL_{n}$, and the torus $T$ is $diag(t_1, \ldots, t_n)$, the group of invertible diagonal matrices.
 
 		Text
-			For type $B_n$, the group $G$ is $SO_{2n+1}$, where the symmetric bilinear form on $\mathbb C^{2n+1}$ is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
+			For type $B_n$, the group $G$ is $SO_{2n+1}$, where we set the standard symmetric bilinear form on $\mathbb C^{2n+1}$ 
+			to be is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
 
 		Text
-			For type $C_n$, the group $G$ is $Sp_{2n}$, where the alternating bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix},$ and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
+			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard the alternating bilinear form on $\mathbb C^{2n}$ 
+			to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix},$ and the torus $T$ is 
+			$diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
 
 		Text
 			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
@@ -93,9 +96,8 @@ doc ///
 			let $I = \{i \mid a_i \neq 0\}$ and $P_I$ the corresponding parabolic subgroup of $G$.
 			Then the generalized flag variety $G/P_I$ is embedded in the irreducible representation of $G$ 
 			with the highest weight $a_1w_1 + \cdots a_nw_n$.    
-
 			These generalized flag varieties can be created as a @TO "TVariety"@ using the method 
-			@TO (tGeneralizedFlagVariety, String, ZZ, List)@.  For instance, the Grassmannian $Gr(2,4)$ of
+			@TO tGeneralizedFlagVariety@.  For instance, the Grassmannian $Gr(2,4)$ of
 			2-dimensional subspaces in $\mathbb C^4$, embedded in $\mathbb P^5$ by the usual Plucker embedding, 
 			can be created as follows.
 
@@ -104,17 +106,17 @@ doc ///
 			peek Gr24
 
 		Text
-			The moment graph of $Gr(2,4)$ is the 1-skeleton of the hypersimplex $\Delta(2,4)$, a.k.a. the octahedron.
+			The @TO MomentGraph@ of $Gr(2,4)$ is the 1-skeleton of the hypersimplex $\Delta(2,4)$, a.k.a. the octahedron.
 
 		Example
 			G = momentGraph Gr24
 			underlyingGraph G
 
 		Text
-			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed as follows, and 
-			its Lefschetz trace (a.k.a. T-equivariant Euler characteristic) is a Laurent polynomial in 
-			the character ring of the torus $T$, whose terms correspond to be weights of the second
-			exterior power of the standard representation of $GL_4$.
+			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed by @TO ampleTKClass@.
+			The method @TO (tChi, TKClass)@ computes its Lefschetz trace (a.k.a. T-equivariant Euler characteristic),
+			which in this case is the Laurent polynomial in the character ring of the torus $T$ 
+			whose terms correspond to be weights of the second exterior power of the standard representation of $GL_4$.
 
 		Example
 			O1 = ampleTKClass Gr24 --the O(1) bundle on Gr24 via its Plucker embedding
@@ -129,21 +131,72 @@ doc ///
 			tChi (O1^2)
 
 		Text
-			The following example features the isotropic Grassmannian $SpGr(2,4)$ consisting of 
-			2-dimensional subspaces in $\mathbb C^4$ that are isotropic with respect to the standard alternating form.
-			Its moment graph is the a complete graph on 4 vertices.
+			The Schubert decomposition of $Gr(2,4)$, and more generally the Bruhat decomposition of $G/P$, can be accessed 
+			by the method @TO (bruhatOrder, TVariety)@, which outputs the poset of the Bruhat order.  Moreover, the Schubert
+			varieties can be created via the method @TO tGeneralizedSchubertVariety@.
 
 		Example
-			SpGr24 = tGeneralizedFlagVariety("C",2,{2})
-			peek SpGr24
-			underlyingGraph momentGraph SpGr24
-			tChi ampleTKClass SpGr24
+			P1 =  bruhatOrder Gr24
+			Sch = tGeneralizedSchubertVariety(Gr24,{set{1,2}})
+			P2 = bruhatOrder Sch
+			--{P1,P2}/displayPoset --to view the posets in pdf
+
+		Text
+			The "forgetful" map from the full flag variety $Fl(4)$ of full flags in $\mathbb C^4$ to $Gr(2,4)$, 
+			given by forgetting the subpsaces in the flag except for the 2-dimensional one, and be created as 
+			a @TO TMap@ by the method @TO tFlagMap@.
+
+		Example
+			Fl4 = tGeneralizedFlagVariety("A",3,{1,2,3},Gr24.charRing) --Fl(4) with the torus having the same character ring as Gr24
+			f = tFlagMap(Fl4,Gr24)
+			Fl4 === f.source and Gr24 === f.target
+			(trivialTKClass Gr24) === (pushforward f)(trivialTKClass Fl4)
+
+		Text
+			The (derived) pushforward of the structure sheaf of $Fl(4)$ is the structure sheaf of $Gr(2,4)$ since the higher direct images vanish under the forgetful map.
+
+		Example
+			(trivialTKClass Gr24) === (pushforward f)(trivialTKClass Fl4)
+
+		Text
+			The following example features the isotropic Grassmannian $SpGr(2,6)$ consisting of 
+			2-dimensional subspaces in $\mathbb C^6$ that are isotropic with respect to the standard alternating form.
+			The vertices of its moment graph can be considered as the vertices of the cuboctahedron.
+
+		Example
+			SpGr26 = tGeneralizedFlagVariety("C",3,{2})
+			peek SpGr26
+			momentGraph SpGr26
+
+		Text
+			The second fundamental representation of $Sp_{6}$ is 14-dimensional with 12 extremal weights.
+
+		Example
+			tChi ampleTKClass SpGr26
+
+		Text
+			The following example features the isotropic Grassmannian $OGr(2,5)$ consisting of
+			3-dimensional subspaces in $\mathbb C^5$ that are isotropic with respect to the standard symmetric form.
+			Its moment graph is the a complete graph on 4 vertices.
+			Note that Spin groups and their representations are not implemented, so for the type $B_n$ the coefficient
+			$a_n$ need be a multiple of 2.
+
+		Example
+			OGr25 = tGeneralizedFlagVariety("B",2,{2,2}) --inputing {2} instead of {2,2} results in error: spin groups not implemented yet
+			peek OGr25
+			tChi ampleTKClass OGr25
+
+	SeeAlso
+		tGeneralizedFlagVariety
+		tFlagMap
 
 
-		
-			
+
+
 
 ///
+
+
 
 
 doc ///
@@ -247,8 +300,7 @@ doc ///
 	Description
 		Text
 			For $X$ a GKM manifold with an action of a torus $T$ whose character ring is $R$,
-			a $T$-equivariant $K$-class $C \in K_T^0(X)$ of is encoded by its image in $K_T^0(X^T)$, which is isomorphic
-			to $\prod_{x\in X^T} R$,
+			a $T$-equivariant $K$-class $C \in K_T^0(X)$ of is encoded by its image in $K_T^0(X^T) = \prod_{x\in X^T} R$,
 			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  See REFERENCE HERE.
 
 		Text
@@ -447,21 +499,27 @@ doc ///
 
 doc ///
 	Key
+		tGeneralizedFlagVariety
 		(tGeneralizedFlagVariety, String, ZZ, List)
+		(tGeneralizedFlagVariety, String, ZZ, List, Ring)
 	Headline
-		makes a generalized flag variety
+		makes a generalized flag variety as a T-variety
 	Usage
-		tGeneralizedFlagVariety(LT,d,L)
+		X = tGeneralizedFlagVariety(LT,d,L)
+		X = tGeneralizedFlagVariety(LT,d,L,R)
 	Inputs
 		LT:String
-			"A", "B", "C", or "D"
+			one of "A", "B", "C", and "D"
 		d:ZZ
 			the dimension of the root system
 		L:List
-			of integers strictly between 0 and d+1
+			of integers strictly between 1 and d (inclusive)
+		R:Ring
+			the character ring of the torus acting on the generalized flag variety
+
 	Outputs
-		:TVariety
-		    the T-variety representing the corresponding generalized flag variety.
+		X:TVariety
+		    representing the corresponding generalized flag variety
 
 	Description
 		Text
@@ -475,19 +533,135 @@ doc ///
 
 ///
 
--*--
+
+
+doc ///
+	Key
+		TMap
+	Headline
+		the class of all T-equivariant maps between T-varieties
+	Description
+		Text
+			Something...
+	SeeAlso
+		(tMap, TVariety, TVariety, List)
+		(tFlagMap, TVariety, TVariety)
+		(pullback, TMap)
+		(pushforward, TMap)
+		(tChi, TKClass)
+///
+
+doc ///
+	Key
+		(tMap, TVariety, TVariety, List)
+	Headline
+		creates a TMap
+	Usage
+		f = tMap(X,Y,L)
+	Inputs
+		X:TVariety
+			the source T-variety of the map
+		Y:TVariety
+			the target T-variety of the map
+		L:List
+			of pairs (x,y) where x and y are members of TT "X.points" and TT "Y.points" (respectively),
+			indicating that the T-fixed point x of X is sent to the T-fixed point y of Y under the map.
+	Outputs
+		f:TMap
+	Description
+		Text
+			something
+
+///
+
+doc ///
+	Key
+		tFlagMap
+		(tFlagMap, TVariety, TVariety)
+	Headline
+		creates TMaps arising from forgetful maps bewteen generalized flag varieties
+	Usage
+		f = tFlagMap(X,Y)
+	Inputs
+		X:TVariety
+			the source T-variety which is a generalized flag variety
+		Y:TVariety
+			the target T-variety which is a generalized flag variety
+	Outputs
+		f:TMap
+	Description
+		Text
+			seomthign
+
+///
+
+
+
+
 doc ///
 	Key
 		(pullback, TMap)
 	Headline
-		computes the pullback map
+		computes the pullback map of T-equivariant K-classes of a T-map
 	Usage
 		pullback(f)
+	Inputs
+		f:TMap
+	Outputs
+		:FunctionClosure
+			whose input is a TKClass on the target T-variety of f and output is its pullback along f
+	Description
+		Text
+			Something something
 
 ///
---*-
+
+doc ///
+	Key
+		(pushforward, TMap)
+	Headline
+		computes the pushforward map of T-equivariant K-classes of a T-map
+	Usage
+		pushforward(f)
+	Inputs
+		f:TMap
+	Outputs
+		:FunctionClosure
+			whose input is a TKClass on the source T-variety of f and output is its pushforward along f
+	Description
+		Text
+			Something something
+
+///
+
+doc ///
+	Key
+		(tChi, TKClass)
+	Headline
+		computes the T-equivariant Euler characteristic of a T-equivariant K-class
+	Usage
+		tChi C
+	Inputs
+		C:TKClass
+	Outputs
+		:RingElement
+			in the character ring of the torus of the T-variety on which C is defined
+	Description
+		Text
+			This method computes the pushforward of a @TO TKClass@ on a @TO TVariety@ $X$ along the structure map 
+			$X \to pt$, where $pt$ is a point with trivial $T$-action.
+			
+		Example
+			PP3 = tProjectiveSpace 3
+			O1 = ampleTKClass PP3
+			tChi O1
+
+///
 
 
+-----------------------------------------------------------------------------------
+------------------------------------< TESTS >--------------------------------------
+-----------------------------------------------------------------------------------
 TEST ///
 PP3 = tProjectiveSpace 3
 assert (3 == #gens PP3.charRing)
