@@ -41,9 +41,9 @@ doc ///
 			{"R. Dinu, C. Eur, and T. Seynnaeve.  K-theoretic Tutte polynomials of morphisms of matroids.  arXiv:math/2004.00112."},
 			{"A. Fink and S. Speyer.  K-classes for matroids and equivariant localization.  Duke Math. J. 161 (2012), no. 14, 2699-2723."},
 			{"M. Goresky, R. Kottwitz, and R. MacPherson.  Equivariant cohomology, Koszul duality, and the localization theorem. Invent. Math. 131 (1998), no. 1, 25-83."},
-			{"I. Rosu, ", EM "Equivariant K-theory and equivariant cohomology ", "with an Appendix by I. Rosu and A. Knutson. ",  "Math. Z. 243 (2003), 423-448."},
-			{"J. Tymoczko, ", EM "An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson. ", "Contemp. Math. 388 (2005), 169-188."},
-			{"G. Vezzosi and A. Vistoli, ", EM "Higher algebraic K-theory for actions of diagonalizable groups. ", "Invent. Math. 153 (2003), no. 1, 1–44."}
+			{"I. Rosu.  Equivariant K-theory and equivariant cohomology.  With an Appendix by I. Rosu and A. Knutson.  Math. Z. 243 (2003), 423-448."},
+			{"J. Tymoczko.  An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson.  Contemp. Math. 388 (2005), 169-188."},
+			{"G. Vezzosi and A. Vistoli.  Higher algebraic K-theory for actions of diagonalizable groups. Invent. Math. 153 (2003), no. 1, 1–44."}
 			}@
 
 		Text
@@ -66,9 +66,82 @@ doc ///
 		"Example: generalized flag varieties"
 	Description
 		Text
-			Generalied flag vareities are important examples of GKM manifolds.  Let $G$ be a semisimple Lie group
-			of classical Lie type ($A$, $B$, $C$, or $D$).  
+			Generalized flag vareities are GKM manifolds.  If $G$ be a reductive complex Lie group and $P$ a 
+			parabolic subgroup containing a maximal torus $T$, then the generalized flag variety $G/P$ is a GKM manifold 
+			with the action of $T$.  This package allows users to create a generalized flag variety for classical Lie types 
+			($A$, $B$, $C$, and $D$) as a @TO "TVariety"@ with conventions explicitly laid out as follows.
 
+		Text
+			For type $A_{n-1}$, the group $G$ is $GL_{n}$, and the torus $T$ is $diag(t_1, \ldots, t_n)$, the group of invertible diagonal matrices.
+
+		Text
+			For type $B_n$, the group $G$ is $SO_{2n+1}$, where the symmetric bilinear form on $\mathbb C^{2n+1}$ is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
+
+		Text
+			For type $C_n$, the group $G$ is $Sp_{2n}$, where the alternating bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix},$ and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
+
+		Text
+			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
+
+		Text
+			In all the cases, the standard action of $(\mathbb C^*)^n$ on $\mathbb C^n$ is defined by $(t_1, \ldots, t_n) \cdot (x_1, \ldots, x_n) = (t_1^{-1}x_1, \ldots, t_n^{-1}x_n)$.  
+
+		Text
+			(With a Borel subgroup of $G$ fixed), let $\{w_1, \ldots, w_n\}$ be the fundamental weights, 
+			ordered for each type in the same way as in Example 3.7 of [ACEP20]. 
+			For a sequence $(a_1, \ldots, a_n)\in \mathbb N^n$ of nonnegative integers, 
+			let $I = \{i \mid a_i \neq 0\}$ and $P_I$ the corresponding parabolic subgroup of $G$.
+			Then the generalized flag variety $G/P_I$ is embedded in the irreducible representation of $G$ 
+			with the highest weight $a_1w_1 + \cdots a_nw_n$.    
+
+			These generalized flag varieties can be created as a @TO "TVariety"@ using the method 
+			@TO (tGeneralizedFlagVariety, String, ZZ, List)@.  For instance, the Grassmannian $Gr(2,4)$ of
+			2-dimensional subspaces in $\mathbb C^4$, embedded in $\mathbb P^5$ by the usual Plucker embedding, 
+			can be created as follows.
+
+		Example
+			Gr24 = tGeneralizedFlagVariety("A",3,{2})
+			peek Gr24
+
+		Text
+			The moment graph of $Gr(2,4)$ is the 1-skeleton of the hypersimplex $\Delta(2,4)$, a.k.a. the octahedron.
+
+		Example
+			G = momentGraph Gr24
+			underlyingGraph G
+
+		Text
+			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed as follows, and 
+			its Lefschetz trace (a.k.a. T-equivariant Euler characteristic) is a Laurent polynomial in 
+			the character ring of the torus $T$, whose terms correspond to be weights of the second
+			exterior power of the standard representation of $GL_4$.
+
+		Example
+			O1 = ampleTKClass Gr24 --the O(1) bundle on Gr24 via its Plucker embedding
+			tChi O1
+
+		Text
+			If $Gr(2,4)$ is embedded differently, say by $O(2)$ line bundle instead, the Lefschetz trace changes 
+			accordingly, and its coefficients record the multiplicities of the associated weight spaces in the second
+			symmetric power of the second exterior power of the standard representation of $GL_4$.
+
+		Example
+			tChi (O1^2)
+
+		Text
+			The following example features the isotropic Grassmannian $SpGr(2,4)$ consisting of 
+			2-dimensional subspaces in $\mathbb C^4$ that are isotropic with respect to the standard alternating form.
+			Its moment graph is the a complete graph on 4 vertices.
+
+		Example
+			SpGr24 = tGeneralizedFlagVariety("C",2,{2})
+			peek SpGr24
+			underlyingGraph momentGraph SpGr24
+			tChi ampleTKClass SpGr24
+
+
+		
+			
 
 ///
 
@@ -370,6 +443,36 @@ doc ///
 	SeeAlso
 		tKClass
 		(symbol *, TKClass, TKClass)
+///
+
+doc ///
+	Key
+		(tGeneralizedFlagVariety, String, ZZ, List)
+	Headline
+		makes a generalized flag variety
+	Usage
+		tGeneralizedFlagVariety(LT,d,L)
+	Inputs
+		LT:String
+			"A", "B", "C", or "D"
+		d:ZZ
+			the dimension of the root system
+		L:List
+			of integers strictly between 0 and d+1
+	Outputs
+		:TVariety
+		    the T-variety representing the corresponding generalized flag variety.
+
+	Description
+		Text
+			Let $w = a_1w_1 + \cdots + a_nw_n$ be a weight in the root system of the type $LT_d$ where $a_i$ is the number 
+			of times $i$ appears in the list $L$.  Let $G$ be the Lie group corresponding to $LT_d$.
+			This method outputs the T-variety representing the generalized flag variety $G/P$ embedded in the irreducible 
+			representation of $G$ with the highest weight $w$.
+
+	SeeAlso
+		"Example: generalized flag varieties"
+
 ///
 
 -*--

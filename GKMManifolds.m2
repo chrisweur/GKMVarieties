@@ -65,14 +65,14 @@ export {
 	"bruhatOrder",
 	"tGeneralizedSchubertVariety",
 	"tChi",
-	"TOrbClosure",
 	"tOrbitClosure",
 	"toFraction",
 	"affineToricRing",
 	"setIndicator",
 	"unastrsk",
 	"toCharRing",
-	"tHilbNumer"
+	"tHilbNumer",
+	"RREFMethod"
 }
 
 
@@ -166,7 +166,7 @@ momentGraph(List,HashTable,Ring) := MomentGraph => (V,E,H) -> (
 
 
 --outputs the graph underlying a moment graph G
-graph(MomentGraph) := Graph => opts -> G -> graph(G.vertices, keys G.edges, EntryMode => "edges")
+underlyingGraph(MomentGraph) := Graph => G -> graph(G.vertices, keys G.edges, EntryMode => "edges")
 
 
 --If a moment graph G comes from a possibly singular GKM variety with a T-invariant
@@ -871,7 +871,7 @@ tGeneralizedFlagVariety(String,ZZ,List) := TVariety => (LT,d,L) -> (
 	<< " the second entry (dimension) must be a positive integer " <<
 	return error
 	);
-    if not all(L, i -> 0 <= i and i <= d+1) then (
+    if not all(L, i -> 1 <= i and i <= d) then (
 	<< " indices for the weights must be between 1 and the dimension (inclusive) " <<
 	return error
 	);
@@ -987,8 +987,8 @@ rowRed = M -> (
 --input:  X a tGeneralizedFlagVariety and MatLst a list of matrices, {M1,...,Mn}, that defines a point in X.
 --    	  For convenience we assume that the ranks of the M_i are distinct.    	
 --output: The tKClass of the closure of the orbit of the point corresponding to {M1,...,Mn}
-TOrbClosure = method()
-TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> ( 
+tOrbClosure = method()
+tOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> ( 
     if X.cache.?lieType then Typ := X.cache.lieType else (
 	 << "T-orbit closures are only implemented for Lie types" << 
 	 return error
@@ -1047,8 +1047,11 @@ TOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> (
 --dimensions rks = {r_1, ... , r_k}, and a matrix A that is k' x (appropriate numcols),
 --where k' >= k, and the first r_i rows span an appropriate isotropic subspace,
 --outputs the TKClass of the torus-orbit closure.
-tOrbitClosure = method()
-tOrbitClosure(TVariety,Matrix) := TKClass => (X,A) -> (
+tOrbitClosure = method(Options => {RREFMethod => false})
+tOrbitClosure(TVariety,Matrix) := TKClass => opts -> (X,A) -> (
+    rks :=  apply(first X.points, v -> #(elements v));
+    MatLst := apply(rks, i -> A^(apply(i, j -> j)));
+    if opts then return tOrbClosure(X,MatLst);
     if X.cache.?lieType then Typ := X.cache.lieType else (
 	 << "T-orbit closures are only implemented for Lie types" << 
 	 return error
@@ -1064,8 +1067,6 @@ tOrbitClosure(TVariety,Matrix) := TKClass => (X,A) -> (
 	<< "the column size of the matrices are incorrect" <<
 	return error
 	);
-    rks :=  apply(first X.points, v -> #(elements v));
-    MatLst := apply(rks, i -> A^(apply(i, j -> j)));
     if not rks === apply(MatLst, v -> rank v) then (
 	<< " the rank of the matrices are incorrect" << 
 	return error
@@ -1330,7 +1331,8 @@ end
 
 restart
 uninstallPackage "GKMManifolds"
-installPackage "GKMManifolds"
+installPackage "GKMManifolds";
+viewHelp GKMManifolds
 
 ----------< tGeneralizedFlagVariety tests >-------------
 restart
