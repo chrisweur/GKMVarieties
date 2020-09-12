@@ -1336,6 +1336,7 @@ installPackage "GKMManifolds"
 restart
 needsPackage "GKMManifolds"
 
+TEST ///
 --the flag variety of 1-dim in 2-dim in ambient 3-dim space, as proj var embedded in P7
 --(here, dim means linear space dim, not projective dim)
 X = tGeneralizedFlagVariety("A",2,{1,2})

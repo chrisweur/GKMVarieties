@@ -24,10 +24,10 @@ doc ///
 		Text
 			A GKM manifold is a variety $X$, often assumed to be smooth and complete, with an 
 			action of an algebraic torus $T$ satisfying the following conditions:
-			(i) X is equivariantly formal with respect to the the action of $T$,
-			(ii) X has finitely many $T$-fixed points, and (iii) X has finitely
+			(i) $X$ is equivariantly formal with respect to the the action of $T$,
+			(ii) $X$ has finitely many $T$-fixed points, and (iii) $X$ has finitely
 			many one-dimensional $T$-orbits.  The data of the zero and one dimensional
-			$T$-orbits of $X$ defines a moment graph, with which one can carry out
+			$T$-orbits of $X$ defines the moment graph of $X$, with which one can carry out
 			$T$-equivariant cohomology and $T$-equivariant $K$-theory computations by
 			combinatorial means.  This package provides methods for these computations
 			in Macaulay2.
@@ -36,9 +36,11 @@ doc ///
 			For mathematical background see:
 			
 			@UL{
-			{"T. Braden and R. MacPherson, ", EM "From moment graphs to intersection cohomology. ", "Math. Ann. 321 (2001), 533-551."},
-			{"E. Bolker, V. Guillemin, and T. Holm, ", EM "How is a graph like a manifold? ", 	"arXiv:math/0206103"},
-			{"M. Goresky, R. Kottwitz, and R. MacPherson, ", EM "Equivariant cohomology, Koszul duality, and the localization theorem. ", " Invent. Math. 131 (1998), no. 1, 25-83."},
+			{"T. Braden and R. MacPherson.  From moment graphs to intersection cohomology.  Math. Ann. 321 (2001), 533-551."},
+			{"E. Bolker, V. Guillemin, and T. Holm.  How is a graph like a manifold?  arXiv:math/0206103."},
+			{"R. Dinu, C. Eur, and T. Seynnaeve.  K-theoretic Tutte polynomials of morphisms of matroids.  arXiv:math/2004.00112."},
+			{"A. Fink and S. Speyer.  K-classes for matroids and equivariant localization.  Duke Math. J. 161 (2012), no. 14, 2699-2723."},
+			{"M. Goresky, R. Kottwitz, and R. MacPherson.  Equivariant cohomology, Koszul duality, and the localization theorem. Invent. Math. 131 (1998), no. 1, 25-83."},
 			{"I. Rosu, ", EM "Equivariant K-theory and equivariant cohomology ", "with an Appendix by I. Rosu and A. Knutson. ",  "Math. Z. 243 (2003), 423-448."},
 			{"J. Tymoczko, ", EM "An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson. ", "Contemp. Math. 388 (2005), 169-188."},
 			{"G. Vezzosi and A. Vistoli, ", EM "Higher algebraic K-theory for actions of diagonalizable groups. ", "Invent. Math. 153 (2003), no. 1, 1–44."}
@@ -48,13 +50,25 @@ doc ///
 			@SUBSECTION "Contributors"@
 		Text
 			The following people have contributed code, improved existing code, or enhanced the documentation:
-			@HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")@
-		    .
+			@HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")@.
+		    
 	SeeAlso
 		"Example: generalized flag varieties"
 		"Example: smooth toric varieties"
 
 		
+
+///
+
+
+doc ///
+	Key
+		"Example: generalized flag varieties"
+	Description
+		Text
+			Generalied flag vareities are important examples of GKM manifolds.  Let $G$ be a semisimple Lie group
+			of classical Lie type ($A$, $B$, $C$, or $D$).  
+
 
 ///
 
@@ -156,7 +170,7 @@ doc ///
 	Key
 		TKClass
 	Headline
-		the class of all $T$-equivariant $K$-classes
+		the class of all T-equivariant K-classes
 	Description
 		Text
 			For $X$ a GKM manifold with an action of a torus $T$ whose character ring is $R$,
@@ -165,13 +179,14 @@ doc ///
 			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  See REFERENCE HERE.
 
 		Text
-			A @TO "TKClass"@ @TT "C"@ is a @TO "HashTable"@
+			A @TO "TKClass"@ C is a @TO "HashTable"@
 			consisting of two keys:
-			UL{
-			{@TT "tvar"@, "whose value is a " @TO "TVariety"@ " of which ", @TT "C"@, " is a $K$-class of"},
-			{TT "hilb", whose value is a @TO "HashTable"@; its keys are TT "X.points" and the values are
-			Laurent polynomials in the character ring $R$ representing the values of the $C$ under the restriction map}
-			}
+
+			@UL{
+			{TT "tvar", ", whose value is a ", TO "TVariety", " of which C is a K-class of"},
+			{TT "hilb", ", whose value is a ", TO "HashTable", "; its keys are ", TT "X.points", " and the values are
+			Laurent polynomials in the character ring representing the values of the K-class under the restriction map."}
+			}@
 
 
 	SeeAlso
@@ -189,7 +204,7 @@ doc ///
 		tKClass
 		(tKClass, TVariety, List)
 	Headline
-		constructs a $T$-equivariant $K$-class
+		constructs a T-equivariant K-class
 	Usage
 		C = tKClass(X,L)
 	Inputs
