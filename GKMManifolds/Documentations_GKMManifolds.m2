@@ -408,6 +408,40 @@ doc ///
 ///
 
 
+
+doc ///
+	Key
+		charts
+		(charts, TVariety)
+		(charts,TVariety, List)
+	Headline
+		outputs the T-invariant affine charts of a T-variety
+	Usage
+		charts X
+		charts(X,L)
+	Inputs
+		X:TVariety
+		L:List
+	Outputs
+		H:HashTable
+		    whose keys are the T-fixed points of X and values are the (negatives) of characters of the 
+		    T-action on a T-invariant affine chart around the corresponding point.
+	Description
+		Text
+			To do
+			
+		Text
+		    	The following example ....
+    	    	Example
+		    	Hi
+	SeeAlso
+		tVariety
+
+	
+///
+
+
+
 doc ///
 	Key
 		TKClass
@@ -841,11 +875,11 @@ doc ///
 			Given two generalized flag vareities X = Fl(k_1,..,k_m;n) and Y = Fl(k_r,..,k_m;n) of the same
 			lie type, this method produced the canonical projection from $X$ to $Y$.
 		Example
-		    	FlOG = tGeneralizedFlagVariety("B",3,{1,2})
-			OGr17 = tGeneralizedFlagVariety("B",3,{1})
+		    	FlOG = tGeneralizedFlagVariety("B",3,{1,2});
+			OGr17 = tGeneralizedFlagVariety("B",3,{1});
 			peek tFlagMap(FlOG,OGr17)
 	SeeAlso
-		tFlagMap
+		tMap
 		diagonalTMap
 		tGeneralizedFlagVariety
 
