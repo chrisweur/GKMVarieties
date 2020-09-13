@@ -95,14 +95,14 @@ M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
 X = tGeneralizedFlagVariety("A",3,{2})
 C = tOrbitClosure(X,M)
 peek C
-D = TOrbClosure(X,{M})
+D = tOrbitClosure(X,M,RREFMethod => true)
 peek D
-
+C === D
 
 M = random(QQ^2,QQ^4)
 X = tGeneralizedFlagVariety("A",3,{1,2})
 time C = tOrbitClosure(X,M); peek C
-time D = TOrbClosure(X,{M^{0},M}); peek D
+time D = tOrbitClosure(X,M,RREFMethod => true); peek D
 C === D
 
 
@@ -117,10 +117,11 @@ time C = TOrbClosure(Y,{N,M}); peek C
 M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
 N = matrix(QQ,{{1,0,1,0},{0,1,0,1}})
 X = tGeneralizedFlagVariety("C",2,{2})
-time C = TOrbClosure(X,{M}); D = TOrbClosure(X,{N});
+time C = tOrbitClosure(X,M); D = tOrbitClosure(X,N);
 peek C
 peek D
-
+time C1 = tOrbitClosure(X,M,RREFMethod => true); D1 = tOrbitClosure(X,N,RREFMethod => true);
+C1 === C, D1 === D
 
 M = matrix{{1,1,1,0,0,0},{0,0,0,1,1,-2}}
 X = tGeneralizedFlagVariety("C",3,{2})
