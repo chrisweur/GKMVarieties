@@ -10,31 +10,15 @@ MISC
 
 TESTS & DOCUMENTATION
 
-- (later) Main page
-- (R) Example: normal toric varieties
-- (E) Example: generalized flag varieties
-- (R) TVariety
-- (R) tVariety
-- (E) TKClass
-- (E) tKClass
-- (E) MomentGraph
-- (E) momentGraph
-- (R) TMap
-- (R) tMap
-- (E) tGeneralizedFlagVariety
-- (E) tGeneralizedSchubertVariety
-- (R) pushforward
-- (R) pullback
-- (R) tChi
-- (R) tProjectiveSpace
-- (E) cellOrder
-- (E) bruhatOrder
-- (R) ampleTKClass
-- (E) diagonalTMap
-- (R) makeCharRing
-- (R) makeHTpt
-- signed set stuff?
-- (R) tFlagMap
-- (R) TOrbClosure
+affineToricRing
+bruhatOrder
+cellOrder
+charts
+diagonalTMap
+lieType
+tGeneralizedSchubertVariety
+trivialTKClass
+(tKClass, TVaritey, ToricDivisor)
+MomentGraph ** MomentGraph
 
 
