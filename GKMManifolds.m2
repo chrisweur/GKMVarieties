@@ -1053,7 +1053,7 @@ tOrbitClosure = method(Options => {RREFMethod => false})
 tOrbitClosure(TVariety,Matrix) := TKClass => opts -> (X,A) -> (
     rks :=  apply(first X.points, v -> #(elements v));
     MatLst := apply(rks, i -> A^(apply(i, j -> j)));
-    if opts then return tOrbClosure(X,MatLst);
+    if opts.RREFMethod then return tOrbClosure(X,MatLst);
     if X.cache.?lieType then Typ := X.cache.lieType else (
 	 << "T-orbit closures are only implemented for Lie types" << 
 	 return error
@@ -1727,7 +1727,7 @@ C = TOrbClosure(X,{M})
 -- The closure of the following is just a point
 M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
 X = tGeneralizedFlagVariety("A",3,{2})
-C = TOrbClosure(X,{M}); peek C
+C = tOrbClosure(X,{M}); peek C
 
 Y = tGeneralizedFlagVariety("A",3,{2,2})
 C = TOrbClosure(Y,{M,M}); peek C
