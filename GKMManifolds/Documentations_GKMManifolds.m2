@@ -1010,10 +1010,10 @@ doc ///
 			A @TO MomentGraph@ is a @TO MutableHashTable@ with three keys:
 
 			@UL{
-			{TT "vertices", " whose values represent the vertices of the moment graph"},
-			{TT "edges", " whose value is a ", TO "HashTable", "; its keys are pairs {a,b} representing 
+			{TT "vertices", ", whose values represent the vertices of the moment graph"},
+			{TT "edges", ", whose value is a ", TO "HashTable", "; its keys are pairs {a,b} representing 
 			the edges of the moment graph, and the values are the characters", TEX "$m(a,b)$"},
-			{TT "HTpt", "whose value is a ring representing the T-equivariant cohomology ring of a point"}
+			{TT "HTpt", ", whose value is a ring representing the T-equivariant cohomology ring of a point"}
 			}@
 
 	Caveat
@@ -1074,11 +1074,11 @@ doc ///
 	Headline
 		view the moment graph of a T-variety
 	Usage
-		momentGraph(X)
+		G = momentGraph(X)
 	Inputs
 		X:TVariety
 	Outputs
-		:MomentGraph
+		G:MomentGraph
 			if a moment graph is defined for the @TO TVariety@ X
 	Description
 		Text
@@ -1107,7 +1107,7 @@ doc ///
 			This methods sets a given @TO MomentGraph@ G to be the moment graph of a @TO TVariety@ X.
 			If a moment graph was already defined for X, then overwrites it and prints that it has done so.
 		Example
-			R = makeCharRing 3
+			R = makeCharRing 4
 			X = tVariety({0,1,2,3},R)
 			X.?momentGraph
 			PP3 = tProjectiveSpace 3
@@ -1118,6 +1118,7 @@ doc ///
 			momentGraph(X,G)
 	SeeAlso
 		(momentGraph, TVariety)
+		(momentGraph, List, HashTable, Ring)
 
 ///
 
