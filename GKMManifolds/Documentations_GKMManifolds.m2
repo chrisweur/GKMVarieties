@@ -912,7 +912,7 @@ doc ///
 	Headline
 		constructs Projective space as a GKM manifold
 	Usage
-		tProjectiveSpace(n)
+		tProjectiveSpace n
 		tProjectiveSpace(n,R)
 	Inputs
 		n:ZZ
@@ -933,6 +933,28 @@ doc ///
 		pushforward
 ///
 
+
+
+doc ///
+	Key
+		makeCharRing
+		(makeCharRing, ZZ) 
+	Headline
+		constructs the character ring of a torus
+	Usage
+		makeCharRing n
+	Inputs
+		n:ZZ
+	Outputs
+		:Ring	
+	Description
+		Text
+			Given an integer n, this method outputs the character ring of T = $(\mathbb C^*)^n$.
+
+		Example
+			makeCharRing 4
+
+///
 
 
 
