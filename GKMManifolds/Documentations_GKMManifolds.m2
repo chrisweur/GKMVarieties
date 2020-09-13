@@ -205,13 +205,13 @@ doc ///
 		"Example: smooth toric varieties"
 	Description
 		Text
-			G
+			To do
 
 		Text
-			In
+			Hi
 
 		Example
-		    	hi	
+		    	Hi	
 
        		Text
 			The following example shows the third Hizerburch surface as a @TO "NormalToricVariety"@ and as a @TO "TVariety"@ 
@@ -968,7 +968,7 @@ doc ///
 			peek PP4
 	SeeAlso
 		tFlagMap
-		pushforward
+		tGeneralizedFlagVariety
 ///
 
 
@@ -1179,7 +1179,7 @@ doc ///
 		:TKClass
 	Description
 		Text
-			If $X$ is a T-variety with a distinguished ample T-equivariant line bundle, this method returns the TKClass of 
+			If $X$ is a T-variety with a distinguished ample T-equivariant line bundle, this method returns the @TO TKClass@ of 
 			the line bundle. If no such line bundle is defined, it allows the user to construct one.
     	    	Text
 		    	The following example describes the ample line bundle on the isotropic Grassmannian $SpGr(2,4)$. The line bundle
@@ -1194,6 +1194,46 @@ doc ///
 		tGeneralizedFlagVariety
 ///
 
+
+doc ///
+	Key
+		tOrbitClosure
+		(tOrbitClosure, TVariety, Matrix)
+	Headline
+		computes the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
+	Usage
+		C = tKClass(X,M)
+	Inputs
+		X:TVariety
+		L:Matrix
+			of matrices representing a point in a generalized flag variety
+	Outputs
+		C:TKClass
+	Description
+		Text
+			(Rephrase...) Let $X$ be a generalized flag variety parameterizing flags of linear subspaces of dimensions {r_1, ... , r_k} in $\mathbb C^n$.
+			Then a point $p$ of $X$ can be identified with a list of matrices L = {M_1,..,M_k} such that the rank of M_i is r_i and the
+			row span of M_i is contained in the row span of M_{i+1}. Given such a list L, this method computes the the T-equivariant 
+			K-class of the torus orbit of $p$. 
+		
+
+		Text
+			The following example computes the orbit closure of apoint in the Lagrangian Grassmannian $SpGr(2,4)$
+
+		Example
+			M = matrix(QQ,{{1,0,1,2},{0,1,2,1}});
+			X = tGeneralizedFlagVariety("C",2,{2});
+			C = tOrbitClosure(X,M);
+			peek C
+			isWellDefined C
+			C' = tOrbitClosure(X,M, RREFMethod => true);
+			peek C'
+			isWellDefined C'
+			
+	
+	SeeAlso
+		tGeneralizedFlagVariety
+///
 
 
 -----------------------------------------------------------------------------------
