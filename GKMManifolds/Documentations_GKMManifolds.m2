@@ -714,7 +714,7 @@ doc ///
 			This method computes the cartesian product of two $T$-equivariant morphisms.
 
 		Example
-		    	X1 = tGeneralizedFlagVariety("A",4,{1,3})
+		    X1 = tGeneralizedFlagVariety("A",4,{1,3})
 			X2 = tGeneralizedFlagVariety("A",4,{2,3})
 			Y = tGeneralizedFlagVariety("A",4,{3})
 			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
@@ -747,8 +747,8 @@ doc ///
 			This method computes the composition of two $T$-equivariant morphisms.
 
 		Example
-		    	R = ZZ[T_0..T_3]
-		    	X = tGeneralizedFlagVariety("A",3,{1,2,3},R)
+		    R = ZZ[T_0..T_3]
+		    X = tGeneralizedFlagVariety("A",3,{1,2,3},R)
 			Y = tGeneralizedFlagVariety("A",3,{2,3},R)
 			Z = tGeneralizedFlagVariety("A",3,{3},R)
 			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Gr(2,3;4)
