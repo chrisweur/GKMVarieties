@@ -1077,9 +1077,15 @@ tOrbitClosure(TVariety,Matrix) := TKClass => opts -> (X,A) -> (
     toWeights := l -> (
 	if Typ === "A" then setIndicator(set l,n)
 	else if Typ === "B" then (
-	    setIndicator(set select(l, i -> i < n),n) - setIndicator(set select(l, i -> i > n-1 and i < 2*n),n)
+	    pos := setIndicator(set select(l, i -> i < n),n);
+	    neg := setIndicator(set ((select(l, i -> i > n-1 and i < 2*n))/(j -> j-n)),n);
+	    pos - neg
 	    )
-	else setIndicator(set select(l, i -> i < n),n) - setIndicator(set select(l, i -> i > n-1),n)
+	else (
+	    post := setIndicator(set select(l, i -> i < n),n);
+	    nega := setIndicator(set ((select(l, i -> i > n-1))/(j -> j-n)),n);
+	    post - nega
+	    )
 	);
     weightLst := apply(MatLst, m -> (unique ((nonzeroMinors m)/toWeights))/(i -> R_i));
     basePolytopeWeights := (
@@ -1712,8 +1718,9 @@ C = TOrbClosure(X,{M}); peek C
 Y = tGeneralizedFlagVariety("A",3,{2,2})
 C = TOrbClosure(Y,{M,M}); peek C
 
-Z = tGeneralizedFlagVariety("C",2,{2})
-C = TOrbClosure(Z,{M}); peek C
+A = matrix(QQ,{{1,0,2,1},{0,1,1,2}})
+X = tGeneralizedFlagVariety("C",2,{2})
+C = tOrbitClosure(X,A); peek C
 
 
 
