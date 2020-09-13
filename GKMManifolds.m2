@@ -1317,27 +1317,7 @@ load "GKMManifolds/Documentations_GKMManifolds.m2"
 
 
 
-
-
 end
-
-		Example
-			V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
-			edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
-				{{set {0, "1*"}}, {set {"0*", "1*"}}},
-			    {{set {0, "1*"}}, {set {"0*", 1}}},
-			    {{set {0, "1*"}}, {set {0, 1}}},
-			    {{set {0, 1}}, {set {"0*", "1*"}}},
-			    {{set {0, 1}}, {set {"0*", 1}}}};
-		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
-		    E = hashTable(apply(edgs, v -> (v,wghts)));
-		    G = momentGraph(V,E,makeHTpt 3);
-		    Z = tVariety(G);
-		    peek Z	
-
-
-
-
 
 ---------------------------------------------------------------------------------------------
 -----------------------------< some tests while developing >---------------------------------
@@ -1727,7 +1707,7 @@ C = TOrbClosure(X,{M})
 -- The closure of the following is just a point
 M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
 X = tGeneralizedFlagVariety("A",3,{2})
-C = tOrbClosure(X,{M}); peek C
+C = TOrbClosure(X,{M}); peek C
 
 Y = tGeneralizedFlagVariety("A",3,{2,2})
 C = TOrbClosure(Y,{M,M}); peek C
