@@ -4,7 +4,7 @@ TODO LIST
 MISC
 
 * import K-Tutte for flag matroid stuff -- Chris will do this
-
+* all the Flag matroid stuff
 
 
 
@@ -64,5 +64,6 @@ Last week
 - signed set stuff?
 - (R) tFlagMap
 - (R) TOrbClosure
+
 
 
