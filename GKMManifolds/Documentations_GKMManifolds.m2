@@ -396,10 +396,11 @@ doc ///
 		    	The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
 			with the Lagrangian Grassmannian SpGr(2,4) 
     	    	Example
-		        X = tGeneralizedFlagVariety("C",2,{2});
-			Y = tGeneralizedFlagVariety("B",2,{2,2});
-			try(Z = X ** Y);
-			try(peek Z)
+		    	R = makeCharRing 2;
+		        X = tGeneralizedFlagVariety("C",2,{2},R);
+			Y = tGeneralizedFlagVariety("B",2,{2,2},R);
+			Z = X ** Y;
+			peek Z
 	SeeAlso
 		tVariety
 
@@ -1266,7 +1267,8 @@ undocumented {
 	(net, TKClass),
 	(net, TMap),
 	(net, FlagMatroid),
-	signedPermutations
+	signedPermutations,
+	tFlagVariety
 }
 
 
