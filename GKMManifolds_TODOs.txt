@@ -10,7 +10,20 @@ MISC
 
 TESTS & DOCUMENTATION
 
-- (later) Main page
+Saturday
+
+- (R) Change tFlagMap to tGeneralizedMap
+- (E) Fix TOrbClosure
+
+- (E) Flag Matroid stuff
+- (R) affineToricRing - (E) bruhatOrder - (E) cellOrder - (R) charts - (R) diagonalTMap - (R) lieType - (E) tGeneralizedSchubertVariety - (R) trivialTKClass - (R) (tKClass, TVaritey, ToricDivisor) - (R) MomentGraph ** MomentGraph - (R) (Charts, TVariety) - (R) (charts, TVariety, HashTable)
+
+
+
+
+Last week
+
+- (later) Main page [Sentence explaining GKM Manifold <-> TVariety]
 - (R) Example: normal toric varieties
 - (E) Example: generalized flag varieties
 - (R) TVariety
