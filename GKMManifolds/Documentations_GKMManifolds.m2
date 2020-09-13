@@ -200,6 +200,37 @@ doc ///
 ///
 
 
+doc ///
+	Key
+		"Example: smooth toric varieties"
+	Description
+		Text
+			G
+
+		Text
+			In
+
+		Example
+		    	hi	
+
+       		Text
+			The following example shows the third Hizerburch surface as a @TO "NormalToricVariety"@ and as a @TO "TVariety"@ 
+		Example
+			FF3 = hirzebruchSurface 3; X = tVariety FF3;
+			peek FF3
+			peek X
+		Text 
+		        We can recover the Toric variety as follows
+		Example
+		        Y = normalToricVariety(X);
+		    	peek Y
+
+
+	SeeAlso
+		tVariety
+		tProjectiveSpace
+
+///
 
 
 doc ///
@@ -229,8 +260,9 @@ doc ///
 			PP2 = tProjectiveSpace 2
 			peek PP2
 
+		   			
 	SeeAlso
-		tVariety
+	    tVariety
 		"Example: generalized flag varieties"
 		"Example: smooth toric varieties"
 		
@@ -249,36 +281,89 @@ doc ///
 		(tVariety, List, List, Ring)
 		(tVariety, MomentGraph)
 		(tVariety, MomentGraph, Ring)
+		(tVariety, NormalToricVariety)
+		(tVariety, NormalToricVariety,Ring)
+		(tVariety, TKClass)
 	Headline
 		constructs a T-variety
 	Usage
-		X = tVariety(P,R)
-		X = tVariety(P,L,R)
+		X = tVariety(L,R)
+		X = tVariety(L,M,R)
 		X = tVariety(G)
 		X = tVariety(G,R)
-
+		X = tVariety(R)
+		X = tVariety(Y,R)
+		X = tVariety(C)
 	Inputs
-		P:List
-			of T-fixed points
 		L:List
-			of lists; each entry consists of the negatives of the characters of the affine chart around a T-fixed point
-		R:Ring
-			representing the character ring the torus
+			of $T$-fixed points of $X$
+		M:List
+			of lists; each list consists of the (negatives of) characters of the 
+			action of $T$ on each $T$-invariant affine chart around the $T$-fixed point 
+			corresponding to L_i
 		G:MomentGraph
+			representing the one dimensional $T$-orbits of $X$
+		R:Ring
+			representing the characteristic ring of $T$
+		Y:NormalToricVariety
+		C:TKClass	
 	Outputs
 		X:TVariety
 	Description
 		Text
-			Here..
-			
-		--Example
-			Here...
+			The minimum data needed to make a GKM Manifold are the set of $T$-fixed points
+			and the character ring. Here is an example with projective space	
+		Example
+			L = {0,1,2,3}; R = ZZ[T_0..T_3];
+			X = tVariety(L,R)
+		Text	
+			If necessary, we can add the (negatives of) characters of the action of $T$ on each 
+			$T$-invariant chart of $X$. Note that the i-th entry of the list below corresponds to
+			the i-th entry of L.
+		Example
+		    	M = {{{-1, 1, 0, 0}, {-1, 0, 1, 0}, {-1, 0, 0, 1}},
+			    {{1, -1, 0, 0}, {0, -1, 1, 0}, {0, -1, 0, 1}},
+			    {{1, 0, -1, 0}, {0, 1, -1, 0}, {0, 0, -1, 1}},
+			    {{1, 0, 0, -1}, {0, 1, 0, -1}, {0, 0, 1, -1}}};
+			Y = tVariety(L,M,R);
+			peek Y
+		Text
+			To produce one of the generalized flag varieties we use the method @TO tGeneralizedFlagVariety@
+			Here is an example of the Lagrangian Grassmannian $SpGr(2,4)$ consisting of 2-dimensional subspaces
+			in $\mathbb C^4$ that are isotropic with respect to the standard alternating form.
+
+		Example
+			SpGr24 = tGeneralizedFlagVariety("C",2,{2})
+			peek SpGr24
+       		Text
+		       Here is the complete flag variety for $SP_4$
+		Example
+			FlGr24 = tGeneralizedFlagVariety("C",2,{1,2})
+			peek FlGr24
+		
+		Text
+		    	The following example produces the Orthogonal Grassmaninnian OGr(2,5) from its
+			moment graph.
+		Example
+		    V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
+		    edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
+                            {{set {0, "1*"}}, {set {"0*", "1*"}}},
+			    {{set {0, "1*"}}, {set {"0*", 1}}},
+			    {{set {0, "1*"}}, {set {0, 1}}},
+			    {{set {0, 1}}, {set {"0*", "1*"}}},
+			    {{set {0, 1}}, {set {"0*", 1}}}};
+		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
+		    E = hashTable(apply(edgs, v-> (v,wghts)));
+		    G = momentGraph(V,E,ZZ[T_0..T_2]);
+		    Z = tVariety(G);
+		    peek Z			
 
 	Caveat
 		This function does not check if X is a valid GKM manifold.
 	
 	SeeAlso
 		(symbol **, TVariety, TVariety)
+		tProjectiveSpace
 		tGeneralizedFlagVariety
 		tMap
 ///
@@ -299,13 +384,21 @@ doc ///
 		    product of X and Y
 	Description
 		Text
-			Here..
+			Given two $T$-varieties $X$ and $Y$ with an action of a common torus $T$, the
+			product is $X \times Y$ with the structure of a $T$-variety given by the 
+			diagonal action of $T$.
 			
-		--Example
-			Here...
+		Text
+		    	The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
+			with the Lagrangian Grassmannian SpGr(2,4) 
+    	    	Example
+		        X = tGeneralizedFlagVariety("C",2,{2});
+			Y = tGeneralizedFlagVariety("B",2,{2,2});
+			try(Z = X ** Y);
+			try(peek Z)
+	SeeAlso
+		tVariety
 
-	Caveat
-		This function does not check if X defines a T-variety
 	
 ///
 
@@ -575,20 +668,108 @@ doc ///
 	Key
 		TMap
 	Headline
-		the class of all T-equivariant maps between T-varieties
+		the class of all T-equivariant morphisms between GKM manifolds
 	Description
 		Text
-			Something...
+			Given two GKM manifolds $X$ and $Y$, a T-equivariant morphism from $X$ to $Y$
+			induces a map from the $T$-fixed points of $X$ to the $T$-fixed points of $Y$.
+			 			
+		Text
+		    	A @TO "TMap"@ C is a @TO "HashTable"@
+			consisting of three keys:
+
+			@UL{
+			{TT "source", ", whose value is a ", TO "TVariety", " corresponding to the domain of f"},
+			{TT "target", ", whose value is a ", TO "TVariety", " corresponding to the codomain of f"},
+			{TT "ptsMap", ", whose value is a ", TO "HashTable", "; its keys are ", TT "X.points", " and the values are
+			points of ", TT "Y.points", " that the key maps to."}
+			}@
+						
 	SeeAlso
-		(tMap, TVariety, TVariety, List)
-		(tFlagMap, TVariety, TVariety)
-		(pullback, TMap)
-		(pushforward, TMap)
-		(tChi, TKClass)
+		(symbol **, TMap, TMap)
+		(compose, TMap, TMap)
+	        tMap
+		tFlagMap
+		pullback
+		pushforward
+		tChi
 ///
+
 
 doc ///
 	Key
+		(symbol **, TMap, TMap)
+	Headline
+		computes the product of two T-equvariant morphisms
+	Usage
+		f ** g
+	Inputs
+		f:TMap
+		g:TMap
+	Outputs
+		:TMap
+			the product of f and g
+	Description
+		Text
+			This method computes the cartesian product of two $T$-equivariant morphisms.
+
+		Example
+		    	X1 = tGeneralizedFlagVariety("A",4,{1,3})
+			X2 = tGeneralizedFlagVariety("A",4,{2,3})
+			Y = tGeneralizedFlagVariety("A",4,{3})
+			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
+			g = tFlagMap(X2,Y); --the projection of Fl(2,3;5) onto Gr(3,5)
+			try(f ** g)
+
+	SeeAlso
+		tMap
+		tFlagMap
+		(compose, TMap, TMap)
+///
+
+
+
+doc ///
+	Key
+		(compose, TMap, TMap)
+	Headline
+		computes the composition of two T-equvariant morphisms
+	Usage
+		compose(f,g)
+	Inputs
+		f:TMap
+		g:TMap
+	Outputs
+		:TMap
+			the composition of f and g
+	Description
+		Text
+			This method computes the composition of two $T$-equivariant morphisms.
+
+		Example
+		    	R = ZZ[T_0..T_3]
+		    	X = tGeneralizedFlagVariety("A",3,{1,2,3},R)
+			Y = tGeneralizedFlagVariety("A",3,{2,3},R)
+			Z = tGeneralizedFlagVariety("A",3,{3},R)
+			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Gr(2,3;4)
+			g = tFlagMap(Y,Z); --the projection of Fl(2,3;3) onto Gr(3;4)
+			try compose(g,f)
+
+
+	SeeAlso
+	    	(symbol **, TMap, TMap)
+		tMap
+		tFlagMap
+		
+///
+
+
+
+
+
+doc ///
+	Key
+		tMap
 		(tMap, TVariety, TVariety, List)
 	Headline
 		creates a TMap
@@ -600,14 +781,34 @@ doc ///
 		Y:TVariety
 			the target T-variety of the map
 		L:List
-			of pairs (x,y) where x and y are members of TT "X.points" and TT "Y.points" (respectively),
-			indicating that the T-fixed point x of X is sent to the T-fixed point y of Y under the map.
+			of pairs (x,y) where x and y are members of @TT "X.points"@ and @TT "Y.points"@, respectively.
 	Outputs
 		f:TMap
 	Description
 		Text
-			something
+			This method creates a @TO TMap@ given a T-Variety $X$, a T-variety $Y$,
+			and a list @TT "L"@ of pairs (x,y) where x and y are members of @TT "X.points"@ and @TT "Y.points"@ (respectively),
+			indicating that the T-fixed point x of X is sent to the T-fixed point y of Y under the map.
 
+		Text
+			The following describes the projection from the third Hizerbruch surface to the projective 
+			line.
+			
+		Example
+		    	R = ZZ[T_0,T_1]
+			F3 = tVariety(hirzebruchSurface 3,R);
+			PP1 = tProjectiveSpace(1,R);
+			L = {({0,1},set {0}), ({0,3}, set{0}), ({1,2}, set{1}), ({2,3}, set{1})};
+			f = tMap(F3,PP1,L)
+	Caveat
+		This does not check that the morphism is well defined. In particular, it does not
+		verify that the map on T-fixed points is induced by a morphism of T-varieties.						
+	SeeAlso
+		diagonalTMap
+		tFlagMap
+		(pullback, TMap)
+		pushforward
+		tChi
 ///
 
 doc ///
@@ -627,7 +828,16 @@ doc ///
 		f:TMap
 	Description
 		Text
-			seomthign
+			Given two generalized flag vareities X = Fl(k_1,..,k_m;n) and Y = Fl(k_r,..,k_m;n) of the same
+			lie type, this method produced the canonical projection from $X$ to $Y$.
+		Example
+		    	FlOG = tGeneralizedFlagVariety("B",3,{1,2})
+			OGr17 = tGeneralizedFlagVariety("B",3,{1})
+			peek tFlagMap(FlOG,OGr17)
+	SeeAlso
+		tFlagMap
+		diagonalTMap
+		tGeneralizedFlagVariety
 
 ///
 
@@ -648,12 +858,26 @@ doc ///
 			whose input is a TKClass on the target T-variety of f and output is its pullback along f
 	Description
 		Text
-			Something something
+			Given two $T$-varieties $X$ and $Y$, this method computes the pullback of a @TO TKClass@ on $Y$ 
+			along a T-equivariant morphism $X \to Y$.
 
+		Example
+		    	R = ZZ[T_0..T_3];
+			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
+			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
+			f = tFlagMap(FlGr,Gr24);
+			O1 = ampleTKClass Gr24;
+			try (pullback f)(O1)
+			
+	SeeAlso
+		tFlagMap
+		pushforward
 ///
+
 
 doc ///
 	Key
+		pushforward
 		(pushforward, TMap)
 	Headline
 		computes the pushforward map of T-equivariant K-classes of a T-map
@@ -666,12 +890,26 @@ doc ///
 			whose input is a TKClass on the source T-variety of f and output is its pushforward along f
 	Description
 		Text
-			Something something
+			Given two $T$-varieties $X$ and $Y$, this method computes the pushforward of a @TO TKClass@ on $X$ 
+			along a T-equivariant morphism $X \to Y$.
 
+		Example
+		    	R = ZZ[T_0..T_3];
+			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
+			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
+			f = tFlagMap(FlGr,Gr24);
+			O1 = ampleTKClass FlGr;
+			try (pushforward f)(O1)
+
+	SeeAlso
+		tFlagMap
+		(pullback, TMap)
+		pushforward
 ///
 
 doc ///
 	Key
+		tChi
 		(tChi, TKClass)
 	Headline
 		computes the T-equivariant Euler characteristic of a T-equivariant K-class
@@ -693,6 +931,62 @@ doc ///
 			tChi O1
 
 ///
+
+
+
+
+doc ///
+	Key
+		tProjectiveSpace
+		(tProjectiveSpace, ZZ)
+		(tProjectiveSpace, ZZ, Ring) 
+	Headline
+		constructs Projective space as a GKM manifold
+	Usage
+		tProjectiveSpace n
+		tProjectiveSpace(n,R)
+	Inputs
+		n:ZZ
+		R:Ring
+	Outputs
+		:TVariety	
+	Description
+		Text
+			Given an integer $n$ this method constructs the n-dimensional Projective space, $\mathbb P^n$, as a $T$-variety. The action
+			of $(\mathbb C^*)^{n+1}$ on $\mathbb P^n$ is defined by 
+			$(t_0, \ldots, t_n) \cdot (x_0, \ldots, x_n) = (t_0^{-1}x_0, \ldots, t_n^{-1}x_n)$.
+
+		Example
+			PP4 = tProjectiveSpace 4;
+			peek PP4
+	SeeAlso
+		tFlagMap
+		pushforward
+///
+
+
+
+doc ///
+	Key
+		makeCharRing
+		(makeCharRing, ZZ) 
+	Headline
+		constructs the character ring of a torus
+	Usage
+		makeCharRing n
+	Inputs
+		n:ZZ
+	Outputs
+		:Ring	
+	Description
+		Text
+			Given an integer n, this method outputs the character ring of T = $(\mathbb C^*)^n$.
+
+		Example
+			makeCharRing 4
+
+///
+
 
 
 -----------------------------------------------------------------------------------
