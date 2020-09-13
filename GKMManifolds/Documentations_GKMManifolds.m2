@@ -396,10 +396,11 @@ doc ///
 		    	The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
 			with the Lagrangian Grassmannian SpGr(2,4) 
     	    	Example
-		        X = tGeneralizedFlagVariety("C",2,{2});
-			Y = tGeneralizedFlagVariety("B",2,{2,2});
-			try(Z = X ** Y);
-			try(peek Z)
+		    	R = makeCharRing 2;
+		        X = tGeneralizedFlagVariety("C",2,{2},R);
+			Y = tGeneralizedFlagVariety("B",2,{2,2},R);
+			Z = X ** Y;
+			peek Z
 	SeeAlso
 		tVariety
 
@@ -721,12 +722,14 @@ doc ///
 			This method computes the cartesian product of two $T$-equivariant morphisms.
 
 		Example
-		        X1 = tGeneralizedFlagVariety("A",4,{1,3});
-			X2 = tGeneralizedFlagVariety("A",4,{2,3});
-			Y = tGeneralizedFlagVariety("A",4,{3});
+		    	R = makeCharRing 5;
+		        X1 = tGeneralizedFlagVariety("A",4,{1,3},R);
+			X2 = tGeneralizedFlagVariety("A",4,{2,3},R);
+			Y = tGeneralizedFlagVariety("A",4,{3},R);
 			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
 			g = tFlagMap(X2,Y); --the projection of Fl(2,3;5) onto Gr(3,5)
-			try(f ** g)
+			h = f ** g
+			peek h
 
 	SeeAlso
 		tMap
@@ -754,13 +757,13 @@ doc ///
 			This method computes the composition of two $T$-equivariant morphisms.
 
 		Example
-		        R = R = makeCharRing 4;
+		        R = makeCharRing 4;
 		        X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
 			Y = tGeneralizedFlagVariety("A",3,{2,3},R);
 			Z = tGeneralizedFlagVariety("A",3,{3},R);
-			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Gr(2,3;4)
-			g = tFlagMap(Y,Z); --the projection of Fl(2,3;3) onto Gr(3;4)
-			try compose(g,f)
+			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Fl(2,3;4)
+			g = tFlagMap(Y,Z); --the projection of Fl(2,3;4) onto Gr(3;4)
+			compose(g,f)
 
 
 	SeeAlso
@@ -1199,6 +1202,7 @@ doc ///
 	Key
 		tOrbitClosure
 		(tOrbitClosure, TVariety, Matrix)
+	       	[tOrbitClosure, RREFMethod]
 	Headline
 		computes the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
 	Usage
@@ -1213,7 +1217,7 @@ doc ///
 		Text
 			(Rephrase...) Let $X$ be a generalized flag variety parameterizing flags of linear subspaces of dimensions {r_1, ... , r_k} in $\mathbb C^n$.
 			Then a point $p$ of $X$ can be identified with a list of matrices L = {M_1,..,M_k} such that the rank of M_i is r_i and the
-			row span of M_i is contained in the row span of M_{i+1}. Given such a list L, this method computes the the T-equivariant 
+			row span of M_i is contained in the row span of M_{i+1}. The list L may be represented as a matrix A with Given such a list L, this method computes the the T-equivariant 
 			K-class of the torus orbit of $p$. 
 		
 
@@ -1263,7 +1267,8 @@ undocumented {
 	(net, TKClass),
 	(net, TMap),
 	(net, FlagMatroid),
-	signedPermutations
+	signedPermutations,
+	tFlagVariety
 }
 
 
