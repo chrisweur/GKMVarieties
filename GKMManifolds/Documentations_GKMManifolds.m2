@@ -721,9 +721,9 @@ doc ///
 			This method computes the cartesian product of two $T$-equivariant morphisms.
 
 		Example
-		    X1 = tGeneralizedFlagVariety("A",4,{1,3})
-			X2 = tGeneralizedFlagVariety("A",4,{2,3})
-			Y = tGeneralizedFlagVariety("A",4,{3})
+		        X1 = tGeneralizedFlagVariety("A",4,{1,3});
+			X2 = tGeneralizedFlagVariety("A",4,{2,3});
+			Y = tGeneralizedFlagVariety("A",4,{3});
 			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
 			g = tFlagMap(X2,Y); --the projection of Fl(2,3;5) onto Gr(3,5)
 			try(f ** g)
@@ -754,10 +754,10 @@ doc ///
 			This method computes the composition of two $T$-equivariant morphisms.
 
 		Example
-		    R = ZZ[T_0..T_3]
-		    X = tGeneralizedFlagVariety("A",3,{1,2,3},R)
-			Y = tGeneralizedFlagVariety("A",3,{2,3},R)
-			Z = tGeneralizedFlagVariety("A",3,{3},R)
+		        R = R = makeCharRing 4;
+		        X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
+			Y = tGeneralizedFlagVariety("A",3,{2,3},R);
+			Z = tGeneralizedFlagVariety("A",3,{3},R);
 			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Gr(2,3;4)
 			g = tFlagMap(Y,Z); --the projection of Fl(2,3;3) onto Gr(3;4)
 			try compose(g,f)
@@ -802,7 +802,7 @@ doc ///
 			line.
 			
 		Example
-		    	R = ZZ[T_0,T_1]
+		    	R = makeCharRing 2;
 			F3 = tVariety(hirzebruchSurface 3,R);
 			PP1 = tProjectiveSpace(1,R);
 			L = {({0,1},set {0}), ({0,3}, set{0}), ({1,2}, set{1}), ({2,3}, set{1})};
@@ -869,7 +869,7 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    	R = ZZ[T_0..T_3];
+		    	R = makeCharRing 4;
 			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
 			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(FlGr,Gr24);
@@ -901,7 +901,7 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    	R = ZZ[T_0..T_3];
+		    	R = makeCharRing 4;
 			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
 			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(FlGr,Gr24);
@@ -1160,6 +1160,39 @@ doc ///
 
 ///
 --*-
+
+
+doc ///
+	Key
+		ampleTKClass
+		(ampleTKClass, TVariety)
+		(ampleTKClass, TVariety, TKClass)
+	Headline
+		computes the class of an ample line bundle
+	Usage
+		ampleTKClass(X)
+	Inputs
+		X:TVariety
+		C:TKClass
+	Outputs
+		:TKClass
+	Description
+		Text
+			If $X$ is a T-variety with a distinguished ample T-equivariant line bundle, this method returns the TKClass of 
+			the line bundle. If no such line bundle is defined, it allows the user to construct one.
+    	    	Text
+		    	The following example describes the ample line bundle on the isotropic Grassmannian $SpGr(2,4)$. The line bundle
+			is precisely the pullback of O(1) under the Plucker embedding $SpGr(2,4) \to \mathbb P^4$.
+		Example
+			SpGr24 = tGeneralizedFlagVariety("C",2,{2});
+			O1 = ampleTKClass SpGr24;
+			peek O1
+
+	SeeAlso
+		tKClass
+		tGeneralizedFlagVariety
+///
+
 
 
 -----------------------------------------------------------------------------------
