@@ -1108,7 +1108,7 @@ doc ///
 			If a moment graph was already defined for X, then overwrites it and prints that it has done so.
 		Example
 			R = makeCharRing 4
-			X = tVariety({0,1,2,3},R)
+			X = tVariety({set{0},set{1},set{2},set{3}},R)
 			X.?momentGraph
 			PP3 = tProjectiveSpace 3
 			G = momentGraph PP3
