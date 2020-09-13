@@ -61,13 +61,14 @@ doc ///
 ///
 
 
+
 doc ///
 	Key
 		"Example: generalized flag varieties"
 	Description
 		Text
-			Generalized flag vareities are GKM manifolds.  If $G$ be a reductive complex Lie group and $P$ a 
-			parabolic subgroup containing a maximal torus $T$, then the generalized flag variety $G/P$ is a GKM manifold 
+			Let $G$ be a reductive complex Lie group and $P$ a 
+			parabolic subgroup containing a maximal torus $T$.  The generalized flag variety $G/P$ is a GKM manifold 
 			with the action of $T$.  This package allows users to create a generalized flag variety for classical Lie types 
 			($A$, $B$, $C$, and $D$) as a @TO "TVariety"@ with conventions explicitly laid out as follows.
 
@@ -79,9 +80,9 @@ doc ///
 			to be is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
 
 		Text
-			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard the alternating bilinear form on $\mathbb C^{2n}$ 
-			to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix},$ and the torus $T$ is 
-			$diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
+			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard the alternating bilinear form on 
+			$\mathbb C^{2n}$ to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix}$, 
+			and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
 
 		Text
 			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
@@ -90,8 +91,10 @@ doc ///
 			In all the cases, the standard action of $(\mathbb C^*)^n$ on $\mathbb C^n$ is defined by $(t_1, \ldots, t_n) \cdot (x_1, \ldots, x_n) = (t_1^{-1}x_1, \ldots, t_n^{-1}x_n)$.  
 
 		Text
-			(With a Borel subgroup of $G$ fixed), let $\{w_1, \ldots, w_n\}$ be the fundamental weights, 
-			ordered for each type in the same way as in Example 3.7 of [ACEP20]. 
+			Let $\{w_1, \ldots, w_n\}$ be a set of fundamental weights, which for classical Lie types are explicitly set to be 
+			as follows. ($A_{n-1}$): $\{e_1, e_1+e_2, \ldots , e_1+e_2+\cdots+e_{n-1}\}$; ($B_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, \frac{1}{2}(e_1+\cdots e_n)\}$; ($C_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, e_1 + \cdots +e_n\}$; ($D_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-2}, \frac{1}{2}(e_1+\cdots+e_{n-2} +e_{n-1}- e_{n}), \frac{1}{2}(e_1+\cdots+e_{n-2}+e_{n-1}+e_n\}$.
+
+		Text
 			For a sequence $(a_1, \ldots, a_n)\in \mathbb N^n$ of nonnegative integers, 
 			let $I = \{i \mid a_i \neq 0\}$ and $P_I$ the corresponding parabolic subgroup of $G$.
 			Then the generalized flag variety $G/P_I$ is embedded in the irreducible representation of $G$ 
@@ -113,7 +116,7 @@ doc ///
 			underlyingGraph G
 
 		Text
-			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed by @TO ampleTKClass@.
+			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed by @TO (ampleTKClass, TVariety)@.
 			The method @TO (tChi, TKClass)@ computes its Lefschetz trace (a.k.a. T-equivariant Euler characteristic),
 			which in this case is the Laurent polynomial in the character ring of the torus $T$ 
 			whose terms correspond to be weights of the second exterior power of the standard representation of $GL_4$.
@@ -206,20 +209,32 @@ doc ///
 		the class of all GKM manifolds
 	Description
 		Text
-			A @TO "TVariety"@ TT "X" is a @TO "MutableHashTable"@ representing a GKM manifold $X$ with an action of a torus $T$.
+			A @TO TVariety@ $X$ is a @TO MutableHashTable@ representing a GKM manifold $X$ with an action of a torus $T$.
 			Its keys include:
-			UL{
-			{TT "points", "whose value is a list representing the $T$-fixed points of $X$"},
-			{TT "charRing", "whose value is a ring representing the character ring of $T$"},
-			{TT "momentGraph", "whose value is the @TO "MomentGraph"@ of $X$"},
-			{TT "charts", "whose value is a @TO "HashTable"@ representing the (negatives of) characters of the action of $T$
-			on each $T$-invariant affine chart around a $T$-fixed point.  The keys of TT "X.charts" are TT "X.points", and the values are lists consisting of lists of integers."}
-			}
+			
+			@UL{
+			{TT "points", ", whose value is a list representing the T-fixed points of ", TEX "$X$"},
+			{TT "charRing", ", whose value is a ring representing the character ring of ", TEX "$T$"},
+			{TT "momentGraph", ", whose value is the ", TO "MomentGraph", " of ", TEX "$X$"},
+			{TT "charts", ", whose value is a ", TO "HashTable", " representing the (negatives of) characters of the T-action 
+			on each T-invariant affine chart around a T-fixed point. ", " The keys of ", TT "X.charts", " are ", TT "X.points", 
+			" and the values are lists consisting of lists of integers."}
+			}@
+
+		Text
+			Every @TO TVariety@ created by methods in this package has at least the two keys @TT "points"@ and @TT "charRing"@.
+			The following example is the projective space $\mathbb P^2$ as a @TO TVariety@.
+
+		Example
+			PP2 = tProjectiveSpace 2
+			peek PP2
 
 	SeeAlso
 		tVariety
 		"Example: generalized flag varieties"
 		"Example: smooth toric varieties"
+		
+
 
 
 
@@ -230,23 +245,26 @@ doc ///
 doc ///
 	Key
 		tVariety
+		(tVariety, List, Ring)
 		(tVariety, List, List, Ring)
+		(tVariety, MomentGraph)
+		(tVariety, MomentGraph, Ring)
 	Headline
 		constructs a T-variety
 	Usage
-		X = tVariety(P,T,L,R)
+		X = tVariety(P,R)
+		X = tVariety(P,L,R)
+		X = tVariety(G)
+		X = tVariety(G,R)
+
 	Inputs
 		P:List
-			of Torus fixed points
-		T:HashTable
-			encoding the one-dimensional Torus fixed orbits.
-			The values are the orbits and the corresponding key is the pair
-			of Torus fixed points in the orbit
+			of T-fixed points
 		L:List
-			of lists; each entry consists of a Torus fixed point along with
-			the characters of the contracting affine chart around it
+			of lists; each entry consists of the negatives of the characters of the affine chart around a T-fixed point
 		R:Ring
-			representing the characteristic ring the torus
+			representing the character ring the torus
+		G:MomentGraph
 	Outputs
 		X:TVariety
 	Description
@@ -257,7 +275,7 @@ doc ///
 			Here...
 
 	Caveat
-		This function does not check if X defines a T-variety
+		This function does not check if X is a valid GKM manifold.
 	
 	SeeAlso
 		(symbol **, TVariety, TVariety)
@@ -523,13 +541,31 @@ doc ///
 
 	Description
 		Text
-			Let $w = a_1w_1 + \cdots + a_nw_n$ be a weight in the root system of the type $LT_d$ where $a_i$ is the number 
-			of times $i$ appears in the list $L$.  Let $G$ be the Lie group corresponding to $LT_d$.
+			Let $G$ be the Lie group corresponding to $LT_d$.
+			Let $w = a_1w_1 + \cdots + a_dw_d$ be a nonnegative $\mathbb Z$-linear combination of fundamental weights 
+			in the root system of type $LT_d$ (see @TO "Example: generalized flag varieties"@ for conventions),
+			where $a_i$ is the number of times $i$ appears in the list $L$.
 			This method outputs the T-variety representing the generalized flag variety $G/P$ embedded in the irreducible 
 			representation of $G$ with the highest weight $w$.
 
+		Text
+			The following example features the Lagrangian Grassmannian $LGr(2,4)$ of 2-dimensional subspaces
+			in $\mathbb C^4$ that are isotropic under the standard alternating form.  Its @TO MomentGraph@ is a complete 
+			graph on 4 vertices.
+
+		Example
+			LGr24 = tGeneralizedFlagVariety("C",2,{2})
+			peek LGr24
+			momentGraph LGr24
+			tChi ampleTKClass LGr24
+
+	Caveat
+		Spin groups have not been implemented.
+
 	SeeAlso
 		"Example: generalized flag varieties"
+		tFlagMap
+
 
 ///
 
@@ -579,14 +615,14 @@ doc ///
 		tFlagMap
 		(tFlagMap, TVariety, TVariety)
 	Headline
-		creates TMaps arising from forgetful maps bewteen generalized flag varieties
+		creates TMaps bewteen generalized flag varieties
 	Usage
 		f = tFlagMap(X,Y)
 	Inputs
 		X:TVariety
-			the source T-variety which is a generalized flag variety
+			the source generalized flag variety
 		Y:TVariety
-			the target T-variety which is a generalized flag variety
+			the target generalized flag variety
 	Outputs
 		f:TMap
 	Description
