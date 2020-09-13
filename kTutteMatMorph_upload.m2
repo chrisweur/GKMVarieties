@@ -563,10 +563,10 @@ tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
 --Given a list K and an integer n, sets up Fl(K;n) <-f- Fl(1,K,n-1;n) -g-> Fl(1;n) x Fl(n-1;n)
 fourierMukai = method();
 fourierMukai(List,ZZ,Ring) := List => (K,n,R) -> (
-    FlK := tFlagVariety(K,n,R);
-    Fl1Kn1 := tFlagVariety(unique ({1}|K|{n-1}), n, R);
-    Fl1 := tFlagVariety({1},n,R);
-    Fln1 := tFlagVariety({n-1},n,R);
+    FlK := tGeneralizedFlagVariety("A",n-1,K,R);
+    Fl1Kn1 := tGeneralizedFlagVariety("A",n-1,unique ({1}|K|{n-1}), R);
+    Fl1 := tGeneralizedFlagVariety("A",n-1,{1},R);
+    Fln1 := tGeneralizedFlagVariety("A",n-1,{n-1},R);
     piK := tFlagMap(Fl1Kn1,FlK);
     f := tFlagMap(Fl1Kn1,Fl1); g := tFlagMap(Fl1Kn1,Fln1);
     pi1n1 := compose(f ** g, diagonalTMap Fl1Kn1);
@@ -1059,19 +1059,19 @@ load "kTutteMatMorph_upload.m2"
 
 R = makeCharRing(3)
 
-X = tFlagVariety({1,2},3,R)
+X = tGeneralizedFlagVariety("A",2,{1,2},R)
 C = ampleTKClass X
 C.tvar === X
 
-P2a = tFlagVariety({1},3,R);
-P2b = tFlagVariety({2},3,R);
+P2a = tGeneralizedFlagVariety("A",2,{1},R);
+P2b = tGeneralizedFlagVariety("A",2,{2},R);
 P2a ** P2b
 
 f = tFlagMap(X,P2a)
 g = tFlagMap(X,P2b)
 h = f ** g
 d = diagonalTMap(X)
-compose(h,d)
+--compose(h,d)
 
 
 ---------------------------< Tests for the flag-geometric Tutte polynomial >--------------------------
