@@ -314,14 +314,15 @@ doc ///
 			The minimum data needed to make a GKM Manifold are the set of $T$-fixed points
 			and the character ring. Here is an example with projective space	
 		Example
-			L = {0,1,2,3}; R = ZZ[T_0..T_3];
+			L = {0,1,2,3};
+			R = makeCharRing 4
 			X = tVariety(L,R)
 		Text	
 			If necessary, we can add the (negatives of) characters of the action of $T$ on each 
 			$T$-invariant chart of $X$. Note that the i-th entry of the list below corresponds to
 			the i-th entry of L.
 		Example
-		    	M = {{{-1, 1, 0, 0}, {-1, 0, 1, 0}, {-1, 0, 0, 1}},
+			M = {{{-1, 1, 0, 0}, {-1, 0, 1, 0}, {-1, 0, 0, 1}},
 			    {{1, -1, 0, 0}, {0, -1, 1, 0}, {0, -1, 0, 1}},
 			    {{1, 0, -1, 0}, {0, 1, -1, 0}, {0, 0, -1, 1}},
 			    {{1, 0, 0, -1}, {0, 1, 0, -1}, {0, 0, 1, -1}}};
@@ -335,26 +336,29 @@ doc ///
 		Example
 			SpGr24 = tGeneralizedFlagVariety("C",2,{2})
 			peek SpGr24
-       		Text
-		       Here is the complete flag variety for $SP_4$
-		Example
-			FlGr24 = tGeneralizedFlagVariety("C",2,{1,2})
-			peek FlGr24
 		
 		Text
-		    	The following example produces the Orthogonal Grassmaninnian OGr(2,5) from its
-			moment graph.
+			Here is the complete flag variety of $Sp_4$.
+
 		Example
-		    V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
-		    edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
-                            {{set {0, "1*"}}, {set {"0*", "1*"}}},
+			SpFl4 = tGeneralizedFlagVariety("C",2,{1,2})
+			peek SpFl4
+		
+		Text
+		    The following example produces the Orthogonal Grassmaninnian $OGr(2,5)$ from its
+			moment graph.
+
+		Example
+			V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
+			edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
+				{{set {0, "1*"}}, {set {"0*", "1*"}}},
 			    {{set {0, "1*"}}, {set {"0*", 1}}},
 			    {{set {0, "1*"}}, {set {0, 1}}},
 			    {{set {0, 1}}, {set {"0*", "1*"}}},
 			    {{set {0, 1}}, {set {"0*", 1}}}};
 		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
-		    E = hashTable(apply(edgs, v-> (v,wghts)));
-		    G = momentGraph(V,E,ZZ[T_0..T_2]);
+		    E = hashTable(apply(edgs, v -> (v,wghts)));
+		    G = momentGraph(V,E,makeHTpt 3);
 		    Z = tVariety(G);
 		    peek Z			
 
@@ -567,8 +571,10 @@ doc ///
 		Example
 			Gr24 = tGeneralizedFlagVariety("A",3,{2}); --the Grassmannian of projective lines in projective 3-space
 			O1 = ampleTKClass Gr24 -- the O(1) bundle on Gr24 as a T-equivariant K-class
-			O2 = O1 * O1
+			O2 = O1^2
 			peek O2
+			Oneg1 = O1^(-1)
+			peek Oneg1
 
 	Caveat
 		$n$ is allowed to be negative only when $C$ is a line bundle, or a direct sum of copies of a line bundle.
@@ -634,10 +640,11 @@ doc ///
 
 	Description
 		Text
-			Let $G$ be the Lie group corresponding to $LT_d$.
-			Let $w = a_1w_1 + \cdots + a_dw_d$ be a nonnegative $\mathbb Z$-linear combination of fundamental weights 
-			in the root system of type $LT_d$ (see @TO "Example: generalized flag varieties"@ for conventions),
-			where $a_i$ is the number of times $i$ appears in the list $L$.
+			Let $G$ be the Lie group corresponding to $LT_d$, and
+			let $w = a_1w_1 + \cdots + a_dw_d$ be a nonnegative $\mathbb Z$-linear combination of fundamental weights 
+			in the root system of type $LT_d$, where $a_i$ is the number of times $i$ appears in the list $L$.
+			(See @TO "Example: generalized flag varieties"@ for conventions regarding classical Lie groups and 
+			their root systems).
 			This method outputs the T-variety representing the generalized flag variety $G/P$ embedded in the irreducible 
 			representation of $G$ with the highest weight $w$.
 
@@ -987,6 +994,172 @@ doc ///
 
 ///
 
+
+doc ///
+	Key
+		MomentGraph
+	Description
+		Text
+			The moment graph of a GKM manifold $X$ has vertices corresponding to the T-fixed points $X^T$ 
+			and edges corresponding to the one-dimensional T-orbits.  If $\{v_1,v_2\}$ is an edge and the 
+			corresponding one-dimensional T-orbit closure is $\mathbb P^1$ where $v_1 = 0$ and $v_2 = \infty$, 
+			then denote $m(v_1,v_2)$ to be the @EM "negative"@ of the character of the action of $T$ on 
+			$\mathbb A^1 \subset \mathbb P^1$ (where $v_1 \in \mathbb A^1$).
+
+		Text
+			A @TO MomentGraph@ is a @TO MutableHashTable@ with three keys:
+
+			@UL{
+			{TT "vertices", " whose values represent the vertices of the moment graph"},
+			{TT "edges", " whose value is a ", TO "HashTable", "; its keys are pairs {a,b} representing 
+			the edges of the moment graph, and the values are the characters", TEX "$m(a,b)$"},
+			{TT "HTpt", "whose value is a ring representing the T-equivariant cohomology ring of a point"}
+			}@
+
+	Caveat
+		Functionalities concerning intersection cohomology of sheaves on moment graphs, which had been 
+		implemenented before (see @HREF{"https://people.math.umass.edu/~braden/MG/index.html","MG: moment graph computations"}@),
+		have not been imported into this package yet.
+
+	SeeAlso
+		momentGraph
+		tVariety
+		TVariety
+
+///
+
+
+doc ///
+	Key
+		momentGraph
+		(momentGraph, List, HashTable, Ring)
+	Headline
+		creates a moment graph
+	Usage
+		G = momentGraph(L,E,H)
+	Inputs
+		L:List
+			of vertices
+		E:HashTable
+			whose keys are lists of two vertices representing edges and values are characters of corresponding 
+			1-dimensional orbits
+		H:Ring
+			a polynomial ring representing the T-equivariant cohomology ring of a point
+	Outputs
+		G:MomentGraph
+	Description
+		Text
+			This method creates a @TO MomentGraph@ from the data of vertices, edges and their associated characters,
+			and a ring representing the T-equivariant cohomology ring of a point (with triival T-action).
+			The following example is the moment graph of the projective 2-space $\mathbb P^2$.
+
+		Example
+			V = {set{0}, set{1}, set{2}};
+			E = hashTable {({set{0},set{1}},{-1,1,0}), ({set{0},set{2}},{-1,0,1}), ({set{1},set{2}},{0,-1,1})}
+			H = makeHTpt 3
+			G = momentGraph(V,E,H)
+			peek G
+			underlyingGraph G
+
+	SeeAlso
+		MomentGraph
+		(underlyingGraph, MomentGraph)
+		(momentGraph, TVariety)
+
+///
+
+doc ///
+	Key
+		(momentGraph, TVariety)
+	Headline
+		view the moment graph of a T-variety
+	Usage
+		momentGraph(X)
+	Inputs
+		X:TVariety
+	Outputs
+		:MomentGraph
+			if a moment graph is defined for the @TO TVariety@ X
+	Description
+		Text
+			If a @TO MomentGraph@ has been defined for a @TO TVariety@ X, this method method returns the moment graph, 
+			and returns error otherwise.
+		Example
+			momentGraph tGeneralizedFlagVariety("A",3,{2})
+	SeeAlso
+		(momentGraph, TVariety, MomentGraph)
+///
+
+doc ///
+	Key
+		(momentGraph, TVariety, MomentGraph)
+	Headline
+		define a moment graph for a T-variety
+	Usage
+		momentGraph(X,G)
+	Inputs
+		X:TVariety
+		G:MomentGraph
+	Outputs
+		:null
+	Description
+		Text
+			This methods sets a given @TO MomentGraph@ G to be the moment graph of a @TO TVariety@ X.
+			If a moment graph was already defined for X, then overwrites it and prints that it has done so.
+		Example
+			R = makeCharRing 3
+			X = tVariety({0,1,2,3},R)
+			X.?momentGraph
+			PP3 = tProjectiveSpace 3
+			G = momentGraph PP3
+			momentGraph(X,G)
+			X.?momentGraph
+			momentGraph X
+			momentGraph(X,G)
+	SeeAlso
+		(momentGraph, TVariety)
+
+///
+
+doc ///
+	Key
+		(underlyingGraph, MomentGraph)
+	Headline
+		the underlying (undirected) graph of a moment graph
+	Usage
+		underlyingGraph(G)
+	Inputs
+		G:MomentGraph
+	Outputs
+		:Graph
+	Description
+		Text
+			This method outputs the underlying undirected @TO Graph@ of a moment graph.
+		Example
+			G = momentGraph tProjectiveSpace 3
+			underlyingGraph G
+	SeeAlso
+		MomentGraph
+
+///
+
+-*--
+doc ///
+	Key
+	Headline
+	Usage
+	Inputs
+	Outputs
+	Description
+		Text
+			Blah
+		Example
+			X = 1
+	Caveat
+	SeeAlso
+
+///
+--*-
 
 
 -----------------------------------------------------------------------------------

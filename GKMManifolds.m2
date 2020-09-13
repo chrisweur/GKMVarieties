@@ -249,7 +249,7 @@ tVariety(MomentGraph,Ring) := TVariety => (G,R) -> (
 --tVariety created from a moment graph G
 --the character ring is created from G.HTpt
 tVariety(MomentGraph) := TVariety => G -> (
-    R := makeCharRing(#(gens G.HTpt));
+    R := makeCharRing numgens (G.HTpt);
     tVariety(G,R)
     )
 
@@ -1106,27 +1106,6 @@ tOrbitClosure(TVariety,Matrix) := TKClass => opts -> (X,A) -> (
     )
 
 
-tFlagMap = method()
-tFlagMap(TVariety,TVariety) := TMap => (X,Y) -> (
-    if not (X.cache.?lieType and Y.cache.?lieType) then << "projection maps are only implemented for Lie types" << return error;
-    if not numgens X.charRing === numgens Y.charRing then << "character ring need be same" << return error;
-    TypX := X.cache.lieType;
-    TypY := Y.cache.lieType;
-    if not TypX === TypY then << "the varieties are of different Lie types" << return error;
-    LX := apply(first X.points, v -> #(elements v));
-    LY := apply(first Y.points, v -> #(elements v));
-    if not isSubset(LY,LX) then << "there is no projection map" << return error;
-    Typ := X.cache.lieType;
-    m := numgens X.charRing;
-    rk := if Typ === "A" then m-1 else m;
-    T := symbol T;
-    R := makeCharRing(m);
-    X' := tGeneralizedFlagVariety(TypX,rk,LX,R);
-    Y' := tGeneralizedFlagVariety(TypY,rk,LY,R);
-    ptPairs := apply(X'.points, p -> (p,first select(Y'.points, q -> isSubset(q,p))));
-    tMap(X',Y',ptPairs)
-)
-
 
 ----------------------------------------------------------------------------------------------
 --------------------------------< ordinary flag varieties >-----------------------------------
@@ -1176,7 +1155,6 @@ tFlagVariety(List,ZZ) := TVariety => (K,n) -> tFlagVariety(K,n,makeCharRing n)
 
 --Given two lists Kso, Kta (for rank sequences of source and target flag varieties) and n,
 --creates the two TVarieties and makes a TMap between them (given the charRing R).
--*
 tFlagMap = method();
 tFlagMap(List,List,ZZ,Ring) := TMap => (Kso,Kta,n,R) -> (
     Flso := tFlagVariety(Kso,n,R);
@@ -1192,7 +1170,7 @@ tFlagMap(TVariety,TVariety) := TMap => (X,Y) -> (
     ptPairs := apply(X.points, p -> (p,first select(Y.points, q -> isSubset(q,p))));
     tMap(X,Y,ptPairs)
 )
-*-
+
 
 ----------------------------------< ordinary flag matroids >--------------------------------------
 
@@ -1343,7 +1321,19 @@ load "GKMManifolds/Documentations_GKMManifolds.m2"
 
 end
 
-
+		Example
+			V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
+			edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
+				{{set {0, "1*"}}, {set {"0*", "1*"}}},
+			    {{set {0, "1*"}}, {set {"0*", 1}}},
+			    {{set {0, "1*"}}, {set {0, 1}}},
+			    {{set {0, 1}}, {set {"0*", "1*"}}},
+			    {{set {0, 1}}, {set {"0*", 1}}}};
+		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
+		    E = hashTable(apply(edgs, v -> (v,wghts)));
+		    G = momentGraph(V,E,makeHTpt 3);
+		    Z = tVariety(G);
+		    peek Z	
 
 
 
