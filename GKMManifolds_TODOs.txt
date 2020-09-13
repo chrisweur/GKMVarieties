@@ -13,7 +13,10 @@ TESTS & DOCUMENTATION
 Saturday
 
 - (R) Change tFlagMap to tGeneralizedMap
+
 - (E) Fix TOrbClosure
+
+- (E) Add product of moment graphs to products
 
 - (E) Flag Matroid stuff
 
