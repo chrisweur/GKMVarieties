@@ -16,7 +16,19 @@ Saturday
 - (E) Fix TOrbClosure
 
 - (E) Flag Matroid stuff
-- (R) affineToricRing - (E) bruhatOrder - (E) cellOrder - (R) charts - (R) diagonalTMap - (R) lieType - (E) tGeneralizedSchubertVariety - (R) trivialTKClass - (R) (tKClass, TVaritey, ToricDivisor) - (R) MomentGraph ** MomentGraph - (R) (Charts, TVariety) - (R) (charts, TVariety, HashTable)
+
+- (R) affineToricRing 
+- (E) bruhatOrder 
+- (E) cellOrder 
+- (R) charts 
+- (R) diagonalTMap 
+- (R) lieType 
+- (E) tGeneralizedSchubertVariety 
+- (R) trivialTKClass 
+- (R) (tKClass, TVaritey, ToricDivisor) 
+- (R) MomentGraph ** MomentGraph 
+- (R) (Charts, TVariety) 
+- (R) (charts, TVariety, HashTable)
 
 
 
