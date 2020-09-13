@@ -1236,6 +1236,45 @@ doc ///
 ///
 
 
+
+undocumented {
+	(net, TVariety),
+	(net, MomentGraph),
+	makeHTpt,
+	tvar,
+	charRing,
+	constituents,
+	FlagMatroids,
+	fourierMukai,
+	hilb,
+	HTpt,
+	isQuot,
+	kCharPol,
+	kTutte,
+	points,
+	ptsMap,
+	RREFMethod,
+	tHilbNumer,
+	toCharRing,
+	toFraction,
+	unastrsk,
+	setIndicator,
+	(tHilbNumer, TVariety, List),
+	(net, TKClass),
+	(net, TMap),
+	(net, FlagMatroid),
+	signedPermutations
+}
+
+
+
+
+
+
+
+
+
+
 -----------------------------------------------------------------------------------
 ------------------------------------< TESTS >--------------------------------------
 -----------------------------------------------------------------------------------
