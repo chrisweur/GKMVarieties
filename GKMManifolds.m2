@@ -366,7 +366,7 @@ TVariety ** TVariety := TVariety => (X,Y) -> (
 
 --the product function above does NOT automatically compute the product moment graph
 MomentGraph ** MomentGraph := MomentGraph => (G1,G2) -> (
-    if G1.HTpt =!= G2.HTpt then (
+    if numgens G1.HTpt =!= numgens G2.HTpt then (
 	<< " the two HTpt are different " <<
 	return error
 	);
