@@ -1062,8 +1062,8 @@ doc ///
 
 			@UL{
 			{TT "vertices", ", whose values represent the vertices of the moment graph"},
-			{TT "edges", ", whose value is a ", TO "HashTable", "; its keys are pairs {a,b} representing 
-			the edges of the moment graph, and the values are the characters", TEX "$m(a,b)$"},
+			{TT "edges", ", whose value is a ", TO "HashTable", "; its keys are pairs {a,b} of elements in ", 
+			TT "vertices", " representing the edges of the moment graph, and the values are the characters ", TEX "$m(a,b)$"},
 			{TT "HTpt", ", whose value is a ring representing the T-equivariant cohomology ring of a point"}
 			}@
 
@@ -1423,7 +1423,7 @@ undocumented {
 	tHilbNumer,
 	toCharRing,
 	toFraction,
-	(toFraction, RingElement, RingElement, Ring)
+	(toFraction, RingElement, RingElement, Ring),
 	unastrsk,
 	setIndicator,
 	(tHilbNumer, TVariety, List),
