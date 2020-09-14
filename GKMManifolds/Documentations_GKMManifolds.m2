@@ -47,6 +47,10 @@ doc ///
 			}@
 
 		Text
+			GKM manifolds are represented by the data type @TO TVariety@, named as such since GKM manifolds are 
+			special kinds of T-varieties.  Related objects are @TO TMap@ and @TO TKClass@.
+
+		Text
 			@SUBSECTION "Contributors"@
 		Text
 			The following people have contributed code, improved existing code, or enhanced the documentation:
