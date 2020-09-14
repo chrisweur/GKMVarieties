@@ -40,9 +40,9 @@ export {
 	"flagMatroid",
 	"tFlagVariety",
 	"tFlagMap",
-	"fourierMukai",
+	--"fourierMukai",
 	"kTutte",
-	"kCharPol",
+	--"kCharPol",
 	"hilb",
 	"tvar",
 	"charts",
@@ -53,13 +53,12 @@ export {
 	"tProjectiveSpace",
 	"MomentGraph",
 	"momentGraph",
-	"isQuot",
 	"constituents",
 	"FlagMatroids",
 	"makeCharRing",
-	"makeHTpt",
+	--"makeHTpt",
 	"tGeneralizedFlagVariety",
-	"signedPermutations",
+	--"signedPermutations",
 	"lieType",
 	"cellOrder",
 	"bruhatOrder",
@@ -68,11 +67,12 @@ export {
 	"tOrbitClosure",
 	"toFraction",
 	"affineToricRing",
-	"setIndicator",
-	"unastrsk",
-	"toCharRing",
-	"tHilbNumer",
-	"RREFMethod"
+	--"setIndicator",
+	--"unastrsk",
+	--"toCharRing",
+	--"tHilbNumer",
+	"RREFMethod",
+	"latticePts"
 }
 
 
@@ -81,9 +81,6 @@ export {
 ------------------------------------------------------------------------------------------------
 -------------------------------< internal auxiliary functions >---------------------------------
 ------------------------------------------------------------------------------------------------
-
-
----------------------< Laurent polynomial rings and monomial algebras >-------------------------
 
 --input: a list L = {l_1, ... , l_d} of list of integers, or
 --a matrix A whose columns are l_i's, representing exponents of a monomial map
@@ -126,9 +123,7 @@ toFraction(RingElement,RingElement,Ring) := (f,g,S) -> (
     {rat, goBack}
 )
 
-
---------------------------------------< moment graphs >-----------------------------------------
-
+--auxiliary function:
 --makes a polynomial ring with n variables, representing T-equivariant cohomology 
 --ring of a point where T =  = (kk^*)^n.
 makeHTpt = method()
@@ -138,10 +133,15 @@ makeHTpt(ZZ) := Ring => n -> (
     )
 
 
+-----------------------------------------------------------------------------------------------
+--------------------------------------< moment graphs >----------------------------------------
+-----------------------------------------------------------------------------------------------
+
 --a MomentGraph G is a MutableHashTable with the minimal data of:
 --G.vertices : a list representing vertices of the graph G
 --G.edges : a hash table whose keys are pairs {p,q} of vertices and values v are directed weights
--- of the edge  p --> q where v is a list of numbers such that matrix{v} * basis(1,G.HTpt) gives the weight
+-- of the edge  p --> q where v is a list of numbers such that matrix{v} * basis(1,G.HTpt)
+-- gives the weight
 --G.HTpt : a polynomial ring, represent the T-equivariant cohomology ring of a point
 
 
@@ -1140,7 +1140,7 @@ swapIndicator = (s,n) -> (
 )
 
 
-
+-*-----------< subsumed in tGeneralizedFlagVariety command now >--------------
 --Given a list K = {k_1, ... , k_m} and a number n defining flag variety Fl(K;n) consisting of
 --flags of linear subspaces of kk^n of dimensions k_1, ... , k_m, returns the TVariety where
 --the action of T = (kk^*)^n on the vector space kk^n is (t.v) = (t^-1v)
@@ -1161,7 +1161,7 @@ tFlagVariety(List,ZZ,Ring) := TVariety => (K,n,R) -> (
 --if one does not want to make the charRing beforehand.
 --NOT recommended for use...
 tFlagVariety(List,ZZ) := TVariety => (K,n) -> tFlagVariety(K,n,makeCharRing n)
-
+----------------*-
 
 
 --Given two lists Kso, Kta (for rank sequences of source and target flag varieties) and n,
@@ -1174,9 +1174,13 @@ tFlagMap(List,List,ZZ,Ring) := TMap => (Kso,Kta,n,R) -> (
     tMap(Flso,Flta,ptPairs)
 )
 
---if X and Y are already tFlagVarieties, then the following outputs the corresponding tFlagMap
--- X --> Y
+--if X and Y are already tGeneralizedFlagVariety, then the following outputs the corresponding
+-- tFlagMap X --> Y
 tFlagMap(TVariety,TVariety) := TMap => (X,Y) -> (
+    if not (X.cache.?lieType and Y.cache.?lieType) then (
+	<< "both T-varieties need have a lieType" <<
+	return error
+	);
     if not X.charRing === Y.charRing then << "character ring need be same" << return error;
     ptPairs := apply(X.points, p -> (p,first select(Y.points, q -> isSubset(q,p))));
     tMap(X,Y,ptPairs)
@@ -1219,7 +1223,7 @@ flagMatroid(Matrix,List) := FlagMatroid => (A,r) -> (
 --checks that the constituents of a flag matroid M are concordant
 isWellDefined(FlagMatroid) := Boolean => M -> (
     L := M.constituents; k := #L;
-    all(k-1, i -> isQuot(L_i,L_(i+1))) and all(L, isWellDefined)
+    all(k-1, i -> isSubset(flats L_i, flats L_(i+1))) and all(L, isWellDefined)
 )
 
 --for a flag matroid F, outputs a list of chains of bases of the constituent matroids
@@ -1245,6 +1249,7 @@ latticePts(FlagMatroid) := M -> (
 )
 
 
+-*-----------------< not needed at this the moment >----------
 --direct sum, deletion, restriction, and contraction of a flag matroid is done by doing
 --respective operation on the operation on each constituents
 FlagMatroid ++ FlagMatroid := FlagMatroid => (M,N) -> (
@@ -1290,8 +1295,6 @@ dual(FlagMatroid) := FlagMatroid => {} >> opts -> M -> (
     flagMatroid apply(reverse ML, m -> dual m)
 )
 
-
-
 face(Matroid,Set) := (M,S) -> (M | S) ++ (M / S)
 
 face(FlagMatroid,Set) := (M,S) -> (M | S) ++ (M / S)
@@ -1301,10 +1304,11 @@ face(FlagMatroid,Set) := (M,S) -> (M | S) ++ (M / S)
 rank(FlagMatroid) := ZZ => M -> sum(M.constituents/rank)
 
 rank(FlagMatroid,Set) := ZZ => (M,A) -> sum(M.constituents, m -> rank(m,A))
-
+-------------------------*-
 
 --given a flag matroid M, returns the TKClass of its 'torus-orbit' in the flag-variety X
 tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
+    if not (lieType X) === "A" then error "the T-variety is not a flag variety";
     E := M.groundSet;
     K := M.constituents/rank;
     R := X.charRing;
@@ -1322,6 +1326,12 @@ tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
     );
     tKClass(X,L)
 )
+
+
+
+
+
+
 
 
 load "GKMManifolds/Documentations_GKMManifolds.m2"

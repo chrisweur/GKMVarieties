@@ -86,12 +86,14 @@ doc ///
 			to be is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
 
 		Text
-			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard the alternating bilinear form on 
+			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard alternating bilinear form on 
 			$\mathbb C^{2n}$ to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix}$ 
 			and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
 
 		Text
-			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1} \ldots, t_n^{-1})$.
+			For type $D_n$, the group $G$ is $SO_{2n}$, where we set the standard symmetric bilinear form on 
+			$\mathbb C^{2n}$ to be given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$
+			and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1} \ldots, t_n^{-1})$.
 
 		Text
 			In all the cases, the standard action of $(\mathbb C^*)^m$ on $\mathbb C^m$ is defined by $(t_1, \ldots, t_m) \cdot (x_1, \ldots, x_m) = (t_1^{-1}x_1, \ldots, t_m^{-1}x_m)$.  
@@ -159,24 +161,24 @@ doc ///
 			--{P1,P2}/displayPoset --to view the posets in pdf
 
 		Text
-			The "forgetful" map from the full flag variety $Fl(4)$ of full flags in $\mathbb C^4$ to $Gr(2,4)$, 
-			given by forgetting the subpsaces in the flag except for the 2-dimensional one, and be created as 
+			The "forgetful" map from the complete flag variety $Fl(4)$ to $Gr(2,4)$, 
+			given by forgetting the subpsaces in the complete flag except for the 2-dimensional one, can be created as 
 			a @TO TMap@ by the method @TO tFlagMap@.
 
 		Example
 			Fl4 = tGeneralizedFlagVariety("A",3,{1,2,3},Gr24.charRing) --Fl(4) with the torus having the same character ring as Gr24
 			f = tFlagMap(Fl4,Gr24)
 			Fl4 === f.source and Gr24 === f.target
-			(trivialTKClass Gr24) === (pushforward f)(trivialTKClass Fl4)
 
 		Text
-			The (derived) pushforward of the structure sheaf of $Fl(4)$ is the structure sheaf of $Gr(2,4)$ since the higher direct images vanish under the forgetful map.
+			As $Fl(4)$ is a $BiProj$ of vector bundles on $Gr(2,4)$, the (derived) pushforward of the structure sheaf 
+			of $Fl(4)$ is the structure sheaf of $Gr(2,4)$ since the higher direct images vanish under the forgetful map.
 
 		Example
 			(trivialTKClass Gr24) === (pushforward f)(trivialTKClass Fl4)
 
 		Text
-			The following example features the isotropic Grassmannian $SpGr(2,6)$ consisting of 
+			For type $C$, the following example features the isotropic Grassmannian $SpGr(2,6)$ consisting of 
 			2-dimensional subspaces in $\mathbb C^6$ that are isotropic with respect to the standard alternating form.
 			The vertices of its moment graph can be considered as the vertices of the cuboctahedron.
 
@@ -192,7 +194,7 @@ doc ///
 			tChi ampleTKClass SpGr26
 
 		Text
-			The following example features the isotropic Grassmannian $OGr(2,5)$ consisting of
+			For type $B$, the following example features the isotropic Grassmannian $OGr(2,5)$ consisting of
 			3-dimensional subspaces in $\mathbb C^5$ that are isotropic with respect to the standard symmetric form.
 			Its moment graph is the a complete graph on 4 vertices.
 			Note that Spin groups and their representations are not implemented, so for the type $B_n$ the coefficient
@@ -203,9 +205,32 @@ doc ///
 			peek OGr25
 			tChi ampleTKClass OGr25
 
+		Text
+			For type $D$, the following example features the isotropic Grassmannian $OGr(3,8)$ consisting of
+			3-dimensional subspaces in $\mathbb C^8$ that are isotropic with respect to the standard symmetric form.
+
+		Example
+			OGr38 = tGeneralizedFlagVariety("D",4,{3,4})
+			OGr38.points
+
+		Text
+			Similarly as in type $B$, Spin groups are not implemented, so the two connected components of 
+			$OGr(4,8)$ need be separatedly created in the following way.
+
+		Example
+			OGr48odd = tGeneralizedFlagVariety("D",4,{3,3})
+			OGr48odd.points
+			OGr48even = tGeneralizedFlagVariety("D",4,{4,4})
+			OGr48even.points
+
+	Caveat
+		Does not check for low-dimensional isogeneis.  For instance, always use type $D_n$ with $n\geq 4$ to be safe.
+
 	SeeAlso
 		tGeneralizedFlagVariety
 		tFlagMap
+		TVariety
+		tVariety
 
 
 
@@ -372,7 +397,8 @@ doc ///
 			    {{set {0, 1}}, {set {"0*", 1}}}};
 		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
 		    E = hashTable(apply(edgs, v -> (v,wghts)));
-		    G = momentGraph(V,E,makeHTpt 3);
+		    t = symbol t; H = QQ[t_0, t_1]
+		    G = momentGraph(V,E,H);
 		    Z = tVariety(G);
 		    peek Z			
 
@@ -727,7 +753,7 @@ doc ///
 	SeeAlso
 		(symbol **, TMap, TMap)
 		(compose, TMap, TMap)
-	        tMap
+	    tMap
 		tFlagMap
 		pullback
 		pushforward
@@ -788,13 +814,14 @@ doc ///
 			This method computes the composition of two $T$-equivariant morphisms.
 
 		Example
-		        R = makeCharRing 4;
-		        X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
+		    R = makeCharRing 4;
+		    X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
 			Y = tGeneralizedFlagVariety("A",3,{2,3},R);
-			Z = tGeneralizedFlagVariety("A",3,{3},R);
+			Z = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Fl(2,3;4)
-			g = tFlagMap(Y,Z); --the projection of Fl(2,3;4) onto Gr(3;4)
-			compose(g,f)
+			g = tFlagMap(Y,Z); --the projection of Fl(2,3;4) onto Gr(2;4)
+			h = compose(g,f)
+			h === tFlagMap(X,Z)
 
 
 	SeeAlso
@@ -872,8 +899,9 @@ doc ///
 			Given two generalized flag vareities X = Fl(k_1,..,k_m;n) and Y = Fl(k_r,..,k_m;n) of the same
 			lie type, this method produced the canonical projection from $X$ to $Y$.
 		Example
-		    	FlOG = tGeneralizedFlagVariety("B",3,{1,2});
-			OGr17 = tGeneralizedFlagVariety("B",3,{1});
+			R = makeCharRing 3
+		   	FlOG = tGeneralizedFlagVariety("B",3,{1,2},R);
+			OGr17 = tGeneralizedFlagVariety("B",3,{1},R);
 			peek tFlagMap(FlOG,OGr17)
 	SeeAlso
 		tMap
@@ -903,12 +931,12 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    	R = makeCharRing 4;
+		    R = makeCharRing 4;
 			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
 			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(FlGr,Gr24);
 			O1 = ampleTKClass Gr24;
-			try (pullback f)(O1)
+			(pullback f)(O1)
 			
 	SeeAlso
 		tFlagMap
@@ -935,12 +963,12 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    	R = makeCharRing 4;
+		    R = makeCharRing 4;
 			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
 			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(FlGr,Gr24);
 			O1 = ampleTKClass FlGr;
-			try (pushforward f)(O1)
+			(pushforward f)(O1)
 
 	SeeAlso
 		tFlagMap
@@ -1032,6 +1060,8 @@ doc ///
 doc ///
 	Key
 		MomentGraph
+	Headline
+		the class of all moment graphs
 	Description
 		Text
 			The moment graph of a GKM manifold $X$ has vertices corresponding to the T-fixed points $X^T$ 
@@ -1090,7 +1120,7 @@ doc ///
 		Example
 			V = {set{0}, set{1}, set{2}};
 			E = hashTable {({set{0},set{1}},{-1,1,0}), ({set{0},set{2}},{-1,0,1}), ({set{1},set{2}},{0,-1,1})}
-			H = makeHTpt 3
+			t = symbol t; H = QQ[t_0..t_2]
 			G = momentGraph(V,E,H)
 			peek G
 			underlyingGraph G
@@ -1264,7 +1294,7 @@ doc ///
 		
 
 		Text
-			The following example computes the orbit closure of apoint in the Lagrangian Grassmannian $SpGr(2,4)$
+			The following example computes the orbit closure of a point in the Lagrangian Grassmannian $SpGr(2,4)$.
 
 		Example
 			M = matrix(QQ,{{1,0,1,2},{0,1,2,1}});
@@ -1273,12 +1303,22 @@ doc ///
 			peek C
 			isWellDefined C
 			C' = tOrbitClosure(X,M, RREFMethod => true);
-			peek C'
 			isWellDefined C'
+			C === C'
 			
-	
+		Text
+			In type "A", the T-equivariant K-class of the orbit closure of a point coincides with that of its flag matroid.
+
+		Example
+			X = tGeneralizedFlagVariety("A",3,{1,2})
+			Mat = random(QQ^2,QQ^4)
+			C = tOrbitClosure(X,Mat)
+			FM = flagMatroid(Mat,{1,2})
+			C' = tKClass(X,FM)
+			C === C'
 	SeeAlso
 		tGeneralizedFlagVariety
+		(tKClass, TVariety, FlagMatroid)
 ///
 
 doc ///
@@ -1576,8 +1616,201 @@ doc ///
 		
 ///
 
+doc ///
+	Key
+		FlagMatroid
+	Headline
+		the class of all flag matroids
+	Description
+		Text
+			A flag matroid $\mathbf M$ is an ordered list $\{M_1, \ldots, M_k\}$ of @TO Matroid@s on a common ground set 
+			such that $M_i$ is a matroid quotient of $M_{i+1}$ for all $i=1, \ldots, k-1$.  The matroids $M_i$'s are called 
+			the "constituent" matroids of the flag matroid $\mathbf M$.  The class @TO FlagMatroid@ is a @TO HashTable@ with 
+			two keys:
+
+			@UL{
+			{TT "groundSet", ", whose value is a ", TO "Set", " representing the common ground set of the constituent matroids"},
+			{TT "constituents", ", whose value is a ", TO "List", " of ", TO "Matroid", "s"}
+			}@
+
+	Caveat
+		Flag matroids are the first examples beyond ordinary matroids of a more general combinatorial family 
+		known as Coxeter matroids.  Coxeter matroids have not been implemented yet.
+	SeeAlso
+		(flagMatroid, List)
+		(flagMatroid, Matrix, List)
+		(tKClass, TVariety, FlagMatroid)
+
+///
+
+doc ///
+	Key
+		flagMatroid
+		(flagMatroid, List)
+		(flagMatroid, Matrix, List)
+	Headline
+		construct a flag matroid
+	Usage
+		FM = flagMatroid(ML)
+		FM = flagMatroid(A,L)
+	Inputs
+		ML:List
+			of @TO Matroid@s on a common ground set
+		A:Matrix
+		L:List
+			of integers between 1 and the number of rows of A (inclusive)
+	Outputs
+		FM:FlagMatroid
+	Description
+		Text
+			Given a list $ML$ of matroids on a common ground set, this method stores the data as a @TO FlagMatroid@.
+		Example
+			ML = {uniformMatroid(2,6),matroid completeGraph 4}
+			FM = flagMatroid(ML)
+			isWellDefined FM
+
+		Text
+			For $A$ an $r\times n$ matrix over a field and $L = \{r_1, \ldots, r_k}$ a list of integers,
+			let $M_i$ be the @TO Matroid@ defined by the columns of the matrix obtained by the first $r_i$ rows of $A$.
+			Theses matroids form a flag matroid $\mathbf M = \{M_1, \ldots, M_k\}$.
+			This method creates this @TO FlagMatroid@.
+		Example
+			A = random(QQ^2,QQ^4)
+			FM = flagMatroid(A,{1,2})
+
+	Caveat
+		When a list of matroids is given as input, this method does not check if the flag matroid is well-defined.
+	SeeAlso
+		(isWellDefined, FlagMatroid)
+		FlagMatroid
+
+///
 
 
+
+doc ///
+	Key
+		(isWellDefined, FlagMatroid)
+	Headline
+		check if a flag matroid is well-defined
+	Usage
+		isWellDefined(FM)
+	Inputs
+		FM:FlagMatroid
+	Outputs
+		:Boolean
+	Description
+		Text
+			A @TO FlagMatroid@ with constituent matroids $\{M_1, \ldots, M_k\}$ is well-defined if $M_i$ is 
+			a matroid quotient of $M_{i+1}$ (i.e. every flat of $M_i$ is a flat of $M_{i+1}$) for all $i = 1, \ldots, k-1$.
+		Example
+			FM = flagMatroid {uniformMatroid(2,4),uniformMatroid(3,4)}
+			isWellDefined FM
+			FMbad = flagMatroid {uniformMatroid(2,4), uniformMatroid(1,2)++uniformMatroid(2,2)}
+			isWellDefined FMbad
+	SeeAlso
+		FlagMatroid
+		(flagMatroid, List)
+
+///
+
+
+doc ///
+	Key
+		(bases, FlagMatroid)
+	Headline
+		compute the bases of a flag matroid
+	Usage
+		B = bases(FM)
+	Inputs
+		FM:FlagMatroid
+	Outputs
+		B:List
+	Description
+		Text
+			An ordered list $\{B_1, \ldots, B_k\}$ of sets is basis of a flag matroid $\mathbf M = \{M_1, \ldots, M_k\}$ 
+			if $B_i$ is a basis of $M_i$ and $B_i \subseteq B_{i+1}$ for all $i$.  This method computes the bases of a 
+			flag matroid.
+		Example
+			FM = flagMatroid {uniformMatroid(2,4),uniformMatroid(3,4)}
+			bases FM
+	SeeAlso
+		FlagMatroid
+
+///
+
+doc ///
+	Key
+		latticePts
+		(latticePts, FlagMatroid)
+	Headline
+		lattice points of a base polytope of a flag matroid
+	Usage
+		P = latticePts(FM)
+	Inputs
+		FM:FlagMatroid
+	Outputs
+		P:List
+			of lists of integers representing the lattice points
+	Description
+		Text
+			For a basis $B= \{B_1, \ldots, B_k\}$ of a flag matroid $M$ (see @TO (bases, FlagMatroid)@), 
+			let $e_B$ be the sum over $i = 1, \ldots, k$ of the indicator vectors of $B_i$.
+			The base polytope of a flag matroid $M$ 
+			is the convex hull of $e_B$ as $B$ ranges over all bases of $M$.  This method computes the lattice points 
+			of the base polytope of a flag matroid, exploiting the strong normality property as proven in [CDMS18]. 
+		Example
+			FM = flagMatroid {uniformMatroid(1,4),uniformMatroid(2,4)}
+			P = latticePts FM
+		Text
+			In terms of T-equivariant K-theory, the lattice points of the base polytope of a flag matroid is 
+			equal to the integer transform of the T-equivariant Euler characteristic (see @TO tChi@) of the @TO TKClass@ 
+			defined by the flag matroid shifted by the $O(1)$ bundle on the (partial) flag variety.
+		Example
+			X = tGeneralizedFlagVariety("A",3,{1,2})
+			FM = flagMatroid {uniformMatroid(1,4),uniformMatroid(2,4)}
+			C = tKClass(X,FM)
+			chiCO1 = tChi(C * ampleTKClass X)
+			set P === set exponents chiCO1
+	SeeAlso
+		(bases, FlagMatroid)
+		tChi
+
+///
+
+doc ///
+	Key
+		(tKClass, TVariety, FlagMatroid)
+	Headline
+		the T-equivariant K-class of a flag matroid
+	Usage
+		C = tKClass(X,FM)
+	Inputs
+		X:TVariety
+			of @TO lieType@ "A" created by @TO tGeneralizedFlagVariety@ 
+		FM:FlagMatroid
+	Outputs
+		C:TKClass
+	Description
+		Text
+			A flag matroid of whose constituent matroids have ranks $r_1, \ldots, r_k$ and ground set size $n$ defines a 
+			@TO TKClass@ on the (partial) flag variety $Fl(r_1,\ldots, r_k;n)$.  When the flag matroid arises 
+			from a matrix representing a point on the (partial) flag variety, this T-equivariant K-class coincides with 
+			that of the structure sheaf of its torus orbit closure.
+			See [CDMS18] or [DES20].
+		Example
+			X = tGeneralizedFlagVariety("A",2,{1,2})
+			A = matrix{{1,2,3},{0,2,3}}
+			FM = flagMatroid(A,{1,2})
+			C1 = tKClass(X,FM)
+			C2 = tOrbitClosure(X,A)
+			C1 === C2
+
+	SeeAlso
+		(latticePts, FlagMatroid)
+		tOrbitClosure
+
+///
 
 undocumented {
 	(net, TVariety),
@@ -1587,11 +1820,8 @@ undocumented {
 	charRing,
 	constituents,
 	FlagMatroids,
-	fourierMukai,
 	hilb,
 	HTpt,
-	isQuot,
-	kCharPol,
 	kTutte,
 	points,
 	ptsMap,
