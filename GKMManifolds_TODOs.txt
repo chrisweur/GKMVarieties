@@ -17,7 +17,6 @@ DOCUMENTATION
 
 - (E) Flag Matroid stuff
 
-- (R) affineToricRing 
 - (R) trivialTKClass 
 - (R) MomentGraph ** MomentGraph
 
