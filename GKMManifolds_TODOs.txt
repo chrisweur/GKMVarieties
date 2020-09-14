@@ -5,64 +5,24 @@ MISC
 
 * import K-Tutte for flag matroid stuff -- Chris will do this
 * all the Flag matroid stuff
+* Test tKClass(TVariety,ToricDivisor) 
+* Turn stuff at end of m2 file into tests
 
 
+DOCUMENTATION
 
-TESTS & DOCUMENTATION
-
-Saturday
-
-- (R) Change tFlagMap to tGeneralizedMap
-
-- (E) Fix TOrbClosure
+- (later) Main page [Sentence explaining GKM Manifold <-> TVariety]
 
 - (E) Add product of moment graphs to products
 
 - (E) Flag Matroid stuff
 
 - (R) affineToricRing 
-- (E) bruhatOrder 
-- (E) cellOrder 
-- (R) charts 
-- (R) diagonalTMap 
-- (R) lieType 
-- (E) tGeneralizedSchubertVariety 
 - (R) trivialTKClass 
-- (R) (tKClass, TVaritey, ToricDivisor) 
-- (R) MomentGraph ** MomentGraph 
-- (R) (Charts, TVariety) 
-- (R) (charts, TVariety, HashTable)
+- (R) MomentGraph ** MomentGraph
 
-
-
-
-Last week
-
-- (later) Main page [Sentence explaining GKM Manifold <-> TVariety]
 - (R) Example: normal toric varieties
-- (E) Example: generalized flag varieties
-- (R) TVariety
-- (R) tVariety
-- (E) TKClass
-- (E) tKClass
-- (E) MomentGraph
-- (E) momentGraph
-- (R) TMap
-- (R) tMap
-- (E) tGeneralizedFlagVariety
-- (E) tGeneralizedSchubertVariety
-- (R) pushforward
-- (R) pullback
-- (R) tChi
-- (R) tProjectiveSpace
-- (E) cellOrder
-- (E) bruhatOrder
-- (R) ampleTKClass
-- (E) diagonalTMap
-- (R) makeCharRing
-- (R) makeHTpt
-- signed set stuff?
-- (R) tFlagMap
+
 - (R) TOrbClosure
 
 
