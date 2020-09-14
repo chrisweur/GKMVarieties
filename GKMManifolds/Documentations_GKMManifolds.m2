@@ -1456,8 +1456,8 @@ doc ///
 			peek f
 
 	SeeAlso
-		tFlagMap
-		pushforward
+		tMap
+		
 ///
 
 doc ///
@@ -1492,6 +1492,38 @@ doc ///
 ///
 
 
+doc ///
+	Key
+		affineToricRing
+		(affineToricRing, List)
+		(affineToricRing, Matrix)
+	Headline
+		computes the toric ring associated to a monomial map
+	Usage
+		affineToricRing L
+		affineToricRing M
+	Inputs
+		L:List
+		    of lists; each list corresponds to a vector in $\mathbb Z^n$
+		M:Matrix
+		    with each column corresponding to a vector in $\mathbb Z^n$
+	Outputs
+		:Ring
+	Description
+		Text
+			Given a list $\{v_1,...,v_d\}$ of vectors in $\mathbb Z^n$ this function computes
+			the toric ring $R/I$ where $R$ is the polynomial ring $\mathbb{Q}[x_1,\dots,x_d]$
+			with $x_i$ having degree $v_i$ and $I$ is the associated toric ideal. In particular
+			$I$ is the kernel of the map $R \to \mathbb{Q}[y_1,\dots,y_n]$ defined by
+			$x_i \mapsto \mathbb y^{v_i}$.
+		Example
+		    	L = {{2,0},{1,1},{0,2}};
+			X = affineToricRing L; -- The singular quadric in A^3	 	
+			X.ideal	      
+		
+///
+
+affineToricRing({{1},{2},{2}})
 
 
 undocumented {
