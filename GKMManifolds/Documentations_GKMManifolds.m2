@@ -1179,6 +1179,34 @@ doc ///
 ///
 
 
+doc ///
+	Key
+		(symbol **, MomentGraph, MomentGraph)
+	Headline
+		the product of two moment graphs
+	Usage
+		G ** H
+	Inputs
+		G:MomentGraph
+		H:MomentGraph
+	Outputs
+		:MomentGraph
+	Description
+		Text
+			Let $G$ and $H$ be moment graphs associated to the $T$-varieties $X$ and $Y$, respectively. This function produces
+			the moment graph of $X ** Y$; the latter is a $T$-variety via the diagonal action of $T$.
+		Example
+			G = momentGraph tProjectiveSpace 1;
+			H = momentGraph tGeneralizedFlagVariety("C",2,{2}); -- The isotropic Grassmannian SpGr(2,4)
+			J = G ** H;
+			peek J
+	SeeAlso
+		MomentGraph
+		(symbol **, TVariety, TVariety)
+
+///
+
+
 
 doc ///
 	Key
@@ -1230,7 +1258,7 @@ doc ///
 	Description
 		Text
 			(Rephrase...) Let $X$ be a generalized flag variety parameterizing flags of linear subspaces of dimensions {r_1, ... , r_k} in $\mathbb C^n$.
-			Then a point $p$ of $X$ can be identified with a list of matrices L = {M_1,..,M_k} such that the rank of M_i is r_i and the
+			Then a point $p$ of $X$ can be identified with a list of matrices L = \{M_1,..,M_k\}  such that the rank of M_i is r_i and the
 			row span of M_i is contained in the row span of M_{i+1}. The list L may be represented as a matrix A with Given such a list L, this method computes the the T-equivariant 
 			K-class of the torus orbit of $p$. 
 		
