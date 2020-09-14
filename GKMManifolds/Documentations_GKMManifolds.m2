@@ -1523,7 +1523,32 @@ doc ///
 		
 ///
 
-affineToricRing({{1},{2},{2}})
+
+doc ///
+	Key
+		trivialTKClass
+		(trivialTKClass, TVariety)
+	Headline
+		computes the T-equivariant K-class of the stucture sheaf
+	Usage
+		trivialTKClass X
+	Inputs
+		X:TVariety
+	Outputs
+		:TKClass
+	Description
+		Text
+			Given a $T$-variety $X$ this function computes the @TO TKClass@ of the
+			structure sheaf $O_X$. In terms of the localization map, $O_X$ corresponds
+			to the constant function $1$.
+		Example
+		    	X = tProjectiveSpace 3;
+			C = trivialTKClass X;
+			peek C
+		
+///
+
+
 
 
 undocumented {
