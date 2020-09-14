@@ -188,10 +188,8 @@ cellOrder(MomentGraph,Poset) := (G,P) -> (
 
 cellOrder(MomentGraph) := Poset => G -> (
     if G.cache.?cellOrder then G.cache.cellOrder
-    else << " no cell order defined on this moment graph" << error
+    else << " no cell order defined on this moment graph" << return error
     )
-
-
 
 --------------------------------------< T-varieties >-------------------------------------------
 
@@ -406,6 +404,13 @@ tHilbNumer(TVariety,List) := RingElement => (X,L) -> (
     f := value numerator hilbertSeries I;
     toCharRing(X,f)
 )
+
+cellOrder(TVariety) := Poset => X -> (
+    G := momentGraph X;
+    cellOrder G
+    )
+    
+
 
 
 --a TKClass C has data of:

@@ -47,8 +47,10 @@ doc ///
 			}@
 
 		Text
-			GKM manifolds are represented by the data type @TO TVariety@, named as such since GKM manifolds are 
-			special kinds of T-varieties.  Related objects are @TO TMap@ and @TO TKClass@.
+			In this package, while GKM manifolds are special kinds of T-varieties, we use the two terms 
+			"GKM manifolds" and "T-varieties" interchangeably.  For instance, @TO TVariety@ is the class 
+			of all GKM manifolds, @TO TKClass@ the class of T-equivariant K-classes on a GKM manifolds, and 
+			@TO TMap@ the class of T-equivariant maps between T-varieties.
 
 		Text
 			@SUBSECTION "Contributors"@
@@ -81,22 +83,30 @@ doc ///
 
 		Text
 			For type $B_n$, the group $G$ is $SO_{2n+1}$, where we set the standard symmetric bilinear form on $\mathbb C^{2n+1}$ 
-			to be is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
+			to be is given by the matrix $\begin{pmatrix} 0 & I_n & 0 \\ I_n & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1}, 1)$.
 
 		Text
 			For type $C_n$, the group $G$ is $Sp_{2n}$, where we set the standard the alternating bilinear form on 
-			$\mathbb C^{2n}$ to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix}$, 
+			$\mathbb C^{2n}$ to be given by the matrix $\begin{pmatrix} 0 & -I_n \\ I_n & 0 \end{pmatrix}$ 
 			and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
 
 		Text
-			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1}, \ldots, t_n^{-1})$.
+			For type $D_n$, the group $G$ is $SO_{2n}$, where the symmetric bilinear form on $\mathbb C^{2n}$ is given by the matrix $\begin{pmatrix} 0 & I_n \\ I_n & 0 \end{pmatrix}$, and the torus $T$ is $diag(t_1, \ldots,t_n, t_1^{-1} \ldots, t_n^{-1})$.
 
 		Text
-			In all the cases, the standard action of $(\mathbb C^*)^n$ on $\mathbb C^n$ is defined by $(t_1, \ldots, t_n) \cdot (x_1, \ldots, x_n) = (t_1^{-1}x_1, \ldots, t_n^{-1}x_n)$.  
+			In all the cases, the standard action of $(\mathbb C^*)^m$ on $\mathbb C^m$ is defined by $(t_1, \ldots, t_m) \cdot (x_1, \ldots, x_m) = (t_1^{-1}x_1, \ldots, t_m^{-1}x_m)$.  
 
 		Text
 			Let $\{w_1, \ldots, w_n\}$ be a set of fundamental weights, which for classical Lie types are explicitly set to be 
-			as follows. ($A_{n-1}$): $\{e_1, e_1+e_2, \ldots , e_1+e_2+\cdots+e_{n-1}\}$; ($B_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, \frac{1}{2}(e_1+\cdots e_n)\}$; ($C_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, e_1 + \cdots +e_n\}$; ($D_n$): $\{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-2}, \frac{1}{2}(e_1+\cdots+e_{n-2} +e_{n-1}- e_{n}), \frac{1}{2}(e_1+\cdots+e_{n-2}+e_{n-1}+e_n\}$.
+			as follows:
+
+			($A_{n-1}$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+e_2+\cdots+e_{n-1}\}$
+
+			($B_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, \frac{1}{2}(e_1+\cdots e_n)\}$
+
+			($C_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, e_1 + \cdots +e_n\}$
+
+			($D_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-2}, \frac{1}{2}(e_1+\cdots+e_{n-2} +e_{n-1}- e_{n}), \frac{1}{2}(e_1+\cdots+e_{n-2}+e_{n-1}+e_n\}$
 
 		Text
 			For a sequence $(a_1, \ldots, a_n)\in \mathbb N^n$ of nonnegative integers, 
@@ -1185,23 +1195,6 @@ doc ///
 
 ///
 
--*--
-doc ///
-	Key
-	Headline
-	Usage
-	Inputs
-	Outputs
-	Description
-		Text
-			Blah
-		Example
-			X = 1
-	Caveat
-	SeeAlso
-
-///
---*-
 
 
 doc ///
@@ -1277,6 +1270,137 @@ doc ///
 		tGeneralizedFlagVariety
 ///
 
+doc ///
+	Key
+		cellOrder
+		(cellOrder, MomentGraph)
+		(cellOrder, TVariety)
+	Headline
+		the poset of a stratification of a T-variety
+	Usage
+		P = cellOrder(G)
+		P = cellOrder(X)
+	Inputs
+		G:MomentGraph
+			on which a cell order has been defined already
+		X:TVariety
+			whose moment graph has a cell order defined already
+	Outputs
+		P:Poset
+	Description
+		Text
+			If a moment graph $G$ arises from a (possibly singular) GKM manifold $X$ with a T-equivariant stratification,
+			with each strata having a unique T-fixed point, the vertices of $G$ (which correspond to the T-fixed point of $X$)
+			form a poset where $v_1 \leq v_2$ if the closure of the stratum corresponding to $v_1$ contains that of $v_2$.
+			The following example features the Schubert variety of projective lines in $\mathbb P^3$ meeting a distinguished line.
+			The poset of its stratification by smaller Schubert cells is a subposet of the Bruhat poset.
+		Example
+			Gr24 = tGeneralizedFlagVariety("A",3,{2})
+			X = tGeneralizedSchubertVariety(Gr24, {set{0,2}})
+			cellOrder X
+
+	SeeAlso
+		(cellOrder, MomentGraph, Poset)
+		bruhatOrder
+
+
+///
+
+doc ///
+	Key
+		(cellOrder, MomentGraph, Poset)
+	Headline
+		define a cell order on a moment graph
+	Usage
+		cellOrder(G,P)
+	Inputs
+		G:MomentGraph
+		P:Poset
+			whose ground set is the vertices of G
+	Description
+		Text
+			Defines a @TO Poset@ $P$ to be a cell order on the @TO MomentGraph@ $G$.  Overwrites if there was 
+			one already defined on $G$.
+		Example
+			PP3 = tProjectiveSpace 3
+			cellOrder PP3
+			V = (momentGraph PP3).vertices
+			P = poset(V, {{V_0,V_1},{V_1,V_2},{V_2,V_3}})
+			cellOrder(momentGraph PP3, P)
+			cellOrder PP3
+	SeeAlso
+		cellOrder
+		bruhatOrder
+
+
+///
+
+
+doc ///
+	Key
+		bruhatOrder
+		(bruhatOrder, TVariety)
+	Headline
+		computes the Bruhat order on a generalized flag variety
+	Usage
+		P = bruhatOrder(X)
+	Inputs
+		X:TVariety
+			a generalized flag variety or Schubert variety
+	Outputs
+		P:Poset
+			the Bruhat order
+	Description
+		Text
+			Given a @TO TVariety@ $X$ created by either @TO tGeneralizedFlagVariety@ or @TO tGeneralizedSchubertVariety@, 
+			computes and returns the Bruhat order corresponding to the Bruhat decomposition.  The resulting poset is 
+			cached in $X$, and can be accessed by either @TO cellOrder@ or @TO bruhatOrder@.
+		Example
+			Fl3 = tGeneralizedFlagVariety("A",2,{1,2})
+			cellOrder Fl3
+			P = bruhatOrder Fl3
+			#(coveringRelations P) == 8
+			cellOrder Fl3
+	SeeAlso
+		cellOrder
+		tGeneralizedFlagVariety
+		tGeneralizedSchubertVariety
+
+///
+
+
+
+doc ///
+	Key
+		tGeneralizedSchubertVariety
+		(tGeneralizedSchubertVariety, TVariety, Thing)
+	Headline
+		create a generalized Schubert variety
+	Usage
+		Y = tGeneralizedSchubertVariety(X,pt)
+	Inputs
+		X:TVariety
+			obtained by @TO tGeneralizedFlagVariety@
+		pt:Thing
+			an element in @TT "X.points"@
+	Outputs
+		Y:TVariety
+			the generalized Schubert variety corresponding to pt which is the union of all Bruhat cells 
+			corresponding to elements in @TT "X.points"@ that are bigger than pt in the Bruhat order
+	Description
+		Text
+			This method creates a @TO TVariety@ that represent a generalized Schubert variety of a generalized flag variety.
+			The following example is the Schubert variety of projective lines in $\mathbb P^3$ meeting a distinguished point.
+		Example
+			X = tGeneralizedSchubertVariety(tGeneralizedFlagVariety("A",3,{2}),{set{0,3}})
+
+	SeeAlso
+		bruhatOrder
+		tGeneralizedFlagVariety
+
+///
+
+
 
 
 undocumented {
@@ -1299,6 +1423,7 @@ undocumented {
 	tHilbNumer,
 	toCharRing,
 	toFraction,
+	(toFraction, RingElement, RingElement, Ring)
 	unastrsk,
 	setIndicator,
 	(tHilbNumer, TVariety, List),
@@ -1317,7 +1442,23 @@ undocumented {
 
 
 
+-*--documentation template
+doc ///
+	Key
+	Headline
+	Usage
+	Inputs
+	Outputs
+	Description
+		Text
+			Blah
+		Example
+			X = 1
+	Caveat
+	SeeAlso
 
+///
+--*-
 -----------------------------------------------------------------------------------
 ------------------------------------< TESTS >--------------------------------------
 -----------------------------------------------------------------------------------
