@@ -17,11 +17,9 @@ DOCUMENTATION
 
 - (E) Flag Matroid stuff
 
-- (R) MomentGraph ** MomentGraph
+- (R) Example: normal toric varieties :(
 
-- (R) Example: normal toric varieties
-
-- (R) finish TOrbClosure
+- (R) finish TOrbClosure ;)
 
 
 
