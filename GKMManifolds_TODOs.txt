@@ -11,12 +11,12 @@ MISC
 
 DOCUMENTATION
 
+- (E,R) Spell check and look for typos in documentation
 
 - (E) Add product of moment graphs to products
 
 - (E) Flag Matroid stuff
 
-- (R) trivialTKClass 
 - (R) MomentGraph ** MomentGraph
 
 - (R) Example: normal toric varieties
