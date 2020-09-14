@@ -423,38 +423,6 @@ doc ///
 
 
 
-doc ///
-	Key
-		charts
-		(charts, TVariety)
-		(charts,TVariety, List)
-	Headline
-		outputs the T-invariant affine charts of a T-variety
-	Usage
-		charts X
-		charts(X,L)
-	Inputs
-		X:TVariety
-		L:List
-	Outputs
-		H:HashTable
-		    whose keys are the T-fixed points of X and values are the (negatives) of characters of the 
-		    T-action on a T-invariant affine chart around the corresponding point.
-	Description
-		Text
-			To do
-			
-		Text
-		    	The following example ....
-    	    	Example
-		    	Hi
-	SeeAlso
-		tVariety
-
-	
-///
-
-
 
 doc ///
 	Key
@@ -492,14 +460,17 @@ doc ///
 	Key
 		tKClass
 		(tKClass, TVariety, List)
+		(tKClass, TVariety, ToricDivisor)
 	Headline
 		constructs a T-equivariant K-class
 	Usage
 		C = tKClass(X,L)
+		C = tKClass(X,D)
 	Inputs
 		X:TVariety
 		L:List
 			of Laurent polynomials corresponding to each T-invariant point
+		D:ToricDivisor	
 	Outputs
 		C:TKClass
 	Description
@@ -518,6 +489,18 @@ doc ///
 			C = tKClass(PP3,L) --the class of O(1) on PP3
 			assert (C === ampleTKClass PP3)
 			assert (isWellDefined C)
+		Text
+		    	If a $T$-variety $X$ also admits a structure of a @TO NormalToricVariety@,
+			then the following example shows how to obtain the @TO TKClass@ of any 
+			@TO ToricDivisor@ on $X$. 
+		Example
+			X = toricProjectiveSpace 3;
+			D = toricDivisor({1,0,0,0},X) -- the class of O(1) on P^3
+			Y = tVariety X; -- The torus is C^3 not C^4
+			C = tKClass(Y,D)
+			assert(isWellDefined C)
+			peek C
+		
 
 	Caveat
 		This function does not check if X defines a T-variety - see 
@@ -1398,6 +1381,114 @@ doc ///
 		bruhatOrder
 		tGeneralizedFlagVariety
 
+///
+
+
+
+doc ///
+	Key
+		charts
+		(charts, TVariety)
+		(charts,TVariety, List)
+	Headline
+		outputs the T-invariant affine charts of a T-variety
+	Usage
+		charts X
+		charts(X,L)
+	Inputs
+		X:TVariety
+		L:List
+		    of lists
+	Outputs
+		H:HashTable
+		    whose keys are the T-fixed points of X and values are the (negatives) of characters of the 
+		    T-action on a T-invariant affine chart around the corresponding point.
+	Description
+		Text
+			Given a GKM manifold $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
+			affine chart around $p$. This method produces a @TO HashTable@ whose keys are the $T$-fixed points of
+			$X$ and the values are the negatives of characterse of the T-action on the associated 
+			contracting affine chart.
+			
+		Text
+		    	The following example describes the charts of the isotropic Grassmannian $SpGr(2,6)$.
+    	    	Example
+		    	X = tGeneralizedFlagVariety("C",3,{2});
+			X.charts
+
+		Text
+		       If $X$ does not have its charts stored, we can manually define it as follows.
+		Example
+		       R = makeCharRing 2;
+		       X = tVariety({{0,1},{0,3},{1,2},{2,3}},R);
+		       L = {{{-1,0},{0,-1}},{{-1,0},{0,1}},{{-3,-1},{1,0}},{{1,0},{3,1}}};
+		       charts(X,L);
+		       peek X
+		       peek tVariety hirzebruchSurface 3
+
+	SeeAlso
+		tVariety
+
+	
+///
+
+
+doc ///
+	Key
+		diagonalTMap
+		(diagonalTMap, TVariety)
+	Headline
+		constructs the diagonal morphism
+	Usage
+		diagonalTMap X
+	Inputs
+		X:TVariety
+	Outputs
+		:TMap
+	Description
+		Text
+			Given a $T$-variety $X$ this method constructs a @TO TMap@ representing the diagonal 
+			morphism $X \to X \times X$. Note that $X \times X$ is a $T$-variety via the diagonal action of $T$.
+
+		Example
+		    	X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
+			f = diagonalTMap X;
+			peek f
+
+	SeeAlso
+		tFlagMap
+		pushforward
+///
+
+doc ///
+	Key
+		lieType
+		(lieType, TVariety)
+	Headline
+		outputs the Lie type of a generalized flag variety
+	Usage
+		lieType X
+	Inputs
+		X:TVariety
+	Outputs
+		:String
+	Description
+		Text
+			If $X$ is a generalized flag variety constructed using the method
+			@TO tGeneralizedFlagVariety@, this method outputs the Lie type of $X$. 
+
+		Example
+		    	X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
+			Y = tGeneralizedFlagVariety("B",3,{2}); -- The Orthogonal Grassmannian OGr(2,7)
+			Z = X** X;
+			lieType(X)
+			lieType(Y)
+			lieType(Z);	 	
+	Caveat
+		The method @TO tProjectiveSpace@ dose not cache the Lie type.						
+	SeeAlso
+		tGeneralizedFlagVariety
+		
 ///
 
 
