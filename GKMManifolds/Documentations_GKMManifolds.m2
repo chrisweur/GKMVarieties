@@ -263,9 +263,6 @@ doc ///
 		Example
 			FF3 = hirzebruchSurface 3; X = tVariety FF3;
 			peek X
-		Text 
-			We can recover the Toric variety as follows
-		Example
 		        Y = normalToricVariety(X);
 		    	assert(Y === FF3)
 		Text
