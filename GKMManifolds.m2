@@ -63,7 +63,7 @@ export {
 	"tOrbitClosure",
 	"toFraction",
 	"affineToricRing",
-	--"setIndicator",
+	"setIndicator",
 	--"unastrsk",
 	--"toCharRing",
 	--"tHilbNumer",

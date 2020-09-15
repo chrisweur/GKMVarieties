@@ -43,18 +43,21 @@ assert (set exponents Eu1 === set exponents Eu2)
 R = X.charRing
 assert (sum(latticePts U, i -> R_i) == Eu2)
 Y = tGeneralizedFlagVariety("A",3,{2},R)
+assert (set Y.points === set apply(subsets(4,2), i -> {set i}))
 Z = tGeneralizedFlagVariety("A",3,{1},R)
 f = tFlagMap(X,Y)
 g = tFlagMap(X,Z)
 assert (O1 === (pullback f)(ampleTKClass Y) * (pullback g)(ampleTKClass Z))
-tautSubGr = tKClass(Y,apply(Y.points, p -> sum(elements first p, i -> R_i)))
-assert ((pushforward f)((pullback g)(ampleTKClass Z)) === tautSubGr)
+dualTautSub = tKClass(Y,apply(Y.points, p -> sum(elements first p, i -> R_i)))
+assert ((pushforward f)((pullback g)(ampleTKClass Z)) === dualTautSub)
 ///
 
---Lagrangian Grassmannian LGr(2,4) tests
+--Lagrangian Grassmannian LGr(2,4), and complete SpFl(1,2;4) tests
 TEST ///
 R = makeCharRing 2
 X = tGeneralizedFlagVariety("C",2,{2},R)
+assert (set X.points === set {{set{0,1}},{set{"0*",1}},{set{0,"1*"}},{set{"0*","1*"}}})
+assert (6 == #(momentGraph X).edges)
 O1 = ampleTKClass X
 assert (tChi O1 == sum({{1,1},{-1,1},{1,-1},{-1,-1},{0,0}}, i -> R_i))
 A1 = matrix{{1,0,1,0},{0,1,0,1}}
@@ -63,7 +66,34 @@ C1 = tOrbitClosure(X,A1)
 C2 = tOrbitClosure(X,A2)
 assert (tChi (C1*O1) == sum({{1,1},{-1,1},{1,-1},{-1,-1}}, i -> R_i))
 assert (tChi (C2*O1) == sum({{1,1},{-1,1},{1,-1},{-1,-1},{0,0}}, i -> R_i))
+Y = tGeneralizedFlagVariety("C",2,{1},R)
+Z = tGeneralizedFlagVariety("C",2,{1,2},R)
+f = tFlagMap(Z,Y)
+g = tFlagMap(Z,X)
+assert (tChi ampleTKClass Y == R_0 + R_1 + R_0^(-1) + R_1^(-1))
+dualTautSub = tKClass(X,apply(X.points, p -> (
+	    l := setIndicator(first p,2);
+	    R_0^(l_0) + R_1^(l_1)
+	    )
+	))
+assert (dualTautSub === (pushforward g)(pullback f)(ampleTKClass Y))
 ///
+
+--a toric variety test
+TEST ///
+X = kleinschmidt(2,{2})
+Y = tVariety X
+assert (normalToricVariety Y === X)
+R = Y.charRing
+assert (2 == numgens R)
+G = momentGraph Y
+assert all(keys G.edges, e -> 0 == (matrix{(rays X)_(first elements (set e_0 * set e_1))} * transpose matrix{G.edges#e}))
+antiK = - toricDivisor X
+TantiK = tKClass(Y,antiK)
+ltsPts = {{1,1},{0,-1},{0,0},{0,1},{-1,-3},{-1,-2},{-1,-1},{-1,0},{-1,1}}
+assert (sum(ltsPts, i -> R_i) == tChi TantiK)
+///
+
 
 ----------< tGeneralizedFlagVariety tests >-------------
 restart

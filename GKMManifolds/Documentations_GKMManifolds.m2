@@ -1050,7 +1050,8 @@ doc ///
 			Given an integer n, this method outputs the character ring of T = $(\mathbb C^*)^n$.
 
 		Example
-			makeCharRing 4
+			R = makeCharRing 4
+			describe R
 
 ///
 
