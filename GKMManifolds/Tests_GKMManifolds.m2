@@ -6,16 +6,64 @@ Tests for GKMManifolds.m2
 
 --need turn some of the following into tests--
 
+
+
+--kTutte test
+TEST ///
 ML = (random drop(drop(allMatroids 4,1),-1))_{0,1,2}
 TML = apply(ML, m -> {tuttePolynomial m, kTutte flagMatroid({m})}) -- 4 seconds
 assert all(TML, l -> (map(ring first l, ring last l, gens ring first l))(last l) == first l)
+N = flagMatroid(matrix{{1,1,1},{1,0,0}},{1,2}) 
+f = kTutte N --see Example 8.24 of [CDMS18]
+x = (ring f)_0
+y = (ring f)_1
+assert (f == x^2*y^2 + x^2*y + x*y^2 + x^2 + x*y)
+A = matrix{{1,1,1,1},{0,1,2,3}}
+FMr = flagMatroid(A,{1,2})
+FM = flagMatroid {uniformMatroid(1,4),uniformMatroid(2,4)}
+assert (FMr === FM)
+g = kTutte FM
+assert (16 == sub(g, {(ring g)_0 => 1, (ring g)_1 => 1}))
+///
 
-FM = flagMatroid{uniformMatroid(1,5),uniformMatroid(4,5)}
-time kTutte FM --6 seconds
+--ordinary flag variety tests
+TEST ///
+X = tGeneralizedFlagVariety("A",3,{1,2})
+A = matrix{{1,1,1,1},{0,1,2,3}}
+U = flagMatroid {uniformMatroid(1,4),uniformMatroid(2,4)}
+C = tKClass(X,U)
+D = tOrbitClosure(X,A)
+O1 = ampleTKClass X
+assert (C === D)
+assert (isWellDefined C)
+assert (isWellDefined (C * O1))
+Eu1 = tChi O1
+Eu2 = tChi (C * O1)
+assert (set exponents Eu1 === set exponents Eu2)
+R = X.charRing
+assert (sum(latticePts U, i -> R_i) == Eu2)
+Y = tGeneralizedFlagVariety("A",3,{2},R)
+Z = tGeneralizedFlagVariety("A",3,{1},R)
+f = tFlagMap(X,Y)
+g = tFlagMap(X,Z)
+assert (O1 === (pullback f)(ampleTKClass Y) * (pullback g)(ampleTKClass Z))
+tautSubGr = tKClass(Y,apply(Y.points, p -> sum(elements first p, i -> R_i)))
+assert ((pushforward f)((pullback g)(ampleTKClass Z)) === tautSubGr)
+///
 
-M = matroid graph{{a,b},{b,c},{c,a},{a,d}}
-kTutte flagMatroid {M}
-tuttePolynomial M
+--Lagrangian Grassmannian LGr(2,4) tests
+TEST ///
+R = makeCharRing 2
+X = tGeneralizedFlagVariety("C",2,{2},R)
+O1 = ampleTKClass X
+assert (tChi O1 == sum({{1,1},{-1,1},{1,-1},{-1,-1},{0,0}}, i -> R_i))
+A1 = matrix{{1,0,1,0},{0,1,0,1}}
+A2 = matrix{{1,0,1,2},{0,1,2,1}}
+C1 = tOrbitClosure(X,A1)
+C2 = tOrbitClosure(X,A2)
+assert (tChi (C1*O1) == sum({{1,1},{-1,1},{1,-1},{-1,-1}}, i -> R_i))
+assert (tChi (C2*O1) == sum({{1,1},{-1,1},{1,-1},{-1,-1},{0,0}}, i -> R_i))
+///
 
 ----------< tGeneralizedFlagVariety tests >-------------
 restart
