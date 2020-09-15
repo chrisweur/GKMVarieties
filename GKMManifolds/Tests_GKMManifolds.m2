@@ -50,6 +50,7 @@ g = tFlagMap(X,Z)
 assert (O1 === (pullback f)(ampleTKClass Y) * (pullback g)(ampleTKClass Z))
 dualTautSub = tKClass(Y,apply(Y.points, p -> sum(elements first p, i -> R_i)))
 assert ((pushforward f)((pullback g)(ampleTKClass Z)) === dualTautSub)
+assert (tChi ampleTKClass X == tChi (pushforward f)(ampleTKClass X))
 ///
 
 --Lagrangian Grassmannian LGr(2,4), and complete SpFl(1,2;4) tests
