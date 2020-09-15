@@ -36,14 +36,15 @@ doc ///
 			For mathematical background see:
 			
 			@UL{
-			{"T. Braden and R. MacPherson.  From moment graphs to intersection cohomology.  Math. Ann. 321 (2001), 533-551."},
-			{"E. Bolker, V. Guillemin, and T. Holm.  How is a graph like a manifold?  arXiv:math/0206103."},
-			{"R. Dinu, C. Eur, and T. Seynnaeve.  K-theoretic Tutte polynomials of morphisms of matroids.  arXiv:math/2004.00112."},
-			{"A. Fink and S. Speyer.  K-classes for matroids and equivariant localization.  Duke Math. J. 161 (2012), no. 14, 2699-2723."},
-			{"M. Goresky, R. Kottwitz, and R. MacPherson.  Equivariant cohomology, Koszul duality, and the localization theorem. Invent. Math. 131 (1998), no. 1, 25-83."},
-			{"I. Rosu.  Equivariant K-theory and equivariant cohomology.  With an Appendix by I. Rosu and A. Knutson.  Math. Z. 243 (2003), 423-448."},
-			{"J. Tymoczko.  An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson.  Contemp. Math. 388 (2005), 169-188."},
-			{"G. Vezzosi and A. Vistoli.  Higher algebraic K-theory for actions of diagonalizable groups. Invent. Math. 153 (2003), no. 1, 1–44."}
+			{"[BM01] T. Braden and R. MacPherson.  From moment graphs to intersection cohomology.  Math. Ann. 321 (2001), 533-551."},
+			{"[BGH02] E. Bolker, V. Guillemin, and T. Holm.  How is a graph like a manifold?  arXiv:math/0206103."},
+			{"[CDMS18] A. Cameron, R. Dinu, M. Michalek, and T. Seynnaeve.  Flag matroids: algebra and geometry.  arXiv:1811.00272."},
+			{"[DES20] R. Dinu, C. Eur, and T. Seynnaeve.  K-theoretic Tutte polynomials of morphisms of matroids.  arXiv:math/2004.00112."},
+			{"[FS12] A. Fink and S. Speyer.  K-classes for matroids and equivariant localization.  Duke Math. J. 161 (2012), no. 14, 2699-2723."},
+			{"[GKM98] M. Goresky, R. Kottwitz, and R. MacPherson.  Equivariant cohomology, Koszul duality, and the localization theorem. Invent. Math. 131 (1998), no. 1, 25-83."},
+			{"[RK03] I. Rosu.  Equivariant K-theory and equivariant cohomology.  With an Appendix by I. Rosu and A. Knutson.  Math. Z. 243 (2003), 423-448."},
+			{"[Tym05] J. Tymoczko.  An introduction to equivariant cohomology and homology, following Goresky, Kottwitz, and MacPherson.  Contemp. Math. 388 (2005), 169-188."},
+			{"[VV03] G. Vezzosi and A. Vistoli.  Higher algebraic K-theory for actions of diagonalizable groups. Invent. Math. 153 (2003), no. 1, 1–44."}
 			}@
 
 		Text
@@ -1809,8 +1810,45 @@ doc ///
 	SeeAlso
 		(latticePts, FlagMatroid)
 		tOrbitClosure
+		kTutte
 
 ///
+
+doc ///
+	Key
+		kTutte
+		(kTutte, FlagMatroid)
+	Headline
+		computes the flag-geometric Tutte polynomial of flag matroids
+	Usage
+		kTutte(FM)
+	Inputs
+		FM:FlagMatroid
+	Outputs
+		:RingElement
+			a polynomial in variables $x,y$
+	Description
+		Text
+			This method computes the flag-geometric Tutte polynomial of a @TO FlagMatroid@, defined via a push-pull of the 
+			@TO TKClass@ of the flag matroid.  See Definition 6.1 of [DES20].
+			The following example negatively answers Conjecture 9.2 of [CDMS18], which had conjectured that all coefficients 
+			of the flag-geometric Tutte polynomial of a flag matroid are nonnegative.
+		Example
+			FM = flagMatroid {uniformMatroid(1,5),uniformMatroid(4,5)}
+			kTutte FM
+		Text
+			When the flag matroid has a single constituent (i.e. is a matroid), it agrees with the usual Tutte polynomial.
+		Example
+			M = matroid graph{{a,b},{b,c},{c,a},{a,d}}
+			kTutte flagMatroid {M}, tuttePolynomial M
+	Caveat
+		The computation does not finish within a reasonable time if the ground set is bigger than 5.
+	SeeAlso
+		FlagMatroid
+		(tKClass, TVariety, FlagMatroid)
+
+///
+
 
 undocumented {
 	(net, TVariety),
@@ -1819,10 +1857,8 @@ undocumented {
 	tvar,
 	charRing,
 	constituents,
-	FlagMatroids,
 	hilb,
 	HTpt,
-	kTutte,
 	points,
 	ptsMap,
 	RREFMethod,
@@ -1832,12 +1868,10 @@ undocumented {
 	(toFraction, RingElement, RingElement, Ring),
 	unastrsk,
 	setIndicator,
-	(tHilbNumer, TVariety, List),
 	(net, TKClass),
 	(net, TMap),
 	(net, FlagMatroid),
-	signedPermutations,
-	tFlagVariety
+	signedPermutations
 }
 
 

@@ -38,11 +38,9 @@ export {
 	"diagonalTMap",
 	"FlagMatroid",
 	"flagMatroid",
-	"tFlagVariety",
+	--"tFlagVariety",
 	"tFlagMap",
-	--"fourierMukai",
 	"kTutte",
-	--"kCharPol",
 	"hilb",
 	"tvar",
 	"charts",
@@ -54,11 +52,9 @@ export {
 	"MomentGraph",
 	"momentGraph",
 	"constituents",
-	"FlagMatroids",
 	"makeCharRing",
 	--"makeHTpt",
 	"tGeneralizedFlagVariety",
-	--"signedPermutations",
 	"lieType",
 	"cellOrder",
 	"bruhatOrder",
@@ -623,10 +619,15 @@ TMap ** TMap := TMap => (phi,psi) -> (
 
 --composition f o g of two TMaps g: X --> Y, f: Y --> Z;
 compose(TMap,TMap) := TMap => (f,g) -> (
-    if not f.source === g.target then << "did you mean to switch the order?" << return error;
-    Y := f.target; X := g.source;
+    Y1 := g.target;
+    Y2 := f.source;
+    if not Y1.points === Y2.points then (
+	<< "check sources and targets of the T-maps" <<
+	return error
+	);
+    Z := f.target; X := g.source;
     ptPairs := apply(X.points, p -> (p, f.ptsMap#(g.ptsMap#p)));
-    tMap(X,Y,ptPairs)
+    tMap(X,Z,ptPairs)
     )
 
 --the T-equivariant Euler characteristic of a TKClass, i.e. the Lefschetz trace,
@@ -1161,21 +1162,21 @@ tFlagVariety(List,ZZ,Ring) := TVariety => (K,n,R) -> (
 --if one does not want to make the charRing beforehand.
 --NOT recommended for use...
 tFlagVariety(List,ZZ) := TVariety => (K,n) -> tFlagVariety(K,n,makeCharRing n)
-----------------*-
 
 
 --Given two lists Kso, Kta (for rank sequences of source and target flag varieties) and n,
 --creates the two TVarieties and makes a TMap between them (given the charRing R).
-tFlagMap = method();
 tFlagMap(List,List,ZZ,Ring) := TMap => (Kso,Kta,n,R) -> (
     Flso := tFlagVariety(Kso,n,R);
     Flta := tFlagVariety(Kta,n,R);
     ptPairs := apply(Flso.points, p -> (p,first select(Flta.points, q -> isSubset(q,p))));
     tMap(Flso,Flta,ptPairs)
 )
+----------------*-
 
 --if X and Y are already tGeneralizedFlagVariety, then the following outputs the corresponding
 -- tFlagMap X --> Y
+tFlagMap = method();
 tFlagMap(TVariety,TVariety) := TMap => (X,Y) -> (
     if not (X.cache.?lieType and Y.cache.?lieType) then (
 	<< "both T-varieties need have a lieType" <<
@@ -1328,8 +1329,96 @@ tKClass(TVariety,FlagMatroid) := TKClass => (X,M) -> (
 )
 
 
+--internal method
+--sets up the varieties involved in the Fourier-Mukai themed push-pull diagram for the
+--flag geometric Tutte polynomial of a flag matroid.  The charRing R should be given.
+--Given a list K and an integer n, sets up Fl(K;n) <-f- Fl(1,K,n-1;n) -g-> Fl(1;n) x Fl(n-1;n)
+fourierMukai = method();
+fourierMukai(List,ZZ,Ring) := List => (K,n,R) -> (
+    FlK := tGeneralizedFlagVariety("A",n-1,K,R);
+    Fl1Kn1 := tGeneralizedFlagVariety("A",n-1,unique ({1}|K|{n-1}), R);
+    Fl1 := tGeneralizedFlagVariety("A",n-1,{1},R);
+    Fln1 := tGeneralizedFlagVariety("A",n-1,{n-1},R);
+    piK := tFlagMap(Fl1Kn1,FlK);
+    f := tFlagMap(Fl1Kn1,Fl1); g := tFlagMap(Fl1Kn1,Fln1);
+    pi1n1 := compose(f ** g, diagonalTMap Fl1Kn1);
+    --<< "{{Fl(K;n), Fl(1,K,n-1;n),  Fl(1;n) x Fl(n-1;n)},{pi_K, pi_(1(n-1))}}" <<
+    {{FlK, Fl1Kn1, pi1n1.target}, {piK, pi1n1}}
+)
+
+fourierMukai(List,ZZ) := List => (K,n) -> fourierMukai(K,n, makeCharRing n)
 
 
+---< auxiliary functions for converting T-equivariant class to in terms of alpha,  beta >---
+
+--takes in a tKClass C of Fl(1;n) x Fl(n-1;n) and outputs the matrix whose (i,j)th entry
+--is the hilb value at the point {set{i}, [n]\set{j}}
+toMatrix = C -> (
+    R := C.tvar.charRing;
+    n := #(gens R);
+    E := set toList(0..(n-1));
+    matrix apply(n, i -> apply(n, j -> (
+        if i == j then return 0_R;
+	C.hilb#(({set{i}}, {E - set{j}}))
+	))
+    )
+)
+
+aa = (i0,i,j,R) -> (R_i-R_(i0))*(R_i^(-1));
+bb = (j0,i,j,R) -> (R_(j0) - R_j)*(R_(j0)^(-1));
+
+equiToNonEquiStep = (i0,j0,X) -> (
+    R := ring X_(0,0); n := #(gens R);
+    t := symbol t; S := QQ[t_0..t_(n-1)]; 
+    denom := sub(product(i0, k -> aa(k,i0,j0,R))*product(j0, k -> bb(k,i0,j0,R)),R);
+    c := first toFraction(X_(i0,j0), denom,S);
+    cVal := sub(c, apply(gens ring c, r -> r=>1));
+    XX := matrix apply(n, i -> apply(n, j -> (
+	numer := X_(i0,j0) * product(i0, k -> aa(k,i,j,R)) * product(j0, k -> bb(k,i,j,R));
+	ratio := toFraction(numer,denom,S);
+	(last ratio) (first toFraction(X_(i,j),1_R,S) - first ratio)
+	))
+    );
+    {cVal,XX}
+)
+
+--internal method
+--Given a TKClass in P^(n-1) x P^(n-1) = Gr(n-1;n) x Gr(1;n),
+--outputs the polynomial in representing its K-class
+--where x,y are the structure sheaves of the two hyperplanes
+toPolynomial = method();
+toPolynomial(TKClass) := Matrix => C -> (
+    T := toMatrix C;
+    n := numcols T;
+    TList := {T};
+    M := matrix apply(n, i -> apply(n, j -> (
+    	out := equiToNonEquiStep(i,j,TList_(-1));
+	TList = append(TList, last out);
+	first out
+	))
+    );
+    x := symbol x; y := symbol y;
+    S := ZZ[x,y];
+    sum(n, i -> sum(n, j -> M_(i,j) * S_0^j * S_1^i))
+)
+
+
+--given a flag matroid M, outputs the flag-geometric Tutte polynomial of M
+kTutte = method();
+kTutte(FlagMatroid) := RingElement => M -> (
+    if not M.cache.?kTutte then M.cache.kTutte = (
+	n := #M.groundSet;
+    	R := makeCharRing n;
+    	K := M.constituents/rank;
+    	FM := fourierMukai(K,n,R);
+    	FlK := first first FM;
+    	f := first last FM; g := last last FM;
+    	yM := tKClass(FlK,M);
+    	YM := (pushforward g)( (pullback f)(yM * (ampleTKClass FlK)) );
+    	toPolynomial YM
+    );
+    M.cache.kTutte
+)
 
 
 
@@ -1341,408 +1430,11 @@ load "GKMManifolds/Documentations_GKMManifolds.m2"
 end
 
 ---------------------------------------------------------------------------------------------
------------------------------< some tests while developing >---------------------------------
 ---------------------------------------------------------------------------------------------
+
 
 restart
 uninstallPackage "GKMManifolds"
 installPackage "GKMManifolds"
 viewHelp GKMManifolds
-
-----------< tGeneralizedFlagVariety tests >-------------
-restart
-needsPackage "GKMManifolds"
-
-TEST ///
---the flag variety of 1-dim in 2-dim in ambient 3-dim space, as proj var embedded in P7
---(here, dim means linear space dim, not projective dim)
-X = tGeneralizedFlagVariety("A",2,{1,2})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-graph G
-C = ampleTKClass X
-peek C
-isWellDefined C
-lieType X
-P = bruhatOrder X
-displayPoset(P, SuppressLabels => false)
-
---if a character ring is pre-determined
-R = makeCharRing 3
-X = tGeneralizedFlagVariety("A",2,{1,2},R)
-C = ampleTKClass X
-ring first values C.hilb === R
-peek C
-isWellDefined C
-
---ordinary Grassmannian(2,4)
-X = tGeneralizedFlagVariety("A",3,{2})
-peek X
-C = ampleTKClass X
-tChi C
-Y = tGeneralizedSchubertVariety(X,{set{0,1}}) --basically same as X
-peek Y
-Z = tGeneralizedSchubertVariety(X,{set{0,2}})
-peek Z
-W = tGeneralizedSchubertVariety(X,{set{1,2}})
-peek W
-displayPoset cellOrder momentGraph X
-displayPoset cellOrder momentGraph Z
-
-
---same variety but embedded differently in P14
-X = tGeneralizedFlagVariety("A",2,{1,1,2})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
---Lagrangian Grassmannian(2,4)
-X = tGeneralizedFlagVariety("C",2,{2})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-graph G
-C = ampleTKClass X
-peek C
-isWellDefined C
-lieType X
-P = bruhatOrder X
-displayPoset(P, SuppressLabels => false)
-
---Lagrangian Grassmannian(3,6)
-X = tGeneralizedFlagVariety("C",3,{3})
-peek X
-H = X.charts
-netList {(first keys H), H#(first keys H)}
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
---isotropic Grassmannian(1,2,3;6) (i.e. SpGr(1,2,3;6))
-X = tGeneralizedFlagVariety("C",3,{1,2,3})
-peek X
-H = X.charts
-netList {(first keys H), H#(first keys H)}
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-isWellDefined C
-P = bruhatOrder X
-displayPoset P
-
-X = tGeneralizedFlagVariety("B",3,{2})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
-
---spin groups are not implemented yet
-X = tGeneralizedFlagVariety("B",3,{3})
-
---we can still do the double and consider SOGr(3,7) which is fine
-X = tGeneralizedFlagVariety("B",3,{3,3})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-isWellDefined C
-
-
-
---low d isogenies A_3 = D_3
---SOGr(3,6) should look similar to P3^* = Gr(3,4)
-X = tGeneralizedFlagVariety("D",3,{3})
-peek X
---SOGr(2,6) should look similar to P3^* = Gr(3,4)
-X = tGeneralizedFlagVariety("D",3,{2})
-peek X
---SOGr(1,6) should look similar to Gr(2,4)
-X = tGeneralizedFlagVariety("D",3,{1})
-peek X
-
-
---even orthogonal Grassmannians are very tricky!
---All fine as long as k < n-1, where we consider k-dim'l isotropic subspace of a 2n-dim'l space.
---When k = n-1, we need consider the sum of the two fundamental weights
---When k = n, it seems like we can one conn component per fundamental weight (? check)
-
-
---orthogonal Grassmannian(2,8)
-X = tGeneralizedFlagVariety("D",4,{2})
-peek X
-H = X.charts
-netList {(first keys H), H#(first keys H)}
-G = momentGraph X
-graph G
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
-
---orthogonal Grassmannian(3,8) (i.e. SOGr(3,8))
---I think? This needs to be checked
-X = tGeneralizedFlagVariety("D",4,{3,4})
-X.points
-peek X
-H = X.charts
-H#{set{0,1,2}}
-G = momentGraph X
-graph G
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
---again, spin groups not implemented
-X = tGeneralizedFlagVariety("D",4,{4})
-X = tGeneralizedFlagVariety("D",4,{3})
-
-
---one of two connected components (I think?) 
---of orthogonal Grassmannian(4,8) (i.e. SOGr(4,8))
-X = tGeneralizedFlagVariety("D",4,{4,4})
-peek X
-H = X.charts
-netList {(first keys H), H#(first keys H)}
-G = momentGraph X
-graph G
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
---the other half of orthogonal Grassmannian(4,8) (i.e. SOGr(4,8))
-X = tGeneralizedFlagVariety("D",3,{3,3})
-peek X
-H = X.charts
-netList {(first keys H), H#(first keys H)}
-G = momentGraph X
-graph G
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-
-
--------------------------------------------< speed tests >-------------------------------------
---Seems like for Grassmannians the functions "tGeneralizedFlagVariety" and "tFlagVariety"
---are about the same speed because the limitation is in the function "permutations"
---However, for partial flag varities, the "tGeneralizedFlagVariety" is considerably slower
---Similarly in other Lie types than "A", Grassmannians are pretty fast, limited by the
---function "signedPermutations", but much slower for partial flag varieties.
-
-
-restart
-uninstallPackage"GKMManifolds"
-installPackage "GKMManifolds"
-
-
---Grassmannians
-time X = tGeneralizedFlagVariety("A", 8, {3}) -- 3 seconds
-time X = tGeneralizedFlagVariety("A", 8, {4}) -- 3 seconds
-time X = tGeneralizedFlagVariety("A", 9, {4}) -- 29 seconds
-time permutations {1,2,3,4,5,6,7,8,9,10}; -- 27 seconds
---so Gr(4,10) above is slow due to permutations being slow
-time X = tFlagVariety({4},9) -- 4 seconds
-time X = tFlagVariety({3},9) -- 4 seconds
-
---full flag varieties
-time X = tGeneralizedFlagVariety("A", 4, {1,2,3,4}) -- 0.3 seconds
-time X = tGeneralizedFlagVariety("A", 5, {1,2,3,4,5}) -- 6 seconds
---time X = tGeneralizedFlagVariety("A", 6, {1,2,3,4,5,6}) -- don't try on laptop
-time X = tFlagVariety({1,2,3,4,5,6},7) -- 3 seconds!!
-
---isotropic Grassmannians
-time X = tGeneralizedFlagVariety("B", 7, {4}) -- 3 seconds
-time X = tGeneralizedFlagVariety("B", 7, {6}) -- 3 seconds
-time X = tGeneralizedFlagVariety("B", 7, {7,7}) -- 2 seconds
-time X = tGeneralizedFlagVariety("B", 8, {8,8}) -- 34 seconds
-time X = tGeneralizedFlagVariety("B", 8, {4}) -- 34 seconds
-time signedPermutations {1,2,3,4,5,6,7,8}; -- 28 seconds
---again, the slowness for isotropic Grassmannians is largely due to signPermutations
-
---flag isotropic
-time X = tGeneralizedFlagVariety("B", 4, {1,2,3,4,4}) -- 3 seconds
-time X = tGeneralizedFlagVariety("B", 5, {1,2,3,4}) -- 40 seconds
-
---few other types
-time X = tGeneralizedFlagVariety("C", 7, {4}) -- 3 seconds
-time X = tGeneralizedFlagVariety("D", 7, {6,7}) -- 3 seconds
-time X = tGeneralizedFlagVariety("C", 5, {1,2,4}) -- 7 seconds
-time X = tGeneralizedFlagVariety("D", 5, {2,3,4,5}) -- 5 seconds
-
---a test for normal toric varieties: Hirezebruch surface H_2
-restart
-needsPackage "GKMManifolds"
-X = kleinschmidt(2,{2})
-peek X
-Y = tVariety X
-peek Y
-peek momentGraph Y
-normalToricVariety Y
-antiK = - toricDivisor X
-TantiK = tKClass(Y,antiK)
-peek TantiK
-tChi TantiK
-
---a sanity check with projective space P^3
-P3 = tProjectiveSpace 3
-R = P3.charRing;
-describe R
-charts P3
-G = momentGraph P3
-G.edges
-peek G
-graph G
-
-
-assert isWellDefined C
-badTKC = tKClass(P3,{R_0,R_0,R_0,R_1})
-peek badTKC
-assert not isWellDefined badTKC
-
-
---product of T-varieties check with P^1
-P1 = tProjectiveSpace 1
-P1xP1 = P1 ** P1
-peek P1xP1
-G = P1.momentGraph
-GxG = G ** G
-peek GxG
-graph GxG
-
---test of affineToricRing
-B = {{1,0},{0,1},{1,1},{1,-1}}
-affineToricRing B
-hilbertSeries(oo, Reduce => true)
-
-
-----------< TOrbClosure tests >-------------
-
-restart
-needsPackage "GKMManifolds"
-
--- Easy test (can compre with Speyer/Fink pg 17)
-M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
-N = matrix(QQ,{{1,1,1,3},{1,1,2,1}})
-X = tGeneralizedFlagVariety("A",3,{2})
-time C1 = TOrbClosure(X,{M})
-time C2 = TOrbClosure(X,{M})
-peek C1
-peek C2
-C = tKClass(X,flagMatroid(M,{2})); peek C
-
-
---Lagrangian Grassmannian test
-M = matrix(QQ,{{1,0,1,2},{0,1,2,1}})
-X = tGeneralizedFlagVariety("C",2,{2})
-C = TOrbClosure(X,{M})
-peek C
-isWellDefined C
-
-
--- Type "A"
-M = matrix(QQ,{{1,1,0,1},{0,0,1,1}})
-N = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
-X = tGeneralizedFlagVariety("A",3,{2})
-time C = TOrbClosure(X,{M});
-peek C
-isWellDefined C
-time D = TOrbClosure(X,{N}); --example where the matroid has only one basis
-peek D
-D.hilb#{set{0,1}}
-factor oo
-
-Y = tGeneralizedFlagVariety("A",2,{2,1})
-M = matrix(QQ,{{1,0,0},{0,1,1}})
-N = matrix(QQ,{{1,1,1}})
-time C = TOrbClosure(Y,{N,M}); peek C
-
-
-
--- Type "C"
-M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
-N = matrix(QQ,{{1,0,1,0},{0,1,0,1}})
-X = tGeneralizedFlagVariety("C",2,{2})
-time C = TOrbClosure(X,{M}); D = TOrbClosure(X,{N});
-peek C
-peek D
-{C,D}/isWellDefined
-
-
-
-M = matrix{{1,1,1,0,0,0},{0,0,0,1,1,-2}}
-X = tGeneralizedFlagVariety("C",3,{2})
-time C = TOrbClosure(X,{M})
-
-N = matrix{{1,1,1,1,1,-2}}
-Y = tGeneralizedFlagVariety("C",3,{2,1})
-time D = TOrbClosure(Y,{N,M});
-peek D
-
-
-
--- Type "B"
-X = tGeneralizedFlagVariety("B",3,{1})
-peek X
-M = matrix(QQ,{{-2,0,0,1,0,0,2}})
---matrix{{-2,0,0}} * transpose matrix{{1,0,0}}  + ( matrix{{1,0,0}} * transpose matrix{{-2,0,0}} ) + 4
-C = TOrbClosure(X,{M})
-peek C
-
-
-
--- Error testing
-M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
-X = tProjectiveSpace 3
-C = TOrbClosure(X,{M})
-
-X = tGeneralizedFlagVariety("A",3,{3})
-C = TOrbClosure(X,{M})
-
-
-
-
--- Sanity check
--- The closure of the following is just a point
-M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
-X = tGeneralizedFlagVariety("A",3,{2})
-C = TOrbClosure(X,{M}); peek C
-
-Y = tGeneralizedFlagVariety("A",3,{2,2})
-C = TOrbClosure(Y,{M,M}); peek C
-
-A = matrix(QQ,{{1,0,2,1},{0,1,1,2}})
-X = tGeneralizedFlagVariety("C",2,{2})
-C = tOrbitClosure(X,A); peek C
-
-
-
-M = matrix(QQ,{{1,2,0,0},{1,2,0,0}})
-X = tGeneralizedFlagVariety("A",3,{1})
-C = TOrbClosure(X,{M}); peek C
-
-
-
 
