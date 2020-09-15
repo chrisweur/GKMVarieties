@@ -1,15 +1,9 @@
--*----
-Things to ask Justin:
 
+-*-----------------------------------------------------------------------------------------
+Documentation for "GKMManifolds.m2"
 
-How to send version 0.1 to be on the M2 website
-
-----*-
-
-
--------------------------------------------------------------------------------------------
---------------------------------------< Documentation >------------------------------------
--------------------------------------------------------------------------------------------
+Authors: Christopher Eur, Ritvik Ramkumar
+-----------------------------------------------------------------------------------------*-
 
 
 beginDocumentation()
@@ -58,7 +52,7 @@ doc ///
 		Text
 			The following people have contributed code, improved existing code, or enhanced the documentation:
 			@HREF("https://www.mis.mpg.de/combag/members/tim-seynnaeve.html","Tim Seynnaeve")@.
-		    
+		
 	SeeAlso
 		"Example: generalized flag varieties"
 		"Example: smooth toric varieties"
@@ -115,7 +109,7 @@ doc ///
 			For a sequence $(a_1, \ldots, a_n)\in \mathbb N^n$ of nonnegative integers, 
 			let $I = \{i \mid a_i \neq 0\}$ and $P_I$ the corresponding parabolic subgroup of $G$.
 			Then the generalized flag variety $G/P_I$ is embedded in the irreducible representation of $G$ 
-			with the highest weight $a_1w_1 + \cdots a_nw_n$.    
+			with the highest weight $a_1w_1 + \cdots a_nw_n$.
 			These generalized flag varieties can be created as a @TO "TVariety"@ using the method 
 			@TO tGeneralizedFlagVariety@.  For instance, the Grassmannian $Gr(2,4)$ of
 			2-dimensional subspaces in $\mathbb C^4$, embedded in $\mathbb P^5$ by the usual Plucker embedding, 
@@ -251,19 +245,19 @@ doc ///
 			Hi
 
 		Example
-		    	Hi	
+			Hi	
 
-       		Text
+   		Text
 			The following example shows the third Hizerburch surface as a @TO "NormalToricVariety"@ and as a @TO "TVariety"@ 
 		Example
 			FF3 = hirzebruchSurface 3; X = tVariety FF3;
 			peek FF3
 			peek X
 		Text 
-		        We can recover the Toric variety as follows
+			We can recover the Toric variety as follows
 		Example
-		        Y = normalToricVariety(X);
-		    	peek Y
+			Y = normalToricVariety(X);
+			peek Y
 
 
 	SeeAlso
@@ -302,7 +296,7 @@ doc ///
 
 		   			
 	SeeAlso
-	    tVariety
+		tVariety
 		"Example: generalized flag varieties"
 		"Example: smooth toric varieties"
 		
@@ -363,9 +357,9 @@ doc ///
 			the i-th entry of L.
 		Example
 			M = {{{-1, 1, 0, 0}, {-1, 0, 1, 0}, {-1, 0, 0, 1}},
-			    {{1, -1, 0, 0}, {0, -1, 1, 0}, {0, -1, 0, 1}},
-			    {{1, 0, -1, 0}, {0, 1, -1, 0}, {0, 0, -1, 1}},
-			    {{1, 0, 0, -1}, {0, 1, 0, -1}, {0, 0, 1, -1}}};
+				{{1, -1, 0, 0}, {0, -1, 1, 0}, {0, -1, 0, 1}},
+				{{1, 0, -1, 0}, {0, 1, -1, 0}, {0, 0, -1, 1}},
+				{{1, 0, 0, -1}, {0, 1, 0, -1}, {0, 0, 1, -1}}};
 			Y = tVariety(L,M,R);
 			peek Y
 		Text
@@ -385,23 +379,23 @@ doc ///
 			peek SpFl4
 		
 		Text
-		    The following example produces the Orthogonal Grassmaninnian $OGr(2,5)$ from its
+			The following example produces the Orthogonal Grassmaninnian $OGr(2,5)$ from its
 			moment graph.
 
 		Example
 			V = {{set {0, 1}}, {set {0, "1*"}}, {set {"0*", 1}}, {set {"0*", "1*"}}};
 			edgs = {{{set {"0*", 1}}, {set {"0*", "1*"}}},
 				{{set {0, "1*"}}, {set {"0*", "1*"}}},
-			    {{set {0, "1*"}}, {set {"0*", 1}}},
-			    {{set {0, "1*"}}, {set {0, 1}}},
-			    {{set {0, 1}}, {set {"0*", "1*"}}},
-			    {{set {0, 1}}, {set {"0*", 1}}}};
-		    wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
-		    E = hashTable(apply(edgs, v -> (v,wghts)));
-		    t = symbol t; H = QQ[t_0, t_1]
-		    G = momentGraph(V,E,H);
-		    Z = tVariety(G);
-		    peek Z			
+				{{set {0, "1*"}}, {set {"0*", 1}}},
+				{{set {0, "1*"}}, {set {0, 1}}},
+				{{set {0, 1}}, {set {"0*", "1*"}}},
+				{{set {0, 1}}, {set {"0*", 1}}}};
+			wghts = {{0,-1},{-1,0},{-1,1},{0,1},{-1,-1},{-1,0}}
+			E = hashTable(apply(edgs, v -> (v,wghts)));
+			t = symbol t; H = QQ[t_0, t_1]
+			G = momentGraph(V,E,H);
+			Z = tVariety(G);
+			peek Z			
 
 	Caveat
 		This function does not check if X is a valid GKM manifold.
@@ -426,7 +420,7 @@ doc ///
 		Y:TVariety
 	Outputs
 		X:TVariety
-		    product of X and Y
+			product of X and Y
 	Description
 		Text
 			Given two $T$-varieties $X$ and $Y$ with an action of a common torus $T$, the
@@ -434,11 +428,11 @@ doc ///
 			diagonal action of $T$.
 			
 		Text
-		    	The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
+			The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
 			with the Lagrangian Grassmannian SpGr(2,4) 
-    	    	Example
-		    	R = makeCharRing 2;
-		        X = tGeneralizedFlagVariety("C",2,{2},R);
+		Example
+			R = makeCharRing 2;
+			X = tGeneralizedFlagVariety("C",2,{2},R);
 			Y = tGeneralizedFlagVariety("B",2,{2,2},R);
 			Z = X ** Y;
 			peek Z
@@ -477,7 +471,7 @@ doc ///
 		tKClass
 		pushforward
 		pullback
-		tChi	    
+		tChi
 
 ///
 
@@ -517,7 +511,7 @@ doc ///
 			assert (C === ampleTKClass PP3)
 			assert (isWellDefined C)
 		Text
-		    	If a $T$-variety $X$ also admits a structure of a @TO NormalToricVariety@,
+			If a $T$-variety $X$ also admits a structure of a @TO NormalToricVariety@,
 			then the following example shows how to obtain the @TO TKClass@ of any 
 			@TO ToricDivisor@ on $X$. 
 		Example
@@ -695,7 +689,7 @@ doc ///
 
 	Outputs
 		X:TVariety
-		    representing the corresponding generalized flag variety
+			representing the corresponding generalized flag variety
 
 	Description
 		Text
@@ -741,7 +735,7 @@ doc ///
 			induces a map from the $T$-fixed points of $X$ to the $T$-fixed points of $Y$.
 			 			
 		Text
-		    	A @TO "TMap"@ C is a @TO "HashTable"@
+			A @TO "TMap"@ C is a @TO "HashTable"@
 			consisting of three keys:
 
 			@UL{
@@ -754,7 +748,7 @@ doc ///
 	SeeAlso
 		(symbol **, TMap, TMap)
 		(compose, TMap, TMap)
-	    tMap
+		tMap
 		tFlagMap
 		pullback
 		pushforward
@@ -780,8 +774,8 @@ doc ///
 			This method computes the cartesian product of two $T$-equivariant morphisms.
 
 		Example
-		    	R = makeCharRing 5;
-		        X1 = tGeneralizedFlagVariety("A",4,{1,3},R);
+			R = makeCharRing 5;
+			X1 = tGeneralizedFlagVariety("A",4,{1,3},R);
 			X2 = tGeneralizedFlagVariety("A",4,{2,3},R);
 			Y = tGeneralizedFlagVariety("A",4,{3},R);
 			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
@@ -815,8 +809,8 @@ doc ///
 			This method computes the composition of two $T$-equivariant morphisms.
 
 		Example
-		    R = makeCharRing 4;
-		    X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
+			R = makeCharRing 4;
+			X = tGeneralizedFlagVariety("A",3,{1,2,3},R);
 			Y = tGeneralizedFlagVariety("A",3,{2,3},R);
 			Z = tGeneralizedFlagVariety("A",3,{2},R);
 			f = tFlagMap(X,Y); --the projection of Fl(1,2,3;4) onto Fl(2,3;4)
@@ -826,7 +820,7 @@ doc ///
 
 
 	SeeAlso
-	    	(symbol **, TMap, TMap)
+		(symbol **, TMap, TMap)
 		tMap
 		tFlagMap
 		
@@ -864,7 +858,7 @@ doc ///
 			line.
 			
 		Example
-		    	R = makeCharRing 2;
+			R = makeCharRing 2;
 			F3 = tVariety(hirzebruchSurface 3,R);
 			PP1 = tProjectiveSpace(1,R);
 			L = {({0,1},set {0}), ({0,3}, set{0}), ({1,2}, set{1}), ({2,3}, set{1})};
@@ -932,11 +926,11 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    R = makeCharRing 4;
-			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
-			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
-			f = tFlagMap(FlGr,Gr24);
-			O1 = ampleTKClass Gr24;
+			R = makeCharRing 4;
+			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R)
+			Gr24 = tGeneralizedFlagVariety("A",3,{2},R)
+			f = tFlagMap(FlGr,Gr24)
+			O1 = ampleTKClass Gr24
 			(pullback f)(O1)
 			
 	SeeAlso
@@ -964,11 +958,11 @@ doc ///
 			along a T-equivariant morphism $X \to Y$.
 
 		Example
-		    R = makeCharRing 4;
-			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R);
-			Gr24 = tGeneralizedFlagVariety("A",3,{2},R);
-			f = tFlagMap(FlGr,Gr24);
-			O1 = ampleTKClass FlGr;
+			R = makeCharRing 4;
+			FlGr = tGeneralizedFlagVariety("A",3,{1,2},R)
+			Gr24 = tGeneralizedFlagVariety("A",3,{2},R)
+			f = tFlagMap(FlGr,Gr24)
+			O1 = ampleTKClass FlGr
 			(pushforward f)(O1)
 
 	SeeAlso
@@ -999,6 +993,8 @@ doc ///
 			PP3 = tProjectiveSpace 3
 			O1 = ampleTKClass PP3
 			tChi O1
+	SeeAlso
+		pushforward
 
 ///
 
@@ -1047,7 +1043,8 @@ doc ///
 	Inputs
 		n:ZZ
 	Outputs
-		:Ring	
+		:Ring
+			with n variables and inverses are allowed
 	Description
 		Text
 			Given an integer n, this method outputs the character ring of T = $(\mathbb C^*)^n$.
@@ -1257,8 +1254,8 @@ doc ///
 		Text
 			If $X$ is a T-variety with a distinguished ample T-equivariant line bundle, this method returns the @TO TKClass@ of 
 			the line bundle. If no such line bundle is defined, it allows the user to construct one.
-    	    	Text
-		    	The following example describes the ample line bundle on the isotropic Grassmannian $SpGr(2,4)$. The line bundle
+		Text
+			The following example describes the ample line bundle on the isotropic Grassmannian $SpGr(2,4)$. The line bundle
 			is precisely the pullback of O(1) under the Plucker embedding $SpGr(2,4) \to \mathbb P^4$.
 		Example
 			SpGr24 = tGeneralizedFlagVariety("C",2,{2});
@@ -1275,7 +1272,7 @@ doc ///
 	Key
 		tOrbitClosure
 		(tOrbitClosure, TVariety, Matrix)
-	       	[tOrbitClosure, RREFMethod]
+	   	[tOrbitClosure, RREFMethod]
 	Headline
 		computes the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
 	Usage
@@ -1467,11 +1464,11 @@ doc ///
 	Inputs
 		X:TVariety
 		L:List
-		    of lists
+			of lists
 	Outputs
 		H:HashTable
-		    whose keys are the T-fixed points of X and values are the (negatives) of characters of the 
-		    T-action on a T-invariant affine chart around the corresponding point.
+			whose keys are the T-fixed points of X and values are the (negatives) of characters of the 
+			T-action on a T-invariant affine chart around the corresponding point.
 	Description
 		Text
 			Given a GKM manifold $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
@@ -1480,20 +1477,20 @@ doc ///
 			contracting affine chart.
 			
 		Text
-		    	The following example describes the charts of the isotropic Grassmannian $SpGr(2,6)$.
-    	    	Example
-		    	X = tGeneralizedFlagVariety("C",3,{2});
+			The following example describes the charts of the isotropic Grassmannian $SpGr(2,6)$.
+		Example
+			X = tGeneralizedFlagVariety("C",3,{2});
 			X.charts
 
 		Text
-		       If $X$ does not have its charts stored, we can manually define it as follows.
+		   If $X$ does not have its charts stored, we can manually define it as follows.
 		Example
-		       R = makeCharRing 2;
-		       X = tVariety({{0,1},{0,3},{1,2},{2,3}},R);
-		       L = {{{-1,0},{0,-1}},{{-1,0},{0,1}},{{-3,-1},{1,0}},{{1,0},{3,1}}};
-		       charts(X,L);
-		       peek X
-		       peek tVariety hirzebruchSurface 3
+		   R = makeCharRing 2;
+		   X = tVariety({{0,1},{0,3},{1,2},{2,3}},R);
+		   L = {{{-1,0},{0,-1}},{{-1,0},{0,1}},{{-3,-1},{1,0}},{{1,0},{3,1}}};
+		   charts(X,L);
+		   peek X
+		   peek tVariety hirzebruchSurface 3
 
 	SeeAlso
 		tVariety
@@ -1520,7 +1517,7 @@ doc ///
 			morphism $X \to X \times X$. Note that $X \times X$ is a $T$-variety via the diagonal action of $T$.
 
 		Example
-		    	X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
+			X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
 			f = diagonalTMap X;
 			peek f
 
@@ -1547,7 +1544,7 @@ doc ///
 			@TO tGeneralizedFlagVariety@, this method outputs the Lie type of $X$. 
 
 		Example
-		    	X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
+			X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
 			Y = tGeneralizedFlagVariety("B",3,{2}); -- The Orthogonal Grassmannian OGr(2,7)
 			Z = X** X;
 			lieType(X)
@@ -1573,9 +1570,9 @@ doc ///
 		affineToricRing M
 	Inputs
 		L:List
-		    of lists; each list corresponds to a vector in $\mathbb Z^n$
+			of lists; each list corresponds to a vector in $\mathbb Z^n$
 		M:Matrix
-		    with each column corresponding to a vector in $\mathbb Z^n$
+			with each column corresponding to a vector in $\mathbb Z^n$
 	Outputs
 		:Ring
 	Description
@@ -1586,9 +1583,10 @@ doc ///
 			$I$ is the kernel of the map $R \to \mathbb{Q}[y_1,\dots,y_n]$ defined by
 			$x_i \mapsto \mathbb y^{v_i}$.
 		Example
-		    	L = {{2,0},{1,1},{0,2}};
+			L = {{2,0},{1,1},{0,2}};
 			X = affineToricRing L; -- The singular quadric in A^3	 	
-			X.ideal	      
+			I = ideal X
+			hilbertSeries I  
 		
 ///
 
@@ -1611,7 +1609,7 @@ doc ///
 			structure sheaf $O_X$. In terms of the localization map, $O_X$ corresponds
 			to the constant function $1$.
 		Example
-		    	X = tProjectiveSpace 3;
+			X = tProjectiveSpace 3;
 			C = trivialTKClass X;
 			peek C
 		
