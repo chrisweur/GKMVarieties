@@ -50,7 +50,7 @@ doc ///
 		Text
 			In this package, while GKM manifolds are special kinds of T-varieties, we use the two terms 
 			"GKM manifolds" and "T-varieties" interchangeably.  For instance, @TO TVariety@ is the class 
-			of all GKM manifolds, @TO TKClass@ the class of T-equivariant K-classes on a GKM manifolds, and 
+			of GKM manifolds, @TO TKClass@ the class of T-equivariant K-classes on a GKM manifolds, and 
 			@TO TMap@ the class of T-equivariant maps between T-varieties.
 
 		Text
