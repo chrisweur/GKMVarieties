@@ -21,7 +21,7 @@ doc ///
 			(i) $X$ is equivariantly formal with respect to the the action of $T$,
 			(ii) $X$ has finitely many $T$-fixed points, and (iii) $X$ has finitely
 			many one-dimensional $T$-orbits.  The data of the zero and one dimensional
-			$T$-orbits of $X$ defines the moment graph of $X$, with which one can carry out
+			$T$-orbits of $X$ define the moment graph of $X$, with which one can carry out
 			$T$-equivariant cohomology and $T$-equivariant $K$-theory computations by
 			combinatorial means.  This package provides methods for these computations
 			in Macaulay2.
@@ -383,8 +383,8 @@ doc ///
 		L:List
 			of $T$-fixed points of $X$
 		M:List
-			of lists; each list consists of the (negatives of) characters of the 
-			action of $T$ on each $T$-invariant affine chart around the $T$-fixed point 
+			of lists; the i-th list consists of the (negatives of) characters of the 
+			action of $T$ on a $T$-invariant affine chart around the $T$-fixed point 
 			corresponding to L_i
 		G:MomentGraph
 			representing the one dimensional $T$-orbits of $X$
@@ -480,7 +480,7 @@ doc ///
 			
 		Text
 			The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
-			with the Lagrangian Grassmannian SpGr(2,4) 
+			with the Lagrangian Grassmannian SpGr(2,4). 
 		Example
 			R = makeCharRing 2;
 			X = tGeneralizedFlagVariety("C",2,{2},R);
@@ -730,7 +730,7 @@ doc ///
 		X = tGeneralizedFlagVariety(LT,d,L,R)
 	Inputs
 		LT:String
-			one of "A", "B", "C", and "D"
+			one of "A", "B", "C", or "D"
 		d:ZZ
 			the dimension of the root system
 		L:List
@@ -857,7 +857,9 @@ doc ///
 			the composition of f and g
 	Description
 		Text
-			This method computes the composition of two $T$-equivariant morphisms.
+			This method computes the composition of two $T$-equivariant morphisms. The
+			following example constructs the composition of two projection maps between
+			standard flag varieties.
 
 		Example
 			R = makeCharRing 4;
@@ -895,7 +897,7 @@ doc ///
 		Y:TVariety
 			the target T-variety of the map
 		L:List
-			of pairs (x,y) where x and y are members of @TT "X.points"@ and @TT "Y.points"@, respectively.
+			of pairs (x,y) where x and y are members of @TT "X.points"@ and @TT "Y.points"@, respectively
 	Outputs
 		f:TMap
 	Description
@@ -942,13 +944,17 @@ doc ///
 		f:TMap
 	Description
 		Text
-			Given two generalized flag vareities X = Fl(k_1,..,k_m;n) and Y = Fl(k_r,..,k_m;n) of the same
-			lie type, this method produced the canonical projection from $X$ to $Y$.
+			Let $L =\{k_1,\dots,k_m\}$ be a set of ranks of linear subscpaces of $\mathbb C^n$ and consider
+			a subset $L' \subseteq L$. Let $X = Fl(L; n)$ and $Y=Fl(L';n)$ be the associated generalized 
+			flag varieties (if they exist). This method produces the canonical projection from $X$ to $Y$
+			that forgets the linear subspaces having ranks $L \setminus L'$.
 		Example
 			R = makeCharRing 3
-		   	FlOG = tGeneralizedFlagVariety("B",3,{1,2},R);
-			OGr17 = tGeneralizedFlagVariety("B",3,{1},R);
-			peek tFlagMap(FlOG,OGr17)
+		   	X = tGeneralizedFlagVariety("B",3,{1,2},R);
+			Y1 = tGeneralizedFlagVariety("B",3,{2},R);
+			Y2 = tGeneralizedFlagVariety("B",3,{1},R);
+			peek tFlagMap(X,Y1)
+			peek tFlagMap(X,Y2)
 	SeeAlso
 		tMap
 		diagonalTMap
@@ -1307,7 +1313,7 @@ doc ///
 			If $X$ is a T-variety with a distinguished ample T-equivariant line bundle, this method returns the @TO TKClass@ of 
 			the line bundle. If no such line bundle is defined, it allows the user to construct one.
 		Text
-			The following example describes the ample line bundle on the isotropic Grassmannian $SpGr(2,4)$. The line bundle
+			The following example describes the ample line bundle on the Lagrangian Grassmannian $SpGr(2,4)$. The line bundle
 			is precisely the pullback of O(1) under the Plucker embedding $SpGr(2,4) \to \mathbb P^4$.
 		Example
 			SpGr24 = tGeneralizedFlagVariety("C",2,{2});
@@ -1328,11 +1334,11 @@ doc ///
 	Headline
 		computes the T-equivariant K-class of a torus orbit closure of a point in a generalized flag variety
 	Usage
-		C = tKClass(X,M)
+		C = tOrbitClosure(X,M)
 	Inputs
 		X:TVariety
-		L:Matrix
-			of matrices representing a point in a generalized flag variety
+		M:Matrix
+			representing a point in a generalized flag variety
 	Outputs
 		C:TKClass
 	Description
@@ -1345,8 +1351,8 @@ doc ///
 		
 
 		Text
-			The following example computes the orbit closure of a point in the Lagrangian Grassmannian $SpGr(2,4)$ and 
-			in the standard Grassmannian $Gr(2,4)$.
+			The following example computes the torus orbit closure of a point in the standard Grassmannian $Gr(2,4)$
+			and in the Lagrangian Grassmannian $SpGr(2,4)$. 
 
 		Example
 			M = matrix(QQ,{{1,0,1,2},{0,1,2,1}});
@@ -1368,7 +1374,7 @@ doc ///
 			C === C'
 		Text
 		    	By default the option RREFMethod is set to false. In this case the method produces the torus orbit closure by
-			only computing the minors of the matrix. If the option RREFMethod is set to true, method row reduces
+			only computing the minors of the matrix. If the option RREFMethod is set to true, the method row reduces
 			the matrix instead of computing its minors.
 		Example
 		       X = tGeneralizedFlagVariety("A",3,{1,2,3})
@@ -1536,7 +1542,7 @@ doc ///
 		Text
 			Given a GKM manifold $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
 			affine chart around $p$. This method produces a @TO HashTable@ whose keys are the $T$-fixed points of
-			$X$ and the values are the negatives of characterse of the T-action on the associated 
+			$X$ and the values are the negatives of characters of the T-action on the associated 
 			contracting affine chart.
 			
 		Text
@@ -1546,10 +1552,11 @@ doc ///
 			X.charts
 
 		Text
-		   If $X$ does not have its charts stored, we can manually define it as follows.
+		   If $X$ does not have its charts stored, we can manually cache it as follows.
 		Example
 		   R = makeCharRing 2;
 		   X = tVariety({{0,1},{0,3},{1,2},{2,3}},R);
+		   peek X
 		   L = {{{-1,0},{0,-1}},{{-1,0},{0,1}},{{-3,-1},{1,0}},{{1,0},{3,1}}};
 		   charts(X,L);
 		   peek X
@@ -1601,6 +1608,7 @@ doc ///
 		X:TVariety
 	Outputs
 		:String
+		    of the form "A", "B", "C" or "D"
 	Description
 		Text
 			If $X$ is a generalized flag variety constructed using the method
@@ -1790,7 +1798,7 @@ doc ///
 		B:List
 	Description
 		Text
-			An ordered list $\{B_1, \ldots, B_k\}$ of sets is basis of a flag matroid $\mathbf M = \{M_1, \ldots, M_k\}$ 
+			An ordered list $\{B_1, \ldots, B_k\}$ of sets is a basis of a flag matroid $\mathbf M = \{M_1, \ldots, M_k\}$ 
 			if $B_i$ is a basis of $M_i$ and $B_i \subseteq B_{i+1}$ for all $i$.  This method computes the bases of a 
 			flag matroid.
 		Example
@@ -1826,7 +1834,7 @@ doc ///
 			P = latticePts FM
 		Text
 			In terms of T-equivariant K-theory, the lattice points of the base polytope of a flag matroid is 
-			equal to the integer transform of the T-equivariant Euler characteristic (see @TO tChi@) of the @TO TKClass@ 
+			equal to the integral transform of the T-equivariant Euler characteristic (see @TO tChi@) of the @TO TKClass@ 
 			defined by the flag matroid shifted by the $O(1)$ bundle on the (partial) flag variety.
 		Example
 			X = tGeneralizedFlagVariety("A",3,{1,2})
