@@ -1953,7 +1953,6 @@ undocumented {
 	toFraction,
 	(toFraction, RingElement, RingElement, Ring),
 	unastrsk,
-	setIndicator,
 	(net, TKClass),
 	(net, TMap),
 	(net, FlagMatroid),
