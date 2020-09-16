@@ -99,11 +99,11 @@ doc ///
 
 			($A_{n-1}$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+e_2+\cdots+e_{n-1}\}$
 
-			($B_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, \frac{1}{2}(e_1+\cdots e_n)\}$
+			($B_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, (1/2)(e_1+\cdots e_n)\}$
 
 			($C_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-1}, e_1 + \cdots +e_n\}$
 
-			($D_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-2}, \frac{1}{2}(e_1+\cdots+e_{n-2} +e_{n-1}- e_{n}), \frac{1}{2}(e_1+\cdots+e_{n-2}+e_{n-1}+e_n\}$
+			($D_n$): $\{w_1, \ldots, w_n\}= \{e_1, e_1+e_2, \ldots , e_1+\cdots+e_{n-2}, (1/2)(e_1+\cdots+e_{n-2} +e_{n-1}- e_{n}), (1/2)(e_1+\cdots+e_{n-2}+e_{n-1}+e_n\}$
 
 		Text
 			For a sequence $(a_1, \ldots, a_n)\in \mathbb N^n$ of nonnegative integers, 
@@ -127,7 +127,7 @@ doc ///
 			underlyingGraph G
 
 		Text
-			The $O(1)$ line bundle on $Gr(2,4)$ via its Plucker embedding can be accessed by @TO (ampleTKClass, TVariety)@.
+			The line bundle $O(1)$ on $Gr(2,4)$, corresponding to its Plucker embedding, can be accessed by @TO (ampleTKClass, TVariety)@.
 			The method @TO (tChi, TKClass)@ computes its Lefschetz trace (a.k.a. T-equivariant Euler characteristic),
 			which in this case is the Laurent polynomial in the character ring of the torus $T$ 
 			whose terms correspond to be weights of the second exterior power of the standard representation of $GL_4$.
@@ -137,7 +137,7 @@ doc ///
 			tChi O1
 
 		Text
-			If $Gr(2,4)$ is embedded differently, say by $O(2)$ line bundle instead, the Lefschetz trace changes 
+			If $Gr(2,4)$ is embedded differently, say by the line bundle $O(2)$ instead, the Lefschetz trace changes 
 			accordingly, and its coefficients record the multiplicities of the associated weight spaces in the second
 			symmetric power of the second exterior power of the standard representation of $GL_4$.
 
@@ -249,7 +249,7 @@ doc ///
 			
 		Text	
 		        The method @TO "normalToricVariety"@ from the package @TO "NormalToricVarieties"@ allows the 
-			user to construct smooth toric varieties. To convert it to a $T$-variety we use the method
+			user to construct smooth toric varieties. To convert it to a GKM manifold we use the method
 			@TO "tVariety"@. Here is an example with the third Hirzebruch surface.
 		Example
 		    	FF3 = hirzebruchSurface 3;
