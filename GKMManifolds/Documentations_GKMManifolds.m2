@@ -275,12 +275,12 @@ doc ///
 			assert(isWellDefined C)
 			peek C
 		Text
-		    	Projective $n$-space as a toric variety (consctructed using @TO "toricProjectiveSpace"@) 
+		    	Projective $n$-space as a toric variety (constructed using @TO "toricProjectiveSpace"@) 
 			is acted upon by an $n$-dimensional torus. However, projective $n$-space as $T$-variety 
 			(constructed using @TO "tProjectiveSpace"@) is acted upon by an $(n+1)$-dimensional torus.
 		Example
-		    	X = toricProjectiveSpace 2; -- The torus is C^2
-       			Y = tProjectiveSpace 2; -- The torus is C^3
+		    	X = toricProjectiveSpace 2; -- the torus is C^2
+       			Y = tProjectiveSpace 2; -- the torus is C^3
 			peek X
 			peek Y		
 	
@@ -403,7 +403,7 @@ doc ///
 		X:TVariety
 	Description
 		Text
-			The minimum data needed to make a GKM Manifold are the set of $T$-fixed points
+			The minimum data needed to create a @TO "TVariety"@ are the set of $T$-fixed points
 			and the character ring. Here is an example with projective space	
 		Example
 			L = {0,1,2,3};
@@ -456,7 +456,7 @@ doc ///
 			peek Z			
 
 	Caveat
-		This function does not check if X is a valid GKM manifold.
+		This function does not check if X is a valid $T$-variety.
 	
 	SeeAlso
 		(symbol **, TVariety, TVariety)
@@ -1081,7 +1081,7 @@ doc ///
 		(tProjectiveSpace, ZZ)
 		(tProjectiveSpace, ZZ, Ring) 
 	Headline
-		constructs Projective space as a GKM manifold
+		constructs projective space as a T-variety
 	Usage
 		tProjectiveSpace n
 		tProjectiveSpace(n,R)
@@ -1092,7 +1092,7 @@ doc ///
 		:TVariety	
 	Description
 		Text
-			Given an integer $n$ this method constructs the n-dimensional Projective space, $\mathbb P^n$, as a $T$-variety. The action
+			Given an integer $n$ this method constructs the n-dimensional projective space, $\mathbb P^n$, as a $T$-variety. The action
 			of $(\mathbb C^*)^{n+1}$ on $\mathbb P^n$ is defined by 
 			$(t_0, \ldots, t_n) \cdot (x_0, \ldots, x_n) = (t_0^{-1}x_0, \ldots, t_n^{-1}x_n)$.
 
@@ -1557,7 +1557,7 @@ doc ///
 			T-action on a T-invariant affine chart around the corresponding point.
 	Description
 		Text
-			Given a GKM manifold $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
+			Given a $T$-variety $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
 			affine chart around $p$. This method produces a @TO HashTable@ whose keys are the $T$-fixed points of
 			$X$ and the values are the negatives of characters of the T-action on the associated 
 			contracting affine chart.
