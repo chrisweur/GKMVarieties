@@ -250,20 +250,18 @@ doc ///
 		Text	
 		        The method @TO "normalToricVariety"@ from the package @TO "NormalToricVarieties"@ allows the 
 			user to construct smooth toric varieties. To convert it to a $T$-variety we use the method
-			@TO "tVariety"@. Here is an example with projective 2-space.
+			@TO "tVariety"@. Here is an example with the third Hirzebruch surface.
 		Example
-		    	X = toricProjectiveSpace 2; -- The torus is C^2 not C^3
+		    	FF3 = hirzebruchSurface 3;
+			X = tVariety FF3;
+			peek FF3
 			peek X
-			Y = tVariety X;
-			peek Y	
 
        		Text
 			If a $T$-variety $X$ was originally constructed from @TO "normalToricVariety"@ we can convert it
 			back to a toric variety as shown in the following example.
 		Example
-			FF3 = hirzebruchSurface 3; X = tVariety FF3;
-			peek X
-		        Y = normalToricVariety(X);
+		        Y = normalToricVariety(X); -- X was defined in the previous example
 		    	assert(Y === FF3)
 		Text
 		    	The following example shows how to convert a $T$-invariant divisor constructed using
@@ -276,6 +274,15 @@ doc ///
 			C = tKClass(Y,D)
 			assert(isWellDefined C)
 			peek C
+		Text
+		    	Projective $n$-space as a toric variety (consctructed using @TO "toricProjectiveSpace"@) 
+			is acted upon by an $n$-dimensional torus. However, projective $n$-space as $T$-variety 
+			(constructed using @TO "tProjectiveSpace"@) is acted upon by an $(n+1)$-dimensional torus.
+		Example
+		    	X = toricProjectiveSpace 2; -- The torus is C^2
+       			Y = tProjectiveSpace 2; -- The torus is C^3
+			peek X
+			peek Y		
 	
 	Caveat
 		The fan corresponding to our torus embedding is the outer normal fan; not the inner normal fan.
@@ -476,17 +483,29 @@ doc ///
 		Text
 			Given two $T$-varieties $X$ and $Y$ with an action of a common torus $T$, the
 			product is $X \times Y$ with the structure of a $T$-variety given by the 
-			diagonal action of $T$.
-			
+			diagonal action of $T$. This method constructs $X \times Y$ as a @TO "TVariety"@.
+			To speed up computation, this method does not automatically cache
+			the moment graph of $X \times Y$. The user can cache this using the method
+ 			@TO"MomentGraph ** MomentGraph"@.
 		Text
-			The following example exhibits the product of the Orthogonal Grassmannian OGr(2,5)
-			with the Lagrangian Grassmannian SpGr(2,4). 
+			The following example exhibits the product of $\mathbb P^1$ with
+			the Lagrangian Grassmannian SpGr(2,4). 
 		Example
-			R = makeCharRing 2;
-			X = tGeneralizedFlagVariety("C",2,{2},R);
-			Y = tGeneralizedFlagVariety("B",2,{2,2},R);
+		        R = makeCharRing 2;
+			X = tProjectiveSpace(1,R);
+			Y = tGeneralizedFlagVariety("C",2,{2},R);
 			Z = X ** Y;
 			peek Z
+		Text
+		    	We can cache the moment graph of $Z$ as follows:
+		Example
+		    	G = momentGraph X;
+			H = momentGraph Y;
+			momentGraph(Z, G** H);
+			peek Z
+			
+			
+				 	
 	SeeAlso
 		tVariety
 
@@ -825,13 +844,11 @@ doc ///
 			This method computes the cartesian product of two $T$-equivariant morphisms.
 
 		Example
-			R = makeCharRing 5;
-			X1 = tGeneralizedFlagVariety("A",4,{1,3},R);
-			X2 = tGeneralizedFlagVariety("A",4,{2,3},R);
-			Y = tGeneralizedFlagVariety("A",4,{3},R);
-			f = tFlagMap(X1,Y); --the projection of Fl(1,3;5) onto Gr(3,5)
-			g = tFlagMap(X2,Y); --the projection of Fl(2,3;5) onto Gr(3,5)
-			h = f ** g
+			R = makeCharRing 3;
+			X = tGeneralizedFlagVariety("A",2,{1,2},R);
+			Y = tGeneralizedFlagVariety("A",2,{1},R);
+			f = tFlagMap(X,Y); -- the projection of Fl(1,2;3) onto Gr(2,3)
+			h = f ** f
 			peek h
 
 	SeeAlso
@@ -1834,7 +1851,7 @@ doc ///
 			P = latticePts FM
 		Text
 			In terms of T-equivariant K-theory, the lattice points of the base polytope of a flag matroid is 
-			equal to the integral transform of the T-equivariant Euler characteristic (see @TO tChi@) of the @TO TKClass@ 
+			equal to the integer-point transform of the T-equivariant Euler characteristic (see @TO tChi@) of the @TO TKClass@ 
 			defined by the flag matroid shifted by the $O(1)$ bundle on the (partial) flag variety.
 		Example
 			X = tGeneralizedFlagVariety("A",3,{1,2})
