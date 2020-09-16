@@ -80,6 +80,145 @@ dualTautSub = tKClass(X,apply(X.points, p -> (
 assert (dualTautSub === (pushforward g)(pullback f)(ampleTKClass Y))
 ///
 
+
+-- Type B tests: OG(3,7) and OGFl(2,3;7) and OGFl(1,2,3;7)
+TEST ///
+-- Checking points
+R = makeCharRing 3
+X = tGeneralizedFlagVariety("B",3,{3,3},R)
+Y = tGeneralizedFlagVariety("B",3,{2,3,3},R)
+Z = tGeneralizedFlagVariety("B",3,{1,2,3,3},R)
+assert(set X.points === set {{set {0, 1, 2}}, {set {0, 1, "2*"}}, {set {0, "1*", 2}}, {set {0, "1*", "2*"}}, 
+	{set {"0*", 1, 2}}, {set {"0*", 1, "2*"}}, {set {"0*", "1*", 2}}, {set {"0*", "1*", "2*"}}})
+X' = tGeneralizedFlagVariety("C",3,{3,3},R)
+Y' = tGeneralizedFlagVariety("C",3,{2,3,3},R)
+Z' = tGeneralizedFlagVariety("C",3,{1,2,3,3},R)
+assert(set X'.points === set X.points and set Y'.points === set Y.points and set Z'.points === set Z.points)
+
+-- Checking charts
+peek X;
+HX = X.charts;
+HX' = X'.charts;
+missingCharX = apply(X.points, v -> toList(set HX'#v - set HX#v));
+assert all(missingCharX, v -> #v == 3 and all(v, w -> max w ==2 or min w == -2))
+
+HY = Y.charts;
+HY' = Y'.charts;
+missingCharY = apply(Y.points, v -> toList(set HY'#v - set HY#v));
+missingCharY#0
+assert all(missingCharY, v -> #v == 3 and all(v, w -> max w ==2 or min w == -2))
+
+HZ = Z.charts;
+HZ' = Z'.charts;
+missingCharZ = apply(Z.points, v -> toList(set HZ'#v - set HZ#v));
+assert all(missingCharZ, v -> #v == 3 and all(v, w -> max w ==2 or min w == -2))
+
+-- Checking maps
+f = tFlagMap(Z,Y)
+g = tFlagMap(Y,X)
+h = tFlagMap(Z,X)
+assert(h === compose(g,f))
+
+-- Checking TOrbClosure
+M = matrix{{-2,0,0,1,0,0,2},{0,-2,0,2,1,0,2},{0,0,-2,2,2,1,2}}
+-- Verifying M is isotropic
+A = matrix{{-2,0,0},{0,-2,0},{0,0,-2}};
+B = matrix{{1,0,0},{2,1,0},{2,2,1}};
+D = matrix{{2},{2},{2}};
+assert(A* transpose(B)  + B *transpose(A) + D*transpose(D) == 0)
+
+
+time C1 = tOrbitClosure(X,M);
+time C1'= tOrbitClosure(X,M, RREFMethod => true);
+assert isWellDefined C
+assert(C1 === C1')
+
+time C2 = tOrbitClosure(Y,M)
+time C2'= tOrbitClosure(Y,M, RREFMethod => true)
+assert isWellDefined C2
+assert(C2 === C2')
+
+time C3 = tOrbitClosure(Z,M)
+time C3'= tOrbitClosure(Z,M, RREFMethod => true)
+assert isWellDefined C3
+assert(C3 === C3')
+///
+
+
+
+
+-- Type D tests: OG(4,8)
+TEST ///
+-- Checking points
+R = makeCharRing 4
+X1 = tGeneralizedFlagVariety("D",4,{4,4},R)
+X2 = tGeneralizedFlagVariety("D",4,{3,3},R)
+Z = tGeneralizedFlagVariety("C",4,{4},R)
+
+PointSet = set{
+    {set{0,1,2,3}}, {set{0,1,2,"3*"}}, {set{0,1,"2*",3}}, {set{0,1,"2*","3*"}},
+    {set{"0*",1,2,3}}, {set{"0*",1,2,"3*"}}, {set{"0*",1,"2*",3}}, {set{"0*",1,"2*","3*"}},
+    {set{0,"1*",2,3}}, {set{0,"1*",2,"3*"}}, {set{0,"1*","2*",3}}, {set{0,"1*","2*","3*"}},
+    {set{"0*","1*",2,3}}, {set{"0*","1*",2,"3*"}}, {set{"0*","1*","2*",3}}, {set{"0*","1*","2*","3*"}}}
+assert(set X1.points + set X2.points === PointSet)
+
+assert(set X1.points + set X2.points === set Z.points)
+
+
+-- Checking charts
+HX1 = X1.charts;
+HX2 = X2.charts;
+HZ = Z.charts;
+missingCharX = (apply(X1.points, v -> toList(set HZ#v - set HX1#v)) |apply(X2.points, v -> toList(set HZ#v - set HX2#v)))
+assert all(missingCharX, v -> #v == 4 and all(v, w -> max w ==2 or min w == -2))
+
+
+-- Checking TOrbClosure
+
+
+
+
+
+
+-- Low degree isogenies
+TEST ///
+-- OG(1,3), SGr(1,2) and P1^* = Gr(1,2)
+X1 = tGeneralizedFlagVariety("B",1,{1,1})
+X2 = tGeneralizedFlagVariety("C",1,{1})
+X3 = tGeneralizedFlagVariety("A",1,{1})
+assert(#X1.points === #X2.points)
+assert(apply(X1.points, v-> #(X1.charts)#v) === apply(X2.points, v-> #(X2.charts)#v))
+assert(apply(X1.points, v-> #(X1.charts)#v) === apply(X3.points, v-> #(X3.charts)#v))
+
+
+-- SOGr(3,6), SOGr(2,6), and P3^* = Gr(3,4)
+X1 = tGeneralizedFlagVariety("D",3,{3,3})
+X2 = tGeneralizedFlagVariety("D",3,{2,2})
+X3 = tGeneralizedFlagVariety("A",3,{3})
+assert(#X1.points === #X2.points and #X2.points === #X3.points)
+assert(apply(X1.points, v-> #(X1.charts)#v) == apply(X2.points, v-> #(X2.charts)#v) and
+    apply(X1.points, v-> #(X1.charts)#v) === apply(X3.points, v-> #(X3.charts)#v))
+
+--SOGr(1,6) and Gr(2,4)
+X1 = tGeneralizedFlagVariety("D",3,{1})
+X2 = tGeneralizedFlagVariety("A",3,{2})
+assert(#X1.points === #X2.points)
+assert(apply(X1.points, v-> #(X1.charts)#v) === apply(X2.points, v-> #(X2.charts)#v))
+
+///
+
+
+-- Boundary cases for TOrbitClosure
+M = matrix(QQ,{{1,0}})
+X = tGeneralizedFlagVariety("A",1,{1})
+C = tOrbitClosure(X,M)
+peek C
+
+
+
+
+
+
 --a toric variety test
 TEST ///
 X = kleinschmidt(2,{2})
@@ -203,29 +342,8 @@ peek C
 --spin groups are not implemented yet
 X = tGeneralizedFlagVariety("B",3,{3})
 
---we can still do the double and consider SOGr(3,7) which is fine
-X = tGeneralizedFlagVariety("B",3,{3,3})
-peek X
-H = X.charts
-G = momentGraph X
-peek G
-G.edges
-C = ampleTKClass X
-peek C
-isWellDefined C
 
 
-
---low d isogenies A_3 = D_3
---SOGr(3,6) should look similar to P3^* = Gr(3,4)
-X = tGeneralizedFlagVariety("D",3,{3})
-peek X
---SOGr(2,6) should look similar to P3^* = Gr(3,4)
-X = tGeneralizedFlagVariety("D",3,{2})
-peek X
---SOGr(1,6) should look similar to Gr(2,4)
-X = tGeneralizedFlagVariety("D",3,{1})
-peek X
 
 
 --even orthogonal Grassmannians are very tricky!
@@ -450,20 +568,13 @@ peek D
 
 
 
--- Type "B"
-X = tGeneralizedFlagVariety("B",3,{1})
-peek X
-M = matrix(QQ,{{-2,0,0,1,0,0,2}})
---matrix{{-2,0,0}} * transpose matrix{{1,0,0}}  + ( matrix{{1,0,0}} * transpose matrix{{-2,0,0}} ) + 4
-C = TOrbClosure(X,{M})
-peek C
 
 
 
 -- Error testing
 M = matrix(QQ,{{1,0,1,3},{0,1,3,1}})
 X = tProjectiveSpace 3
-C = TOrbClosure(X,{M})
+C = tOrbitClosure(X,M)
 
 X = tGeneralizedFlagVariety("A",3,{3})
 C = TOrbClosure(X,{M})
@@ -473,12 +584,9 @@ C = TOrbClosure(X,{M})
 
 -- Sanity check
 -- The closure of the following is just a point
-M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
-X = tGeneralizedFlagVariety("A",3,{2})
-C = TOrbClosure(X,{M}); peek C
 
-Y = tGeneralizedFlagVariety("A",3,{2,2})
-C = TOrbClosure(Y,{M,M}); peek C
+
+
 
 A = matrix(QQ,{{1,0,2,1},{0,1,1,2}})
 X = tGeneralizedFlagVariety("C",2,{2})
@@ -488,8 +596,8 @@ C = tOrbitClosure(X,A); peek C
 
 M = matrix(QQ,{{1,2,0,0},{1,2,0,0}})
 X = tGeneralizedFlagVariety("A",3,{1})
-C = TOrbClosure(X,{M}); peek C
-
+C = tOrbitClosure(X,M); peek C
+M = matrix(QQ,{{1,2,0,0}})
 
 
 
