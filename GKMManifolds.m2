@@ -735,7 +735,8 @@ unastrsk = i -> if instance(i,String) then value first i else if instance(i,ZZ) 
 
 --given a set s consisting of elements e where e is an integer i or "i*" with 0 <= i <= n-1
 --outputs the signed indicator vector
-setIndicator = (s,n) -> (
+setIndicator = method()
+setIndicator(Set,ZZ) := List => (s,n) -> (
     if (elements s)/unastrsk != unique (elements s/unastrsk) then (
 	<< " the signed subset is not admissible " <<
 	return error
@@ -1437,4 +1438,4 @@ restart
 uninstallPackage "GKMManifolds"
 installPackage "GKMManifolds"
 viewHelp GKMManifolds
-
+check "GKMManifolds"
