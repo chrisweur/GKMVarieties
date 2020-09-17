@@ -134,7 +134,7 @@ assert(A* transpose(B)  + B *transpose(A) + D*transpose(D) == 0)
 
 time C1 = tOrbitClosure(X,M);
 time C1'= tOrbitClosure(X,M, RREFMethod => true);
-assert isWellDefined C
+assert isWellDefined C1
 assert(C1 === C1')
 
 time C2 = tOrbitClosure(Y,M)
