@@ -1333,8 +1333,8 @@ doc ///
 			The following example describes the ample line bundle on the Lagrangian Grassmannian $SpGr(2,4)$. The line bundle
 			is precisely the pullback of O(1) under the Plucker embedding $SpGr(2,4) \to \mathbb P^4$.
 		Example
-			SpGr24 = tGeneralizedFlagVariety("C",2,{2});
-			O1 = ampleTKClass SpGr24;
+			SpGr24 = tGeneralizedFlagVariety("C",2,{2})
+			O1 = ampleTKClass SpGr24
 			peek O1
 
 	SeeAlso
@@ -1372,11 +1372,11 @@ doc ///
 			and in the Lagrangian Grassmannian $SpGr(2,4)$. 
 
 		Example
-			M = matrix(QQ,{{1,0,1,2},{0,1,2,1}});
-			X1 = tGeneralizedFlagVariety("A",3,{2});
-			X2 = tGeneralizedFlagVariety("C",2,{2});
-			C1 = tOrbitClosure(X1,M);
-			C2 = tOrbitClosure(X2,M);
+			M = matrix(QQ,{{1,0,1,2},{0,1,2,1}})
+			X1 = tGeneralizedFlagVariety("A",3,{2})
+			X2 = tGeneralizedFlagVariety("C",2,{2})
+			C1 = tOrbitClosure(X1,M)
+			C2 = tOrbitClosure(X2,M)
 			peek C1
 			peek C2	
 		Text
@@ -1389,6 +1389,23 @@ doc ///
 			FM = flagMatroid(Mat,{1,2})
 			C' = tKClass(X,FM)
 			C === C'
+		Text
+		    	In type "D", the orthogonal Grassmannian $OG(n,2n)$ has two connected components. To compute the
+			torus orbit closure of a point $p$ it suffices to restrict to either 
+			$OG(n,n;2n)$ or $OG(n-1,n-1;2n)$, depending on which component $p$ is located in; see the last example
+			in @TO "Example: generalized flag varieties"@ for more details. Here is an example with $n=4$:
+		Example
+		    	R = makeCharRing 4
+			X1 = tGeneralizedFlagVariety("D",4,{4,4},R)
+			X2 = tGeneralizedFlagVariety("D",4,{3,3},R)
+			A = matrix{{1,3,-2,-1/4},{-1,-1,19,-61/4},{0,1,19,-73/4},{2,0,22,-89/4}};
+			B = matrix(QQ,{{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}});
+			M = A | B
+			assert(A* transpose(B)  + B *transpose(A) == 0) -- verifying that M is isotropic
+			C1 = tOrbitClosure(X1,M)
+			C2 = tOrbitClosure(X2,M)
+			peek C1 
+			peek C2 -- since the point corresponding to M lies in X1, C2 is just the empty class i.e. 0
 		Text
 		    	By default the option RREFMethod is set to false. In this case the method produces the torus orbit closure by
 			only computing the minors of the matrix. If the option RREFMethod is set to true, the method row reduces
@@ -1557,8 +1574,9 @@ doc ///
 			T-action on a T-invariant affine chart around the corresponding point.
 	Description
 		Text
-			Given a $T$-variety $X$ and a $T$-fixed point $p$, one can find a contracting $T$-invariant
-			affine chart around $p$. This method produces a @TO HashTable@ whose keys are the $T$-fixed points of
+			Assume $X$ is a $T$-variety for which there exists a contracting $T$-invariant around each
+			$T$-fixed point (the generalized flag varieties have this property). This 
+			method produces a @TO HashTable@ whose keys are the $T$-fixed points of
 			$X$ and the values are the negatives of characters of the T-action on the associated 
 			contracting affine chart.
 			
@@ -1581,6 +1599,7 @@ doc ///
 
 	SeeAlso
 		tVariety
+		tGeneralizedFlagVariety
 
 	
 ///
@@ -1936,6 +1955,45 @@ doc ///
 ///
 
 
+
+doc ///
+	Key
+		setIndicator
+		(setIndicator, Set, ZZ)
+	Headline
+		computes the signed indicator vector of an admissible set
+	Usage
+		setIndicator(T,n)
+	Inputs
+		T:Set
+		n:ZZ
+	Outputs
+		:List
+			corresponding to a vector in $\mathbb Z^n$
+	Description
+		Text
+			Let $T$ be a set consisting of elements $s$, where $s$ is either equal to $i$ or $i^*$ with $0 \leq i \leq n-1$.
+			The set $T$ is said to be admissible if for any integer $i$, both $i$ and $i^{*}$ are not contained in $T$.
+			This method produces the signed indicator vector of $T$. In particular, the @TO "setIndicator"@ of $T$ is  
+			$\sum c_ie_i \in \mathbb Z^n$ where $c_i = 1$ if $i \in T$, $c_i = -1$ if $i^{*} \in T$ and $0$ otherwise.
+		Example
+			T1 = set{1,2,4,5};
+			T2 = set{1,"2*"};
+			setIndicator(T1,7)
+			setIndicator(T2,3)
+		Text
+		    	If the set is not admissible it produces an error.
+		Example
+		    	T3 = set{1,"1*","2*",3};		
+			setIndicator(T3,4)
+	SeeAlso
+		tGeneralizedFlagVariety
+
+///
+
+
+
+
 undocumented {
 	(net, TVariety),
 	(net, MomentGraph),
@@ -1953,7 +2011,6 @@ undocumented {
 	toFraction,
 	(toFraction, RingElement, RingElement, Ring),
 	unastrsk,
-	setIndicator,
 	(net, TKClass),
 	(net, TMap),
 	(net, FlagMatroid),
@@ -1962,6 +2019,7 @@ undocumented {
 
 
 
+    
 
 
 
@@ -1985,10 +2043,4 @@ doc ///
 
 ///
 --*-
------------------------------------------------------------------------------------
-------------------------------------< TESTS >--------------------------------------
------------------------------------------------------------------------------------
-TEST ///
-PP3 = tProjectiveSpace 3
-assert (3 == #gens PP3.charRing)
-///
+
