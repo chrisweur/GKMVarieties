@@ -4,11 +4,9 @@ Tests for GKMManifolds.m2
 
 -----------------------------------------------------------------------*-
 
---need turn some of the following into tests--
-
-
-
---kTutte test
+--------------------------------
+-- kTutte test
+--------------------------------
 TEST ///
 ML = (random drop(drop(allMatroids 4,1),-1))_{0,1,2}
 TML = apply(ML, m -> {tuttePolynomial m, kTutte flagMatroid({m})}) -- 4 seconds
@@ -26,7 +24,9 @@ g = kTutte FM
 assert (16 == sub(g, {(ring g)_0 => 1, (ring g)_1 => 1}))
 ///
 
---ordinary flag variety tests
+--------------------------------
+-- Type A tests (ordinary flag variety)
+--------------------------------
 TEST ///
 X = tGeneralizedFlagVariety("A",3,{1,2})
 A = matrix{{1,1,1,1},{0,1,2,3}}
@@ -53,7 +53,9 @@ assert ((pushforward f)((pullback g)(ampleTKClass Z)) === dualTautSub)
 assert (tChi ampleTKClass X == tChi (pushforward f)(ampleTKClass X))
 ///
 
---Lagrangian Grassmannian LGr(2,4), and complete SpFl(1,2;4) tests
+----------------------------------------------------------------
+-- Type C tests: Lagrangian Grassmannian LGr(2,4), and complete flag SpFl(1,2;4)
+----------------------------------------------------------------
 TEST ///
 R = makeCharRing 2
 X = tGeneralizedFlagVariety("C",2,{2},R)
@@ -81,7 +83,9 @@ assert (dualTautSub === (pushforward g)(pullback f)(ampleTKClass Y))
 ///
 
 
+----------------------------------------------------------------
 -- Type B tests: OG(3,7) and OGFl(2,3;7) and OGFl(1,2,3;7)
+----------------------------------------------------------------
 TEST ///
 -- Checking points
 R = makeCharRing 3
@@ -146,8 +150,9 @@ assert(C3 === C3')
 
 
 
-
--- Type D tests: OG(4,8)
+----------------------------------------
+-- Type D tests: OG(4,8) and OGFl(1,4;8)
+----------------------------------------
 TEST ///
 -- Checking points
 R = makeCharRing 4
@@ -174,13 +179,54 @@ assert all(missingCharX, v -> #v == 4 and all(v, w -> max w ==2 or min w == -2))
 
 
 -- Checking TOrbClosure
+-- Example that is 0 on X2
+A = matrix{{1,3,-2,-1/4},{-1,-1,19,-61/4},{0,1,19,-73/4},{2,0,22,-89/4}}
+B = matrix(QQ,{{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}})
+M = A | B
+-- Verifying M is isotropic
+assert(A* transpose(B)  + B *transpose(A) == 0)
+
+time C1 = tOrbitClosure(X1,M);
+time C2 = tOrbitClosure(X2,M);
+assert(isWellDefined C1 and isWellDefined C2)
+assert all(X2.points, v -> C2.hilb#v == 0)
+
+-- Example that is 0 on X1
+A = matrix{{1,0,0,1},{0,1,0,1},{0,0,1,1},{0,0,0,0}}
+B = matrix{{0,-1/9,-6/5,0},{1/9,0,-6/5,0},{6/5,6/5,0,0},{-1,-1,-1,1}}
+N = A|B
+-- Verifying M is isotropic
+assert(A* transpose(B)  + B *transpose(A) == 0)
+
+time D1 = tOrbitClosure(X1,N);
+time D2 = tOrbitClosure(X2,N);
+assert(isWellDefined D1 and isWellDefined D2)
+assert all(X1.points, v -> D1.hilb#v == 0)
 
 
 
+--- Same thing happens with the flag variety
+R = makeCharRing 4
+Y1 = tGeneralizedFlagVariety("D",4,{3,4,3,3},R)
+Y2 = tGeneralizedFlagVariety("D",4,{3,4,4,4},R)
+Z = tGeneralizedFlagVariety("D",4,{3,4},R)
+assert(set ((X.points)/first) === set ((Z.points)/first))
+assert(set ((Y.points)/first) === set ((Z.points)/first))
+
+time C1 = tOrbitClosure(Y1,M);
+time C2 = tOrbitClosure(Y2,M);
+assert all(Y1.points, v -> C1.hilb#v == 0)
+assert isWellDefined C2
+
+f = tFlagMap(X,Z)
+assert (trivialTKClass Z === (pushforward f)(trivialTKClass X) )
+///
 
 
 
+-------------------------
 -- Low degree isogenies
+-------------------------
 TEST ///
 -- OG(1,3), SGr(1,2) and P1^* = Gr(1,2)
 X1 = tGeneralizedFlagVariety("B",1,{1,1})
@@ -207,19 +253,25 @@ assert(apply(X1.points, v-> #(X1.charts)#v) === apply(X2.points, v-> #(X2.charts
 
 ///
 
-
+-------------------------------------
 -- Boundary cases for TOrbitClosure
-M = matrix(QQ,{{1,0}})
-X = tGeneralizedFlagVariety("A",1,{1})
+-------------------------------------
+TEST ///
+M = matrix(QQ,{{1,0,0,0},{0,1,0,0}})
+R = makeCharRing 4
+X = tGeneralizedFlagVariety("A",3,{2},R)
 C = tOrbitClosure(X,M)
 peek C
+assert all(keys C.hilb, v -> (
+	if not v === {set{0,1}} then C.hilb#v == 0 else 
+	sub(C.hilb#v,R)  === product apply({0,1} ** {2,3}, v -> 1- R_(v_0)^(-1)*R_(v_1)) 
+	)
+    )
+///
 
-
-
-
-
-
---a toric variety test
+-----------------------
+-- A toric variety test
+-----------------------
 TEST ///
 X = kleinschmidt(2,{2})
 Y = tVariety X
