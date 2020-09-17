@@ -1440,3 +1440,4 @@ uninstallPackage "GKMManifolds"
 installPackage "GKMManifolds"
 viewHelp GKMManifolds
 check "GKMManifolds"
+
