@@ -1425,8 +1425,7 @@ kTutte(FlagMatroid) := RingElement => M -> (
 
 
 load "GKMManifolds/Documentations_GKMManifolds.m2"
-
-
+load "GKMManifolds/Tests_GKMManifolds.m2"
 
 end
 
@@ -1439,3 +1438,4 @@ uninstallPackage "GKMManifolds"
 installPackage "GKMManifolds"
 viewHelp GKMManifolds
 check "GKMManifolds"
+
