@@ -189,34 +189,34 @@ doc ///
 			tChi ampleTKClass SpGr26
 
 		Text
-			For type $B$, the following example features the isotropic Grassmannian $OGr(2,5)$ consisting of
+			For type $B$, the following example features the isotropic Grassmannian $SOGr(2,5)$ consisting of
 			3-dimensional subspaces in $\mathbb C^5$ that are isotropic with respect to the standard symmetric form.
 			Its moment graph is the a complete graph on 4 vertices.
 			Note that Spin groups and their representations are not implemented, so for the type $B_n$ the coefficient
 			$a_n$ need be a multiple of 2.
 
 		Example
-			OGr25 = tGeneralizedFlagVariety("B",2,{2,2}) --inputing {2} instead of {2,2} results in error: spin groups not implemented yet
-			peek OGr25
-			tChi ampleTKClass OGr25
+			SOGr25 = tGeneralizedFlagVariety("B",2,{2,2}) --inputing {2} instead of {2,2} results in error: spin groups not implemented yet
+			peek SOGr25
+			tChi ampleTKClass SOGr25
 
 		Text
-			For type $D$, the following example features the isotropic Grassmannian $OGr(3,8)$ consisting of
+			For type $D$, the following example features the isotropic Grassmannian $SOGr(3,8)$ consisting of
 			3-dimensional subspaces in $\mathbb C^8$ that are isotropic with respect to the standard symmetric form.
 
 		Example
-			OGr38 = tGeneralizedFlagVariety("D",4,{3,4})
-			OGr38.points
+			SOGr38 = tGeneralizedFlagVariety("D",4,{3,4})
+			SOGr38.points
 
 		Text
 			Similarly as in type $B$, Spin groups are not implemented, so the two connected components of 
-			$OGr(4,8)$ need be separatedly created in the following way.
+			$SOGr(4,8)$ need be separatedly created in the following way.
 
 		Example
-			OGr48odd = tGeneralizedFlagVariety("D",4,{3,3})
-			OGr48odd.points
-			OGr48even = tGeneralizedFlagVariety("D",4,{4,4})
-			OGr48even.points
+			SOGr48odd = tGeneralizedFlagVariety("D",4,{3,3})
+			SOGr48odd.points
+			SOGr48even = tGeneralizedFlagVariety("D",4,{4,4})
+			SOGr48even.points
 
 	Caveat
 		Does not check for low-dimensional isogeneis.  For instance, always use type $D_n$ with $n\geq 4$ to be safe.
@@ -248,23 +248,23 @@ doc ///
 			$t \cdot (x_1,\dots, x_n) = (t^{-a_1}x_1,\dots, t^{-a_n}x_n)$.
 			
 		Text	
-		        The method @TO "normalToricVariety"@ from the package @TO "NormalToricVarieties"@ allows the 
+			The method @TO "normalToricVariety"@ from the package @TO "NormalToricVarieties"@ allows the 
 			user to construct smooth toric varieties. To convert it to a GKM manifold we use the method
 			@TO "tVariety"@. Here is an example with the third Hirzebruch surface.
 		Example
-		    	FF3 = hirzebruchSurface 3;
+			FF3 = hirzebruchSurface 3;
 			X = tVariety FF3;
 			peek FF3
 			peek X
 
-       		Text
+   		Text
 			If a $T$-variety $X$ was originally constructed from @TO "normalToricVariety"@ we can convert it
 			back to a toric variety as shown in the following example.
 		Example
-		        Y = normalToricVariety(X); -- X was defined in the previous example
-		    	assert(Y === FF3)
+			Y = normalToricVariety(X); -- X was defined in the previous example
+			assert(Y === FF3)
 		Text
-		    	The following example shows how to convert a $T$-invariant divisor constructed using
+			The following example shows how to convert a $T$-invariant divisor constructed using
 			@TO ToricDivisor@ to a  @TO TKClass@.
 
 		Example
@@ -275,12 +275,12 @@ doc ///
 			assert(isWellDefined C)
 			peek C
 		Text
-		    	Projective $n$-space as a toric variety (constructed using @TO "toricProjectiveSpace"@) 
+			Projective $n$-space as a toric variety (constructed using @TO "toricProjectiveSpace"@) 
 			is acted upon by an $n$-dimensional torus. However, projective $n$-space as $T$-variety 
 			(constructed using @TO "tProjectiveSpace"@) is acted upon by an $(n+1)$-dimensional torus.
 		Example
-		    	X = toricProjectiveSpace 2; -- the torus is C^2
-       			Y = tProjectiveSpace 2; -- the torus is C^3
+			X = toricProjectiveSpace 2; -- the torus is C^2
+	   		Y = tProjectiveSpace 2; -- the torus is C^3
 			peek X
 			peek Y		
 	
@@ -308,11 +308,11 @@ doc ///
 		Y:NormalToricVariety		
 	Description			
 		Text	
-		        If $X$ is a $T$-variety that was originally constructed using @TO "normalToricVariety"@, then
+			If $X$ is a $T$-variety that was originally constructed using @TO "normalToricVariety"@, then
 			this method reverts $X$ to a @TO "NormalToricVariety"@.
 			
 		Example
-		    	X = toricProjectiveSpace 2;
+			X = toricProjectiveSpace 2;
 			Y = tVariety X
 			assert(normalToricVariety Y === X)
 
@@ -437,7 +437,7 @@ doc ///
 			peek SpFl4
 		
 		Text
-			The following example produces the Orthogonal Grassmaninnian $OGr(2,5)$ from its
+			The following example produces the Orthogonal Grassmaninnian $SOGr(2,5)$ from its
 			moment graph.
 
 		Example
@@ -491,15 +491,15 @@ doc ///
 			The following example exhibits the product of $\mathbb P^1$ with
 			the Lagrangian Grassmannian SpGr(2,4). 
 		Example
-		        R = makeCharRing 2;
+			R = makeCharRing 2;
 			X = tProjectiveSpace(1,R);
 			Y = tGeneralizedFlagVariety("C",2,{2},R);
 			Z = X ** Y;
 			peek Z
 		Text
-		    	We can cache the moment graph of $Z$ as follows:
+			We can cache the moment graph of $Z$ as follows:
 		Example
-		    	G = momentGraph X;
+			G = momentGraph X;
 			H = momentGraph Y;
 			momentGraph(Z, G** H);
 			peek Z
@@ -1390,12 +1390,12 @@ doc ///
 			C' = tKClass(X,FM)
 			C === C'
 		Text
-		    	In type "D", the orthogonal Grassmannian $OG(n,2n)$ has two connected components. To compute the
+			In type "D", the orthogonal Grassmannian $SOGr(n,2n)$ has two connected components. To compute the
 			torus orbit closure of a point $p$ it suffices to restrict to either 
-			$OG(n,n;2n)$ or $OG(n-1,n-1;2n)$, depending on which component $p$ is located in; see the last example
+			$SOGr(n,n;2n)$ or $SOGr(n-1,n-1;2n)$, depending on which component $p$ is located in; see the last example
 			in @TO "Example: generalized flag varieties"@ for more details. Here is an example with $n=4$:
 		Example
-		    	R = makeCharRing 4
+			R = makeCharRing 4
 			X1 = tGeneralizedFlagVariety("D",4,{4,4},R)
 			X2 = tGeneralizedFlagVariety("D",4,{3,3},R)
 			A = matrix{{1,3,-2,-1/4},{-1,-1,19,-61/4},{0,1,19,-73/4},{2,0,22,-89/4}};
@@ -1407,14 +1407,14 @@ doc ///
 			peek C1 
 			peek C2 -- since the point corresponding to M lies in X1, C2 is just the empty class i.e. 0
 		Text
-		    	By default the option RREFMethod is set to false. In this case the method produces the torus orbit closure by
+			By default the option RREFMethod is set to false. In this case the method produces the torus orbit closure by
 			only computing the minors of the matrix. If the option RREFMethod is set to true, the method row reduces
 			the matrix instead of computing its minors.
 		Example
-		       X = tGeneralizedFlagVariety("A",3,{1,2,3})
-		       Mat = random(QQ^3,QQ^4)
-		       time C = tOrbitClosure(X,Mat)	
-		       time C = tOrbitClosure(X,Mat, RREFMethod => true)
+			X = tGeneralizedFlagVariety("A",3,{1,2,3})
+			Mat = random(QQ^3,QQ^4)
+			time C = tOrbitClosure(X,Mat)	
+			time C = tOrbitClosure(X,Mat, RREFMethod => true)
 			
 	SeeAlso
 		tGeneralizedFlagVariety
@@ -1644,7 +1644,7 @@ doc ///
 		X:TVariety
 	Outputs
 		:String
-		    of the form "A", "B", "C" or "D"
+			of the form "A", "B", "C" or "D"
 	Description
 		Text
 			If $X$ is a generalized flag variety constructed using the method
@@ -1652,7 +1652,7 @@ doc ///
 
 		Example
 			X = tGeneralizedFlagVariety("A",3,{2}); -- The Grassmannian Gr(2,4)
-			Y = tGeneralizedFlagVariety("B",3,{2}); -- The Orthogonal Grassmannian OGr(2,7)
+			Y = tGeneralizedFlagVariety("B",3,{2}); -- The Orthogonal Grassmannian SOGr(2,7)
 			Z = X** X;
 			lieType(X)
 			lieType(Y)
@@ -1982,9 +1982,9 @@ doc ///
 			setIndicator(T1,7)
 			setIndicator(T2,3)
 		Text
-		    	If the set is not admissible it produces an error.
+			If the set is not admissible it produces an error.
 		Example
-		    	T3 = set{1,"1*","2*",3};		
+			T3 = set{1,"1*","2*",3};		
 			setIndicator(T3,4)
 	SeeAlso
 		tGeneralizedFlagVariety
@@ -2019,7 +2019,7 @@ undocumented {
 
 
 
-    
+
 
 
 
