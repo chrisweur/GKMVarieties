@@ -286,6 +286,7 @@ ltsPts = {{1,1},{0,-1},{0,0},{0,1},{-1,-3},{-1,-2},{-1,-1},{-1,0},{-1,1}}
 assert (sum(ltsPts, i -> R_i) == tChi TantiK)
 ///
 
+-*---- old tests during developing
 
 ----------< tGeneralizedFlagVariety tests >-------------
 restart
@@ -653,3 +654,4 @@ M = matrix(QQ,{{1,2,0,0}})
 
 
 
+----------------------------------------------------------*-
