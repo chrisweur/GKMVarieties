@@ -1973,7 +1973,7 @@ doc ///
 	Description
 		Text
 			Let $T$ be a set consisting of elements $s$, where $s$ is either equal to $i$ or $i^*$ with $0 \leq i \leq n-1$.
-			The set $T$ is said to be admissible if for any integer $i$, both $i$ and $i^{*}$ are not contained in $T$.
+			The set $T$ is said to be admissible if for any integer $i$, not both $i$ and $i^{*}$ are contained in $T$.
 			This method produces the signed indicator vector of $T$. In particular, the @TO "setIndicator"@ of $T$ is  
 			$\sum c_ie_i \in \mathbb Z^n$ where $c_i = 1$ if $i \in T$, $c_i = -1$ if $i^{*} \in T$ and $0$ otherwise.
 		Example
