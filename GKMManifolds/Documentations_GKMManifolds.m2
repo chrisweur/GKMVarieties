@@ -404,7 +404,7 @@ doc ///
 		G:MomentGraph
 			representing the one dimensional $T$-orbits of $X$
 		R:Ring
-			representing the characteristic ring of $T$
+			representing the character ring of $T$
 		Y:NormalToricVariety
 		C:TKClass	
 	Outputs
