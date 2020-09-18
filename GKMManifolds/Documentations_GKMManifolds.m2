@@ -2012,7 +2012,7 @@ doc ///
 			M = matroid graph{{a,b},{b,c},{c,a},{a,d}}
 			kTutte flagMatroid {M}, tuttePolynomial M
 	Caveat
-		The computation does not finish within a reasonable time if the ground set is bigger than 5.
+		The computation often does not finish within a reasonable time (< 10 min) if the ground set is bigger than 5.
 	SeeAlso
 		FlagMatroid
 		(tKClass, TVariety, FlagMatroid)
