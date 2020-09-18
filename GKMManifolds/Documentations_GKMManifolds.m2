@@ -1936,7 +1936,7 @@ doc ///
 		Text
 			This method computes the flag-geometric Tutte polynomial of a @TO FlagMatroid@, defined via a push-pull of the 
 			@TO TKClass@ of the flag matroid.  See Definition 6.1 of [DES20].
-			The following is Example 8.24 in [CDMS18].
+			The following is the example 8.24 in [CDMS18].
 			
 		Example
 			FM = flagMatroid {uniformMatroid(1,3),uniformMatroid(2,3)}
@@ -1954,10 +1954,6 @@ doc ///
 		(tKClass, TVariety, FlagMatroid)
 
 ///
-
-FM = flagMatroid {uniformMatroid(1,5),uniformMatroid(4,5)}
-kTutte FM
-
 
 doc ///
 	Key
