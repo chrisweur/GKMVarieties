@@ -1437,7 +1437,7 @@ end
 
 restart
 uninstallPackage "GKMManifolds"
-installPackage "GKMManifolds"
+installPackage "GKMManifolds" --42 seconds
 viewHelp GKMManifolds
 time check "GKMManifolds"
 
