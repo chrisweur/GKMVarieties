@@ -524,8 +524,7 @@ doc ///
 		Text
 			For $X$ a GKM manifold with an action of a torus $T$ whose character ring is $R$,
 			a $T$-equivariant $K$-class $C \in K_T^0(X)$ of is encoded by its image in $K_T^0(X^T) = \prod_{x\in X^T} R$,
-			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.
-			See [Corollary 5.12; VV03] or [Corollary A.5; RK03] for details.
+			under the injective restriction map $K_T^0(X) \to K_T^0(X^T)$.  See REFERENCE HERE.
 
 		Text
 			A @TO "TKClass"@ C is a @TO "HashTable"@
@@ -540,7 +539,6 @@ doc ///
 
 	SeeAlso
 		tKClass
-		(isWellDefined, TKClass)
 		pushforward
 		pullback
 		tChi
@@ -628,10 +626,8 @@ doc ///
 			it satisfies the following "edge compatibility condition":
 
 			For each one-dimensional $T$-orbit-closure in $X$ with boundary points $x$ and $x'$, one has
-			$f_x \equiv f_{x'}$ module $1 - T^{\lambda(x,x')}$ where $\lambda(x,x')$ is the character of the action of $T$ on the
+			$f_x \equiv f_{x'} \mod 1 - T^\lambda_{x,x'}$ where $\lambda_{x,x'}$ is the character of the action of $T$ on the
 			one-dimensional orbit.
-
-			See [Corollary 5.12; VV03] or [Corollary A.5; RK03] for details.
 
 		Example
 			PP3 = tProjectiveSpace 3
@@ -997,7 +993,7 @@ doc ///
 		f:TMap
 	Outputs
 		:FunctionClosure
-			whose input is a @TO TKClass@ on the target T-variety of f and output is its pullback along f
+			whose input is a TKClass on the target T-variety of f and output is its pullback along f
 	Description
 		Text
 			Given two $T$-varieties $X$ and $Y$, this method computes the pullback of a @TO TKClass@ on $Y$ 
@@ -1014,7 +1010,6 @@ doc ///
 	SeeAlso
 		tFlagMap
 		pushforward
-		TKClass
 ///
 
 
@@ -1030,7 +1025,7 @@ doc ///
 		f:TMap
 	Outputs
 		:FunctionClosure
-			whose input is a @TO TKClass@ on the source T-variety of f and output is its pushforward along f
+			whose input is a TKClass on the source T-variety of f and output is its pushforward along f
 	Description
 		Text
 			Given two $T$-varieties $X$ and $Y$, this method computes the pushforward of a @TO TKClass@ on $X$ 
@@ -1047,8 +1042,7 @@ doc ///
 	SeeAlso
 		tFlagMap
 		(pullback, TMap)
-		TKClass
-		tChi
+		pushforward
 ///
 
 doc ///
@@ -1075,8 +1069,6 @@ doc ///
 			tChi O1
 	SeeAlso
 		pushforward
-		TKClass
-		ampleTKClass
 
 ///
 
@@ -1582,9 +1574,9 @@ doc ///
 			T-action on a T-invariant affine chart around the corresponding point.
 	Description
 		Text
-			Assume $X$ is a $T$-variety for which there exists a contracting $T$-invariant affine chart around each
-			$T$-fixed point.  For instance, generalized flag varieties and smooth toric varieties have this property.
-			This returns a @TO HashTable@ whose keys are the $T$-fixed points of
+			Assume $X$ is a $T$-variety for which there exists a contracting $T$-invariant around each
+			$T$-fixed point (the generalized flag varieties have this property). This 
+			method produces a @TO HashTable@ whose keys are the $T$-fixed points of
 			$X$ and the values are the negatives of characters of the T-action on the associated 
 			contracting affine chart.
 			
