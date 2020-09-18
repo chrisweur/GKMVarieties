@@ -1439,5 +1439,30 @@ restart
 uninstallPackage "GKMManifolds"
 installPackage "GKMManifolds"
 viewHelp GKMManifolds
-check "GKMManifolds"
+time check "GKMManifolds"
 
+needsPackage "GKMManifolds"
+
+--the canned examples
+FM = flagMatroid {uniformMatroid(1,5),uniformMatroid(3,5)}
+time kTutte FM -- 7 seconds
+FM = flagMatroid {uniformMatroid(2,6),uniformMatroid(4,6)}
+--time kTutte FM --700 seconds
+-*--
+i11 : FM = flagMatroid {uniformMatroid(2,6),uniformMatroid(4,6)}
+
+o11 = a flag matroid with rank sequence {2, 4} on 6 elements 
+
+o11 : FlagMatroid
+
+i12 : time kTutte FM
+     -- used 691.322 seconds
+
+       4 4     4 3     3 4     4 2     3 3     2 4     4       3 2      2 3       4     4      3 
+o12 = x y  + 2x y  + 2x y  + 3x y  - 6x y  + 3x y  + 4x y + 18x y  + 18x y  + 4x*y  + 5x  + 14x y
+      --------------------------------------------------------------------------------------------
+           2 2        3     4     3     2        2     3
+      + 18x y  + 14x*y  + 5y  + 2x  + 6x y + 6x*y  + 2y
+
+o12 : ZZ[x, y]
+-*--

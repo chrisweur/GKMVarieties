@@ -8,8 +8,8 @@ Tests for GKMManifolds.m2
 -- kTutte test
 --------------------------------
 TEST ///
-ML = (random drop(drop(allMatroids 4,1),-1))_{0,1,2}
-TML = apply(ML, m -> {tuttePolynomial m, kTutte flagMatroid({m})}) -- 4 seconds
+ML = (random drop(drop(allMatroids 4,1),-1))_{0,1}
+TML = apply(ML, m -> {tuttePolynomial m, kTutte flagMatroid({m})}) -- 2.5 seconds
 assert all(TML, l -> (map(ring first l, ring last l, gens ring first l))(last l) == first l)
 N = flagMatroid(matrix{{1,1,1},{1,0,0}},{1,2}) 
 f = kTutte N --see Example 8.24 of [CDMS18]
@@ -20,8 +20,8 @@ A = matrix{{1,1,1,1},{0,1,2,3}}
 FMr = flagMatroid(A,{1,2})
 FM = flagMatroid {uniformMatroid(1,4),uniformMatroid(2,4)}
 assert (FMr === FM)
-g = kTutte FM
-assert (16 == sub(g, {(ring g)_0 => 1, (ring g)_1 => 1}))
+--g = kTutte FM
+--assert (16 == sub(g, {(ring g)_0 => 1, (ring g)_1 => 1}))
 ///
 
 --------------------------------
