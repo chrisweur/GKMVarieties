@@ -1,0 +1,8 @@
+FUTURE PROJECTS:
+
+* Intersection (co)homology of sheaves on moment graphs (Braden & MacPherson)
+
+* Interface with toric vector bundles
+
+* Moment graph homology [BGH02, GZ papers]
+
