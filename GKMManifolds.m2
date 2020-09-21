@@ -23,8 +23,8 @@ newPackage("GKMManifolds",
 	HomePage => "https://github.com/chrisweur/GKMManifolds",
 	PackageExports => {"Graphs", "Matroids", "NormalToricVarieties"},
 	AuxiliaryFiles => true,
-	DebuggingMode => false,
-	KeyWords => {"Equivariant Cohomology", "Toric Geometry", "Flag Varieties", "Matroids"}
+	--Keywords => {"Equivariant Cohomology", "Toric Geometry", "Flag Varieties", "Matroids"},
+	DebuggingMode => false
 )
 export {
 	"TVariety",
