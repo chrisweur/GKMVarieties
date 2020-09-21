@@ -19,11 +19,12 @@ newPackage("GKMManifolds",
 	     Email => "ritvik@math.berkeley.edu",
 	     HomePage => "https://math.berkeley.edu/~ritvik"}
 	    },
-	Headline => "a package for computations with GKM manifolds and moment graphs",
+	Headline => "computations with GKM manifolds and moment graphs",
 	HomePage => "https://github.com/chrisweur/GKMManifolds",
 	PackageExports => {"Graphs", "Matroids", "NormalToricVarieties"},
 	AuxiliaryFiles => true,
-	DebuggingMode => false
+	DebuggingMode => false,
+	KeyWords => {"Equivariant Cohomology", "Toric Geometry", "Flag Varieties", "Matroids"}
 )
 export {
 	"TVariety",
