@@ -853,10 +853,10 @@ toRoot := LT -> (
 tGeneralizedFlagVariety = method()
 tGeneralizedFlagVariety(String,ZZ,List) := TVariety => (LT,d,L) -> (
     if not member(LT,{"A","B","C","D"}) then (
-	error " the first entry must be one of \"A\", \"B\", \"C\", or \"D\" "
+	error " the first argument must be one of \"A\", \"B\", \"C\", or \"D\" "
 	);
     if d <= 0 then (
-	error " the second entry (dimension) must be a positive integer "
+	error " the second argument (dimension) must be a positive integer "
 	);
     if not all(L, i -> 1 <= i and i <= d) then (
 	error " indices for the weights must be between 1 and the dimension (inclusive) "
@@ -891,6 +891,17 @@ tGeneralizedFlagVariety(String,ZZ,List) := TVariety => (LT,d,L) -> (
     X.cache.lieType = LT;
     X
     )
+
+------------------------------------------------
+-- Lines 870 - 882 can be replaced with
+------------------------------------------------
+-*
+    chrts := apply(extrWts, v -> (
+	    lambdas := select(apply(delete(v,extrWts), w-> {w,toRootFunc(w-v)}), u-> #u_1 == 1);
+	    apply(lambdas, u -> GEdgesDouble#({v,u_0}/redVecToFlag) = first u_1);
+	    apply(lambdas, u -> u_1)
+	    );
+*-
 
 --same as tGeneralizedFlagVariety but with the ring R provided for the character ring.
 tGeneralizedFlagVariety(String,ZZ,List,Ring) := TVariety => (LT,d,L,R) -> (
@@ -939,7 +950,7 @@ tGeneralizedSchubertVariety = method()
 tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
     G := momentGraph X;
     if not member(v,G.vertices) then (
-	error " the second entry must be a vertex of the moment graph of the TVariety "
+	error " the second argument must be a vertex of the moment graph of the TVariety "
 	);
     P := bruhatOrder X;
     V := principalFilter(P,v);
@@ -954,17 +965,13 @@ tGeneralizedSchubertVariety(TVariety,Thing) := TVariety => (X,v) -> (
 --------------------------------< T-orbit closures of points >------------------------------------
 
 ---------------------------< auxiliary functions for TOrbClosure >--------------------------------
-convertToNum = (n,L) -> (
-    return apply(toList L, v -> if v === unastrsk(v) then v else n + unastrsk v)
-    )
+convertToNum = (n,L) -> apply(toList L, v -> if v === unastrsk(v) then v else n + unastrsk v)
 
-revMat = M -> return matrix apply( reverse entries M, v-> reverse v)
+
+revMat = M -> matrix apply( reverse entries M, v-> reverse v)
 
 -- Takes in a mutable matrix and outputs the RREF with the identitiy block in the beginning
-rowRed = M -> (
-    Mat := matrix revMat(M) ;
-    return mutableMatrix revMat transpose gens gb image transpose Mat;
-    )
+rowRed = M -> mutableMatrix revMat transpose gens gb image transpose matrix revMat M
 
 
 
@@ -990,7 +997,7 @@ tOrbClosure(TVariety,List) := TKClass => (X,MatLst) -> (
 	    )
 	) then error "the column size of the matrices are incorrect";
     if not rks === apply(MatLst, v -> rank v) then (
-	error " the rank of the matrices are incorrect "
+	error " the ranks of the matrices are incorrect "
 	);
     (if Typ === "A" then Gens := apply(gens QS, v -> v^(-1))
 	else if Typ  === "C" or Typ === "D" then Gens = apply(gens QS, v -> v^(-1)) | gens QS
@@ -1050,7 +1057,7 @@ tOrbitClosure(TVariety,Matrix) := TKClass => opts -> (X,A) -> (
 	error "the column size of the matrices are incorrect"
 	);
     if not rks === apply(MatLst, v -> rank v) then (
-	error " the rank of the matrices are incorrect"
+	error " the ranks of the matrices are incorrect"
 	);
     nonzeroMinors := Mat -> select(subsets(numcols Mat, numrows Mat), l -> determinant Mat_l != 0);
     toWeights := l -> (
