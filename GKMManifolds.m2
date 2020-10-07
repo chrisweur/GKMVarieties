@@ -686,8 +686,6 @@ normalToricVariety(TVariety) := NormalToricVariety => opts -> X -> (
     )
 
 
---TODO: the following unfunction is untested
-
 --given a ToricDivisor D on a TVariety Y whose normal toric variety is X,
 --outputs the TKClass of D on Y
 tKClass(TVariety,ToricDivisor) := TKClass => (Y,D) -> (
