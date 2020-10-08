@@ -52,8 +52,8 @@ VarietyWithTorusAction work?
 
 
 MUCH SIMPLER ALTERNATIVE:
-TVariety --> EquiformalVariety
-tVariety --> makeEquiformalVariety
+TVariety --> GKMVariety
+tVariety --> makeGKMVariety
 TMap --> EquivariantMap
 TKClass --> EquivariantKClass
 tKClass --> makeKClass or makeEquivariantKClass(?...)
