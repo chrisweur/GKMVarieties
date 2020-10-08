@@ -1423,7 +1423,10 @@ time check "GKMManifolds"
 
 needsPackage "GKMManifolds"
 
---the canned examples
+
+
+
+-----------------------< canned examples >---------------------------
 FM = flagMatroid {uniformMatroid(1,5),uniformMatroid(3,5)}
 time kTutte FM -- 7 seconds
 FM = flagMatroid {uniformMatroid(2,6),uniformMatroid(4,6)}
@@ -1447,7 +1450,7 @@ o12 = x y  + 2x y  + 2x y  + 3x y  - 6x y  + 3x y  + 4x y + 18x y  + 18x y  + 4x
 o12 : ZZ[x, y]
 --*-
 
---canned example for displaying error messages
+--canned examples for displaying error messages
 --for bruhatOrder
 Fl3 = tGeneralizedFlagVariety("A",2,{1,2})
 cellOrder Fl3
