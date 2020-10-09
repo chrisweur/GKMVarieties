@@ -11,7 +11,7 @@ FUTURE PROJECTS:
 
 
 
-NAMING SCHEMA RENEWAL:
+FUTURE NAMING SCHEMA RENEWAL:
 
 Torus
 --Type of HashTable
@@ -41,40 +41,9 @@ makeTorus
 --and also initializes EquivariantMap and EquivariantKClass?
 
 
-
-
-POSSIBLE ISSUES:
-
+Possible issues:
 Always have to make the torus first.  But if one has a NormalToricVariety, how will making this into a 
 VarietyWithTorusAction work?
-
-
-
-
-MUCH SIMPLER ALTERNATIVE:
-TVariety --> GKMVariety
-tVariety --> makeGKMVariety
-TMap --> EquivariantMap
-TKClass --> EquivariantKClass
-tKClass --> makeKClass or makeEquivariantKClass(?...)
-tMap --> map
-tChi --> euler
-ampleTKClass --> OO_X(1) or ampleKClass
-trivialTKClass --> OO_X or trivialKClass
-
-
-
-
-MISC:
-
-ask about "getAttribute", "hasAttribute", and "ReverseDictionary"
-
-ask about the net and printing name stuff
-
-
-EquivariantMap has two keys; for one of them: should it be "gkmManifold"? "GKMManifold"?
-
-"hilb"? "KPolynomial"? "HilbertSeriesNumerator"? 
 
 
 
