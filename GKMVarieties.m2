@@ -1412,7 +1412,7 @@ restart
 uninstallPackage "GKMVarieties"
 installPackage "GKMVarieties" --42 seconds
 viewHelp GKMVarieties
-time check "GKMVarieties"
+check "GKMVarieties"
 
 needsPackage "GKMVarieties"
 

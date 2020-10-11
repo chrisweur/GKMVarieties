@@ -22,8 +22,8 @@ doc ///
 			(ii) $X$ has finitely many $T$-fixed points, and (iii) $X$ has finitely
 			many one-dimensional $T$-orbits.  The data of the zero and one dimensional
 			$T$-orbits of $X$ define the moment graph of $X$, with which one can carry out
-			$T$-equivariant cohomology and $T$-equivariant $K$-theory computations by
-			combinatorial means sometimes referred to as the method of localization.
+			$T$-equivariant cohomology and $T$-equivariant $K$-theory computations via
+			the method of localization.
 			This package provides methods for these computations in Macaulay2.
 			
 		Text
