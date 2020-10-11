@@ -162,7 +162,7 @@ momentGraph(List,HashTable,Ring) := MomentGraph => (V,E,H) -> (
 underlyingGraph(MomentGraph) := Graph => G -> graph(G.vertices, keys G.edges, EntryMode => "edges")
 
 
---If a moment graph G comes from a possibly singular GKM variety with a T-invariant
+--If a moment graph G comes from a possibly singular GKM variety with a torus invariant
 -- Whitney stratification consisting of affine spaces,
 --the vertices of G correspond to each strata,
 --and are ordered v1 <= v2 if the closure of stratum of v2 is contained in that of v1.
@@ -277,8 +277,8 @@ makeGKMVariety(List,List,Ring) := GKMVariety => (L,M,R) -> (
     	}
     )
 
---given a GKMVariety X, whose X.charts have not been defined yet,
---and a list L = {l_1, ... , l_m} where l_i is a list of characters of the T-action
+--given a GKMVariety X with an action of a torus T, whose X.charts have not been defined yet,
+--and a list L = {l_1, ... , l_m} where l_i is a list of characters of the torus action
 --at the affine chart around p_i where X.points = {p_1, ... , p_m}
 --defines X.charts to be the hash table whose keys are X.points and values the characters
 charts = method()
@@ -401,7 +401,7 @@ cellOrder(GKMVariety) := Poset => X -> (
 
 
 --a KClass C has data of:
---C.variety = a GKMVariety X that the T-equiv K-class C lives on
+--C.variety = a GKMVariety X that the equivariant K-class C lives on
 --C.KPolynomials = a hash table whose keys are points of X and values are the Hilbert series at the point
 KClass = new Type of HashTable
 
@@ -609,7 +609,7 @@ compose(EquivariantMap,EquivariantMap) := EquivariantMap => (f,g) -> (
     Y1 := g.target;
     Y2 := f.source;
     if not Y1.points === Y2.points then (
-	error " check sources and targets of the T-maps "
+	error " check sources and targets of the equivariant morphisms "
 	);
     Z := f.target; X := g.source;
     ptPairs := apply(X.points, p -> (p, f.ptsMap#(g.ptsMap#p)));
@@ -634,7 +634,7 @@ euler(KClass) := RingElement => C -> (
 ---------------------------------< normal toric varieties >------------------------------------
 
 --given a NormalToricVariety X, outputs a GKM variety Y with the data
---Y.points are lists where each list is the indices of the rays defining the T-fixed point
+--Y.points are lists where each list is the indices of the rays defining the torus fixed point
 --X need be smooth, non-degenerate, and must have fixed-points.
 
 --WARNING: as usual, if an affine chart AA^m has characters a_1, ... , a_m, the torus (kk^*)^n
@@ -938,7 +938,7 @@ bruhatOrder(GKMVariety) := Poset => X -> (
 
 --Schubert variety of a generalized flag variety
 --input: is (X,v), where X is a generalized flag variety and v is a vertex in its moment graph
---output: a GKMVariety representing a Schubert variety whose T-fixed points correspond to all
+--output: a GKMVariety representing a Schubert variety whose torus fixed points correspond to all
 --vertices w in the moment graph of X where v <= w
 generalizedSchubertVariety = method()
 generalizedSchubertVariety(GKMVariety,Thing) := GKMVariety => (X,v) -> (
@@ -956,7 +956,7 @@ generalizedSchubertVariety(GKMVariety,Thing) := GKMVariety => (X,v) -> (
     )
 
 --------------------------------------------------------------------------------------------------
---------------------------------< T-orbit closures of points >------------------------------------
+--------------------------------< Torus orbit closures of points >------------------------------------
 
 ---------------------------< auxiliary functions for TOrbClosure >--------------------------------
 convertToNum = (n,L) -> apply(toList L, v -> if v === unastrsk(v) then v else n + unastrsk v)
@@ -976,7 +976,7 @@ rowRed = M -> mutableMatrix revMat transpose gens gb image transpose matrix revM
 tOrbClosure = method()
 tOrbClosure(GKMVariety,List) := KClass => (X,MatLst) -> ( 
     if X.cache.?lieType then Typ := X.cache.lieType else (
-	 error "T-orbit closures are only implemented for Lie types"
+	 error "Torus orbit closures are only implemented for Lie types"
 	 );
     R := X.characterRing;
     m := numgens X.characterRing;
@@ -1038,7 +1038,7 @@ orbitClosure(GKMVariety,Matrix) := KClass => opts -> (X,A) -> (
     MatLst := apply(rks, i -> A^(apply(i, j -> j)));
     if opts.RREFMethod then return tOrbClosure(X,MatLst);
     if X.cache.?lieType then Typ := X.cache.lieType else (
-	 error "T-orbit closures are only implemented for Lie types"
+	 error "Torus orbit closures are only implemented for Lie types"
 	 );
     R := X.characterRing;
     n := numgens R;
