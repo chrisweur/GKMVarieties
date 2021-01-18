@@ -1396,6 +1396,27 @@ flagGeomTuttePolynomial(FlagMatroid) := RingElement => M -> (
 
 
 
+------------------------------< equivariant cohomology >-----------------------------------
+
+--input: a list L and a ring R
+--output: the direct product ring R^L, but represented as a quotient of R[L/(l -> e_l)]
+--with idempotents e_l summing to 1
+Ring^**List := Ring => (R,L) -> (
+    e := symbol e;
+    S := R[L/(l -> e_l)];
+    J := ideal(subsets(gens S, 2)/product) + ideal((gens S)/(i -> i^2 - i)) + ideal(1 - sum gens S);
+    S/J
+    )
+
+cohomologyRing = method()
+cohomologyRing(MomentGraph) := Ring => G -> (
+    Inc := a;
+    )
+
+
+
+
+
 
 load "GKMVarieties/Documentation_GKMVarieties.m2"
 load "GKMVarieties/Tests_GKMVarieties.m2"
