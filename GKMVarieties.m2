@@ -511,6 +511,101 @@ ampleKClass(GKMVariety,KClass) := (X,C) -> (
     )
 
 
+--a ChowClass C has data of:
+--C.variety = a GKMVariety X that the equivariant K-class C lives on
+--C.Polynomials = a hash table whose keys are points of X and values are the... 
+
+ChowClass = new Type of HashTable
+
+ChowClass.synonym = "equivariant Chow class"
+
+globalAssignment GKMVariety
+net ChowClass := C -> net ofClass class C | " on a GKM variety "
+
+
+--a ChowClass is given by a GKMVariety X and a list L of polynomials for each torus-invariant
+--points in X, (listed in the order of X.points)
+makeChowClass = method();
+makeChowClass(GKMVariety,List) := ChowClass => (X,L) -> (
+    K := X.points;
+    if any(L, l -> ring l =!= X.characterRing) then L = L/(f -> toCharacterRing(X,f));
+    new ChowClass from {
+	symbol variety => X,
+	symbol Polynomials => hashTable apply(#K, i -> (K_i,L_i))
+    }
+)
+
+makeGKMVariety(ChowClass) := GKMVariety => C -> C.variety
+
+
+--tests whether a ChowClass satisfies the edge-compatibility criterion
+isWellDefined(ChowClass) := Boolean => C -> (
+    X := C.variety;
+    if not X.?momentGraph then (
+	error "a moment graph needs to be defined for this GKM variety "
+	);
+    G := X.momentGraph;
+    R := X.characterRing;
+    x := symbol x;
+    S := QQ[x_0..x_(#gens R - 1)];
+    badEdges := select(keys G.edges, e -> (
+	    pt1 := first e;
+	    pt2 := last e;
+	    lambda := G.edges#e;
+	    ratio := toFraction(C.Polynomials#pt1 - C.Polynomials#pt2, 1 - R_lambda, S);
+	    #(terms(QQ,denominator first ratio)) != 1
+	    )
+	);
+    if #badEdges != 0 then (
+	<< "incompatible edges " | toString(badEdges) <<
+	return false
+	);
+    true
+    )
+
+
+--the trivial ChowClass (where X^T --> R is a constant 1 function) of a GKMVariety X
+--in other words, the ChowClass of the structure sheaf of X
+trivialChowClass = method();
+trivialChowClass(GKMVariety) := ChowClass => X -> (
+    R := X.characterRing;
+    L := apply(X.points, p -> 1_R);
+    makeChowClass(X,L)
+)
+
+
+--multiplying two ChowClasses
+ChowClass * ChowClass := (C1,C2) -> (
+    X1 := C1.variety; X2 := C2.variety;
+    if not X1 === X2 then error "the GKM varieties are different";
+    L := apply(X1.points, p -> C1.Polynomials#p * C2.Polynomials#p);
+    makeChowClass(X1,L)
+)
+
+-- TODO: check that this doesn't raise issues
+ChowClass ^ ZZ := (C,d) -> (
+    if d > 0 then return product(d, i -> C)
+    else if d == 0 then return trivialChowClass C.variety
+    else if d < 0 then (
+	if not all(values C.Polynomials, f -> 1 == #terms f) then (
+	    error "unable to compute the inverse of this Chow class"
+	    );
+	L := apply(C.variety.points, p -> (C.ChowPolynomials#p)^(-1));
+	Cneg := makeChowClass(C.variety,L);
+	return product(-d, i -> Cneg)
+	)
+    )
+
+
+--adding two ChowClasses
+ChowClass + ChowClass := (C1,C2) -> (
+    X1 := C1.variety; X2 := C2.variety;
+    if not X1 === X2 then error "the GKM varieties are different";
+    L := apply(X1.points, p -> C1.Polynomials#p + C2.Polynomials#p);
+    makeChowClass(X1,L)
+)
+
+
 --a EquivariantMap f has data of:
 --f.source: the source makeGKMVariety X,
 --f.target: the target makeGKMVariety Y
