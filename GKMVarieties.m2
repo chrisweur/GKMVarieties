@@ -312,6 +312,21 @@ toCharacterRing = (X,f) -> (
 )
 
 
+--internal auxiliary function: 
+--input: a polynomial f and a GKMVariety X
+--output: a polynomial f considered as an element of X.momentGraph.HTpt
+toHTpt = (X,f) -> (
+    if not X.?momentGraph then (
+	error "a moment graph needs to be defined for this GKM variety "
+	);
+    if f == 1 then return 1_(X.momentGraph.HTpt);
+    R := ring f; n := #(gens R);
+    if not #(gens X.momentGraph.HTpt) == n then
+        error "rings have different number of variables";
+    sub(f,apply(n, i -> R_i=>X.momentGraph.HTpt_i))    
+)
+
+
 --projective space PP^n as a T=(k^*)^(n+1) variety, where (t_0, ... , t_n) acts on the
 --coordinates [x_0, ... , x_n] by [t_0^(-1)x_0, ... , t_n^(-1)x_n]
 --input: an integer n and the character ring R of T
@@ -528,10 +543,10 @@ net ChowClass := C -> net ofClass class C | " on a GKM variety "
 makeChowClass = method();
 makeChowClass(GKMVariety,List) := ChowClass => (X,L) -> (
     K := X.points;
-    if any(L, l -> ring l =!= X.characterRing) then L = L/(f -> toCharacterRing(X,f));
+    if any(L, l -> ring l =!= X.characterRing) then L = L/(f -> toHTpt(X,f));
     new ChowClass from {
-	symbol variety => X,
-	symbol Polynomials => hashTable apply(#K, i -> (K_i,L_i))
+        symbol variety => X,
+        symbol Polynomials => hashTable apply(#K, i -> (K_i,L_i))
     }
 )
 
@@ -542,26 +557,26 @@ makeGKMVariety(ChowClass) := GKMVariety => C -> C.variety
 isWellDefined(ChowClass) := Boolean => C -> (
     X := C.variety;
     if not X.?momentGraph then (
-	error "a moment graph needs to be defined for this GKM variety "
+        error "a moment graph needs to be defined for this GKM variety "
 	);
     G := X.momentGraph;
-    R := X.characterRing;
+    R := G.HTpt;
     x := symbol x;
     S := QQ[x_0..x_(#gens R - 1)];
     badEdges := select(keys G.edges, e -> (
-	    pt1 := first e;
-	    pt2 := last e;
-	    lambda := G.edges#e;
-	    ratio := toFraction(C.Polynomials#pt1 - C.Polynomials#pt2, 1 - R_lambda, S);
-	    #(terms(QQ,denominator first ratio)) != 1
-	    )
-	);
+    pt1 := first e;
+    pt2 := last e;
+    lambda := G.edges#e;
+    I := -- TODO: figure this out
+    (C.Polynomials#pt1 - C.Polynomials#pt2) % I == 0
+    )
+    );
     if #badEdges != 0 then (
-	<< "incompatible edges " | toString(badEdges) <<
-	return false
+    << "incompatible edges " | toString(badEdges) <<
+    return false
 	);
     true
-    )
+)
 
 
 --the trivial ChowClass (where X^T --> R is a constant 1 function) of a GKMVariety X
@@ -590,7 +605,7 @@ ChowClass ^ ZZ := (C,d) -> (
 	if not all(values C.Polynomials, f -> 1 == #terms f) then (
 	    error "unable to compute the inverse of this Chow class"
 	    );
-	L := apply(C.variety.points, p -> (C.ChowPolynomials#p)^(-1));
+	L := apply(C.variety.points, p -> (C.Polynomials#p)^(-1));
 	Cneg := makeChowClass(C.variety,L);
 	return product(-d, i -> Cneg)
 	)
@@ -629,6 +644,23 @@ map(GKMVariety,GKMVariety,List) := EquivariantMap => opts -> (X,Y,L) -> (
 	cache => new CacheTable	
     }
 )
+
+
+--pullback map of ChowClasses given a EquivariantMap
+--pullback = method(); --from version 1.16 onward "pullback" is a built-in global variable
+chowPullback(EquivariantMap) := FunctionClosure => phi -> (
+    X := phi.source; 
+    Y := phi.target;
+    if not phi.cache.?chowPullback then phi.cache.chowPullback = C -> (
+	if C.variety =!= Y then (
+	    error "the ChowClass to pullback is not a ChowClass of the target GKM variety"
+	    );
+	L := apply(X.points, p -> C.Polynomials#((phi.ptsMap)#p));
+	makeChowClass(X,L)
+    );
+    phi.cache.chowPullback
+)
+
 
 --pullback map of KClasses given a EquivariantMap
 --pullback = method(); --from version 1.16 onward "pullback" is a built-in global variable
