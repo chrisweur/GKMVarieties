@@ -183,6 +183,24 @@ cellOrder(MomentGraph) := Poset => G -> (
     else error " no cell order defined on this moment graph"
     )
 
+
+directions = method()
+directions(MomentGraph,List) := (G,L) -> (
+    if G.cache.?directions then (
+    print "warning: overwriting previously defined directions on this moment graph"
+    );
+    if #G.vertices != #L then (
+    error "the number of directions does not match the number of vertices"
+    );
+    G.cache.directions = L;
+);
+
+
+directions(MomentGraph) := L => G -> (
+    if G.cache.?directions then G.cache.directions
+    else error "no directions defined on this moment graph"
+    )
+
 --------------------------------------< GKM varieties >-------------------------------------------
 
 
