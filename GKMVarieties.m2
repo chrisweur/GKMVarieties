@@ -70,7 +70,8 @@ export {
 	--"toCharacterRing",
 	--"tHilbNumer",
 	"RREFMethod",
-    "chowPullback"
+    "equiCohomologyRing",
+    "cohomologyRing"
 }
 
 
@@ -1581,9 +1582,15 @@ Ring^**List := Ring => (R,L) -> (
     S/J
     )
 
-cohomologyRing = method()
-cohomologyRing(MomentGraph) := Ring => G -> (
+equiCohomologyRing = method()
+equiCohomologyRing(MomentGraph) := Ring => G -> (
     -- Inc := a;
+    )
+
+
+cohomologyRing = method();
+cohomologyRing(MOmentGraph) := Ring => G -> (
+    -- to implement
     )
 
 
