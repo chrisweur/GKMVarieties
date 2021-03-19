@@ -31,8 +31,10 @@ export {
 	"makeGKMVariety",
 	"KClass",
 	"makeKClass",
+    "makeChowClass",
 	"ampleKClass",
 	"trivialKClass",
+    "trivialChowClass",
 	"EquivariantMap",
 	"pushforward",	
 	"diagonalMap",
@@ -41,6 +43,7 @@ export {
 	--"tFlagVariety",
 	"flagMap",
 	"flagGeomTuttePolynomial",
+    "Polynomials",
 	"KPolynomials",
 	"charts",
 	"points",
@@ -55,6 +58,7 @@ export {
 	--"makeHTpt",
 	"generalizedFlagVariety",
 	"lieType",
+    "directions",
 	"cellOrder",
 	"bruhatOrder",
 	"generalizedSchubertVariety",
@@ -65,7 +69,8 @@ export {
 	--"unastrsk",
 	--"toCharacterRing",
 	--"tHilbNumer",
-	"RREFMethod"
+	"RREFMethod",
+    "chowPullback"
 }
 
 
@@ -196,10 +201,10 @@ directions(MomentGraph,List) := (G,L) -> (
 );
 
 
-directions(MomentGraph) := L => G -> (
+directions(MomentGraph) := List => G -> (
     if G.cache.?directions then G.cache.directions
     else error "no directions defined on this moment graph"
-    )
+);
 
 --------------------------------------< GKM varieties >-------------------------------------------
 
@@ -360,6 +365,9 @@ projectiveSpace(ZZ,Ring) := GKMVariety => (n,R) -> (
     L := apply(V, v -> (select(V, w -> w =!= v))/(w -> setIndicator(w,n+1) - setIndicator(v,n+1)));
     charts(X,L);
     X.cache.ampleKClass = makeKClass(X, (X.points)/(i -> R_(setIndicator(i,n+1))));
+    X.momentGraph.cache.directions = hashTable apply(subsets(V,2), i ->
+    ({i_0, i_1}, t_(first elements first i) - t_(first elements last i))
+    );
     X
     )
 
@@ -574,10 +582,17 @@ makeGKMVariety(ChowClass) := GKMVariety => C -> C.variety
 --tests whether a ChowClass satisfies the edge-compatibility criterion
 isWellDefined(ChowClass) := Boolean => C -> (
     X := C.variety;
+
     if not X.?momentGraph then (
         error "a moment graph needs to be defined for this GKM variety "
 	);
+
     G := X.momentGraph;
+
+    if not G.cache.?directions then (
+        error "directions need to be defined on the moment graph for this GKM variety "
+	);
+
     R := G.HTpt;
     x := symbol x;
     S := QQ[x_0..x_(#gens R - 1)];
@@ -585,8 +600,7 @@ isWellDefined(ChowClass) := Boolean => C -> (
     pt1 := first e;
     pt2 := last e;
     lambda := G.edges#e;
-    I := -- TODO: figure this out
-    (C.Polynomials#pt1 - C.Polynomials#pt2) % I == 0
+    (C.Polynomials#pt1 - C.Polynomials#pt2) % G.cache.directions#e != 0
     )
     );
     if #badEdges != 0 then (
@@ -601,8 +615,12 @@ isWellDefined(ChowClass) := Boolean => C -> (
 --in other words, the ChowClass of the structure sheaf of X
 trivialChowClass = method();
 trivialChowClass(GKMVariety) := ChowClass => X -> (
-    R := X.characterRing;
-    L := apply(X.points, p -> 1_R);
+    if not X.?momentGraph then (
+        error "a moment graph needs to be defined for this GKM variety "
+	);
+
+    R := X.momentGraph.HTpt;
+    L := apply(X.points, p -> 0_R);
     makeChowClass(X,L)
 )
 
@@ -666,6 +684,7 @@ map(GKMVariety,GKMVariety,List) := EquivariantMap => opts -> (X,Y,L) -> (
 
 --pullback map of ChowClasses given a EquivariantMap
 --pullback = method(); --from version 1.16 onward "pullback" is a built-in global variable
+chowPullback = method();
 chowPullback(EquivariantMap) := FunctionClosure => phi -> (
     X := phi.source; 
     Y := phi.target;
@@ -1555,7 +1574,7 @@ Ring^**List := Ring => (R,L) -> (
 
 cohomologyRing = method()
 cohomologyRing(MomentGraph) := Ring => G -> (
-    Inc := a;
+    -- Inc := a;
     )
 
 
