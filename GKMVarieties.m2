@@ -43,7 +43,7 @@ export {
 	--"tFlagVariety",
 	"flagMap",
 	"flagGeomTuttePolynomial",
-    "Polynomials",
+    "EqnMults",
 	"KPolynomials",
 	"charts",
 	"points",
@@ -572,7 +572,7 @@ makeChowClass(GKMVariety,List) := ChowClass => (X,L) -> (
     if any(L, l -> ring l =!= X.characterRing) then L = L/(f -> toHTpt(X,f));
     new ChowClass from {
         symbol variety => X,
-        symbol Polynomials => hashTable apply(#K, i -> (K_i,L_i))
+        symbol EqnMults => hashTable apply(#K, i -> (K_i,L_i))
     }
 )
 
@@ -600,7 +600,7 @@ isWellDefined(ChowClass) := Boolean => C -> (
     pt1 := first e;
     pt2 := last e;
     lambda := G.edges#e;
-    (C.Polynomials#pt1 - C.Polynomials#pt2) % G.cache.directions#e != 0
+    (C.EqnMults#pt1 - C.EqnMults#pt2) % G.cache.directions#e != 0
     )
     );
     if #badEdges != 0 then (
@@ -629,7 +629,7 @@ trivialChowClass(GKMVariety) := ChowClass => X -> (
 ChowClass * ChowClass := (C1,C2) -> (
     X1 := C1.variety; X2 := C2.variety;
     if not X1 === X2 then error "the GKM varieties are different";
-    L := apply(X1.points, p -> C1.Polynomials#p * C2.Polynomials#p);
+    L := apply(X1.points, p -> C1.EqnMults#p * C2.EqnMults#p);
     makeChowClass(X1,L)
 )
 
@@ -638,10 +638,10 @@ ChowClass ^ ZZ := (C,d) -> (
     if d > 0 then return product(d, i -> C)
     else if d == 0 then return trivialChowClass C.variety
     else if d < 0 then (
-	if not all(values C.Polynomials, f -> 1 == #terms f) then (
+	if not all(values C.EqnMults, f -> 1 == #terms f) then (
 	    error "unable to compute the inverse of this Chow class"
 	    );
-	L := apply(C.variety.points, p -> (C.Polynomials#p)^(-1));
+	L := apply(C.variety.points, p -> (C.EqnMults#p)^(-1));
 	Cneg := makeChowClass(C.variety,L);
 	return product(-d, i -> Cneg)
 	)
@@ -652,7 +652,7 @@ ChowClass ^ ZZ := (C,d) -> (
 ChowClass + ChowClass := (C1,C2) -> (
     X1 := C1.variety; X2 := C2.variety;
     if not X1 === X2 then error "the GKM varieties are different";
-    L := apply(X1.points, p -> C1.Polynomials#p + C2.Polynomials#p);
+    L := apply(X1.points, p -> C1.EqnMults#p + C2.EqnMults#p);
     makeChowClass(X1,L)
 )
 
@@ -692,7 +692,7 @@ chowPullback(EquivariantMap) := FunctionClosure => phi -> (
 	if C.variety =!= Y then (
 	    error "the ChowClass to pullback is not a ChowClass of the target GKM variety"
 	    );
-	L := apply(X.points, p -> C.Polynomials#((phi.ptsMap)#p));
+	L := apply(X.points, p -> C.EqnMults#((phi.ptsMap)#p));
 	makeChowClass(X,L)
     );
     phi.cache.chowPullback
@@ -705,11 +705,20 @@ pullback(EquivariantMap) := FunctionClosure => phi -> (
     X := phi.source; 
     Y := phi.target;
     if not phi.cache.?pullback then phi.cache.pullback = C -> (
-	if C.variety =!= Y then (
-	    error "the KClass to pullback is not a KClass of the target GKM variety"
-	    );
-	L := apply(X.points, p -> C.KPolynomials#((phi.ptsMap)#p));
-	makeKClass(X,L)
+        if class C === KClass then ( 
+            if C.variety =!= Y then (
+                error "the KClass to pullback is not a KClass of the target GKM variety"
+            );
+            L := apply(X.points, p -> C.KPolynomials#((phi.ptsMap)#p));
+            makeKClass(X,L)
+        );
+        else if class C === ChowClass then (
+            if C.variety =!= Y then (
+                error "the ChowClass to pullback is not a ChowClass of the target GKM variety"
+            );
+            L := apply(X.points, p -> C.EqnMults#((phi.ptsMap)#p));
+            makeChowClass(X,L)
+        );
     );
     phi.cache.pullback
 )
