@@ -1,4 +1,5 @@
 x EqnMults instead of ChowClass Polynomials
 x pullback becomes polymorphic for KClass and ChowClass
-rename cohomologyRing as equiCohomologyRing
+x rename cohomologyRing as equiCohomologyRing
 implement pushforward
+remove "directions"

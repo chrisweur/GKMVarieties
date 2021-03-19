@@ -712,13 +712,13 @@ pullback(EquivariantMap) := FunctionClosure => phi -> (
             );
             L := apply(X.points, p -> C.KPolynomials#((phi.ptsMap)#p));
             makeKClass(X,L)
-        );
+        )
         else if class C === ChowClass then (
             if C.variety =!= Y then (
                 error "the ChowClass to pullback is not a ChowClass of the target GKM variety"
             );
-            L := apply(X.points, p -> C.EqnMults#((phi.ptsMap)#p));
-            makeChowClass(X,L)
+            M := apply(X.points, p -> C.EqnMults#((phi.ptsMap)#p));
+            makeChowClass(X,M)
         );
     );
     phi.cache.pullback
@@ -745,7 +745,7 @@ pushforward(EquivariantMap) := FunctionClosure => phi -> (
 	    	val := (last first toSum) sum(toSum/first)
 	    	)
 	    );
-	makeKClass(Y,L)
+        makeKClass(Y,L)
     	);
     phi.cache.pushforward = pushforwardFct
     )
@@ -1589,7 +1589,7 @@ equiCohomologyRing(MomentGraph) := Ring => G -> (
 
 
 cohomologyRing = method();
-cohomologyRing(MOmentGraph) := Ring => G -> (
+cohomologyRing(MomentGraph) := Ring => G -> (
     -- to implement
     )
 
