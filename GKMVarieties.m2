@@ -738,6 +738,8 @@ pushforward(EquivariantMap) := FunctionClosure => phi -> (
 
 
 -- TODO: make polymorphic (currently cache.pushforward collides...)
+-- TODO: assert Chow Class well defined so quotient in ring
+-- TODO: try using sub instead of numerator
 pushforwardChow = method();
 pushforwardChow(EquivariantMap) := FunctionClosure => phi -> (
     if phi.cache.?pushforward then return phi.cache.pushforward;
@@ -745,8 +747,8 @@ pushforwardChow(EquivariantMap) := FunctionClosure => phi -> (
     Y := phi.target;
     G := momentGraph X;
     R := G.HTpt;
-    Yprods := hashTable apply(Y.points, q -> (q, product((Y.charts)#q, l -> R_l)));
-    Xprods := hashTable apply(X.points, p -> (p, product((X.charts)#p, l -> R_l)));
+    Yprods := hashTable apply(Y.points, q -> (q, product((Y.charts)#q, l -> R_l))); -- "dot" with variables
+    Xprods := hashTable apply(X.points, p -> (p, product((X.charts)#p, l -> R_l))); -- "dot" with variables
     pushforwardFct := C -> (
         if not C.variety === X then error " ChowClass not of the source GKM variety "; 
         L := apply(Y.points, q -> (
@@ -1595,6 +1597,7 @@ Ring^**List := Ring => (R,L) -> (
     )
 
 
+-- TODO: write up and send psuedocode including what's missing
 equiCohomologyRing = method()
 equiCohomologyRing(MomentGraph) := RingMap => G -> (
     V := G.vertices;
@@ -1637,6 +1640,7 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
     )
 
 
+-- TODO: quotient out HTpt by maximal ideal M, then tensor with S (instead of quotient maximal ideal of S; N.B. might need to do tensoring by hand first to avoid need for explicit tensoring)
 cohomologyRing = method();
 cohomologyRing(MomentGraph) := Ring => G -> (
     g := equiCohomologyRing(G);

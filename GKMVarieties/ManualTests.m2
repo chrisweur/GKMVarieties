@@ -370,7 +370,7 @@ X = makeGKMVariety F2
 G = momentGraph X
 R = G.HTpt
 C = trivialChowClass X
-C1 = makeChowClass(X, {-R_0, -R_0 - R_1, 2 * R_0, R_1})
+C1 = makeChowClass(X, {-R_0, -R_0 - R_1, 2 * R_0, -R_1})
 C2 = makeChowClass(X, {R_0, R_1, 2 * R_0, 3 * R_1})
 isWellDefined C -- true
 isWellDefined C1 -- true
