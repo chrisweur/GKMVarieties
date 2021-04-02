@@ -1570,7 +1570,21 @@ Ring^**List := Ring => (R,L) -> (
 
 equiCohomologyRing = method()
 equiCohomologyRing(MomentGraph) := Ring => G -> (
-    -- Inc := a;
+    V := G.vertices;
+    R := G.HTpt;
+    P := cellOrder G;
+    H := new HashTable from apply(#V, i -> V#i => (gens R)#i);
+    S := apply(V, v -> (
+        labels := new MutableHashTable from apply(
+            select(V, u -> (compare(P , u, v) and u != v
+        )), u -> u => 0);
+        print(labels);
+
+        for i from 0 to #V - 1 do (
+        )
+
+        )
+    )
     )
 
 

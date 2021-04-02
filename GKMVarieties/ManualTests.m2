@@ -379,6 +379,11 @@ isWellDefined C2 -- false
 
 -- tests for equiCohomologyRing and cohomologyRing
 
+PP3 = projectiveSpace 3
+G = momentGraph PP3
+P = poset(V, {{V_0, V_1}, {V_1, V_2}, {V_2, V_3}})
+cellOrder(G, P)
+equiCohomologyRing(momentGraph projectiveSpace 4);
 
 -- tests for toric divisor -> Chow class
 
@@ -386,7 +391,7 @@ rayList = {{1,0},{0,1},{-1,1},{-1,0},{0,-1}}
 coneList = {{0,1},{1,2},{2,3},{3,4},{0,4}}
 X = normalToricVariety(rayList, coneList)
 D = toricDivisor(X)
-X = GKMVariety(X)
+X = makeGKMVariety(X)
 C = makeChowClass(X, D)
 
 -- tests for pullback, *pushforward*

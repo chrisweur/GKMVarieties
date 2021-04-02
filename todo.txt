@@ -6,6 +6,5 @@ implement pushforward
 x remove "directions"
 x add manual tests
     x trivialChowClass well defined
-
-given toric divisor, get equivariant chow class
+x given toric divisor, get equivariant chow class
 
