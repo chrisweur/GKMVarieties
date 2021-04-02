@@ -30,6 +30,7 @@ export {
 	"GKMVariety",
 	"makeGKMVariety",
 	"KClass",
+    "ChowClass",
 	"makeKClass",
     "makeChowClass",
 	"ampleKClass",
@@ -543,7 +544,6 @@ ChowClass.synonym = "equivariant Chow class"
 
 globalAssignment GKMVariety
 net ChowClass := C -> net ofClass class C | " on a GKM variety "
-
 
 --a ChowClass is given by a GKMVariety X and a list L of polynomials for each torus-invariant
 --points in X, (listed in the order of X.points)
