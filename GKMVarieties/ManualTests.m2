@@ -363,6 +363,8 @@ C = tOrbitClosure(X,M); peek C
 M = matrix(QQ,{{1,2,0,0}})
 
 
+-- tests for Chow Class basics
+
 F2 = hirzebruchSurface 2
 X = makeGKMVariety F2
 G = momentGraph X
@@ -395,3 +397,5 @@ X = makeGKMVariety(X)
 C = makeChowClass(X, D)
 
 -- tests for pullback, *pushforward*
+
+

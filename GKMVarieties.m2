@@ -737,6 +737,23 @@ pushforward(EquivariantMap) := FunctionClosure => phi -> (
     )
 
 
+-- TODO: make polymorphic
+pushforwardChow = method();
+pushforwardChow(EquivariantMap) := FunctionClosure => phi -> (
+    if phi.cache.?chowPushforward then return phi.cache.chowPushforward;
+    X := phi.source;
+    Y := phi.target;
+    G := momentGraph X;
+    R := G.HTpt;
+    pushforwardFct := C -> (
+        if not C.variety === X then error " ChowClass not of the source GKM variety "; 
+        
+        
+    );
+    phi.cache.chowPushforward = pushforwardFct
+    )
+
+
 --given a GKMVariety X outputs the diagonal map X -> X x X
 diagonalMap = method();
 diagonalMap(GKMVariety) := EquivariantMap => X -> (
@@ -1594,7 +1611,7 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
                         )
                     ));
                     print(dirPairs);
-                    -- we can just fold here...
+                    -- we can just fold here once we figure out a CRT-like trick
                     L#v = 0; -- TODO: make min degree satisfying rels below;
                 );
             ));
