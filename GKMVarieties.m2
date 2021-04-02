@@ -1568,23 +1568,35 @@ Ring^**List := Ring => (R,L) -> (
     S/J
     )
 
+
 equiCohomologyRing = method()
-equiCohomologyRing(MomentGraph) := Ring => G -> (
+equiCohomologyRing(MomentGraph) := RingMap => G -> (
     V := G.vertices;
     R := G.HTpt;
+    S := R^**V;
     P := cellOrder G;
-    H := new HashTable from apply(#V, i -> V#i => (gens R)#i);
-    S := apply(V, v -> (
-        labels := new MutableHashTable from apply(
-            select(V, u -> (compare(P , u, v) and u != v
-        )), u -> u => 0);
-        print(labels);
+    H := new HashTable from apply(#V, i -> V#i => (gens S)#i);
+    K := apply(V, v -> (
+        L := new MutableHashTable from apply(
+            select(V, u -> (compare(P, u, v) and u =!= v)), u -> u => 0);
 
-        for i from 0 to #V - 1 do (
-        )
+        while true do ( 
+            scan(V, v -> (
+                if all(select(V, u -> (compare(P, u, v) and u =!= v)),
+                    u -> L#?u) then (
+                    L#v = 0; -- TODO: make min degree satisfying rels below;
+                );
+            ));
 
-        )
-    )
+            if all(V, v -> L#?v) then break;
+        );
+
+        sum(apply(V, v -> L#v * H#v))
+    ));
+
+    e := symbol e;
+    f := map(S, R[V/(l -> e_l)], K);
+    map(S, coimage f, K)
     )
 
 
