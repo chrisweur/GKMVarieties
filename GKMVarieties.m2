@@ -1586,6 +1586,15 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
                 below := dropElements(subposet(P, I), {v});
                 nbhd := maximalElements below;
                 if all(nbhd, u -> L#?u) then (
+                    dirPairs := apply(nbhd, u -> (
+                        if G.edges#?{u, v} then (
+                            {L#u, directionPoly(G, G.edges#{u, v})}
+                        ) else (
+                            {-L#u, directionPoly(G, G.edges#{v, u})}
+                        )
+                    ));
+                    print(dirPairs);
+                    -- we can just fold here...
                     L#v = 0; -- TODO: make min degree satisfying rels below;
                 );
             ));
@@ -1604,7 +1613,11 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
 
 cohomologyRing = method();
 cohomologyRing(MomentGraph) := Ring => G -> (
-    -- to implement
+    g := equiCohomologyRing(G);
+    S := target g;
+    I := ideal(gens S);
+    R := source g;
+    map(S/I, R, g);
     )
 
 
