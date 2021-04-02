@@ -737,20 +737,29 @@ pushforward(EquivariantMap) := FunctionClosure => phi -> (
     )
 
 
--- TODO: make polymorphic
+-- TODO: make polymorphic (currently cache.pushforward collides...)
 pushforwardChow = method();
 pushforwardChow(EquivariantMap) := FunctionClosure => phi -> (
-    if phi.cache.?chowPushforward then return phi.cache.chowPushforward;
+    if phi.cache.?pushforward then return phi.cache.pushforward;
     X := phi.source;
     Y := phi.target;
     G := momentGraph X;
     R := G.HTpt;
+    Yprods := hashTable apply(Y.points, q -> (q, product((Y.charts)#q, l -> R_l)));
+    Xprods := hashTable apply(X.points, p -> (p, product((X.charts)#p, l -> R_l)));
     pushforwardFct := C -> (
         if not C.variety === X then error " ChowClass not of the source GKM variety "; 
-        
-        
+        L := apply(Y.points, q -> (
+	        preimages := select(X.points, p -> (phi.ptsMap)#p === q);
+	    	if #preimages == 0 then return 0_R;
+            Yprod := Yprods#q;
+            sum(apply(preimages, p -> (
+                numerator (Yprod / Xprods#p) * C.EqnMults#p
+            )));
+        ));
+        makeChowClass(Y,L)
     );
-    phi.cache.chowPushforward = pushforwardFct
+    phi.cache.pushforward = pushforwardFct
     )
 
 
@@ -1636,9 +1645,6 @@ cohomologyRing(MomentGraph) := Ring => G -> (
     R := source g;
     map(S/I, R, g);
     )
-
-
-
 
 
 
