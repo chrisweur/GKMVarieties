@@ -4,8 +4,8 @@ x rename cohomologyRing as equiCohomologyRing
 implement cohomologyRing, equiCohomologyRing
 implement pushforward
 x remove "directions"
-add manual tests
-    * trivialChowClass well defined
+x add manual tests
+    x trivialChowClass well defined
 
 given toric divisor, get equivariant chow class
 

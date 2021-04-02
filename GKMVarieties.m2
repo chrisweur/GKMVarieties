@@ -559,7 +559,14 @@ makeChowClass(GKMVariety,List) := ChowClass => (X,L) -> (
 
 makeGKMVariety(ChowClass) := GKMVariety => C -> C.variety
 
+-- TODO: check
+makeChowClass(GKMVariety, ToricDivisor) := ChowClass => (X, D) -> (
+    G := momentGraph X;
+    R := G.HTpt;
+    makeChowClass(X, apply(entries D, i -> i_R))
+)
 
+-- helper
 directionPoly = method();
 directionPoly(MomentGraph,List) := RingElement => (G,L) -> (
     sum(apply(#L, i -> L#i * (gens G.HTpt)#i))

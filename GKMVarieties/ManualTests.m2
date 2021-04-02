@@ -351,8 +351,6 @@ C = TOrbClosure(X,{M})
 -- The closure of the following is just a point
 
 
-
-
 A = matrix(QQ,{{1,0,2,1},{0,1,1,2}})
 X = tGeneralizedFlagVariety("C",2,{2})
 C = tOrbitClosure(X,A); peek C
@@ -365,24 +363,30 @@ C = tOrbitClosure(X,M); peek C
 M = matrix(QQ,{{1,2,0,0}})
 
 
--- to fix: remove "directions"
--- add 2 additional nontrivial Chow classes, then sums, powers, etc.
 F2 = hirzebruchSurface 2
 X = makeGKMVariety F2
+G = momentGraph X
+R = G.HTpt
 C = trivialChowClass X
-isWellDefined C
-
-C1 = ...
-C2 = ...
-
-C1 + C2
-C1 * C2
-C1^2
+C1 = makeChowClass(X, {-R_0, -R_0 - R_1, 2 * R_0, R_1})
+C2 = makeChowClass(X, {R_0, R_1, 2 * R_0, 3 * R_1})
+isWellDefined C -- true
+isWellDefined C1 -- true
+isWellDefined C2 -- false
+(C1 + C2).EqnMults
+(C1 * C2).EqnMults
+(C1^2).EqnMults
 
 -- tests for equiCohomologyRing and cohomologyRing
 
 
 -- tests for toric divisor -> Chow class
 
+rayList = {{1,0},{0,1},{-1,1},{-1,0},{0,-1}}
+coneList = {{0,1},{1,2},{2,3},{3,4},{0,4}}
+X = normalToricVariety(rayList, coneList)
+D = toricDivisor(X)
+X = GKMVariety(X)
+C = makeChowClass(X, D)
 
 -- tests for pullback, *pushforward*
