@@ -1576,14 +1576,16 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
     S := R^**V;
     P := cellOrder G;
     H := new HashTable from apply(#V, i -> V#i => (gens S)#i);
-    K := apply(V, v -> (
+    mapComps := apply(V, v -> (
         L := new MutableHashTable from apply(
             select(V, u -> (compare(P, u, v) and u =!= v)), u -> u => 0);
 
         while true do ( 
             scan(V, v -> (
-                if all(select(V, u -> (compare(P, u, v) and u =!= v)),
-                    u -> L#?u) then (
+                I := principalOrderIdeal(P, v);
+                below := dropElements(subposet(P, I), {v});
+                nbhd := maximalElements below;
+                if all(nbhd, u -> L#?u) then (
                     L#v = 0; -- TODO: make min degree satisfying rels below;
                 );
             ));
@@ -1595,8 +1597,8 @@ equiCohomologyRing(MomentGraph) := RingMap => G -> (
     ));
 
     e := symbol e;
-    f := map(S, R[V/(l -> e_l)], K);
-    map(S, coimage f, K)
+    f := map(S, R[V/(l -> e_l)], mapComps);
+    map(S, coimage f, mapComps)
     )
 
 
