@@ -190,23 +190,6 @@ cellOrder(MomentGraph) := Poset => G -> (
     )
 
 
-directions = method()
-directions(MomentGraph,List) := (G,L) -> (
-    if G.cache.?directions then (
-    print "warning: overwriting previously defined directions on this moment graph"
-    );
-    if #G.vertices != #L then (
-    error "the number of directions does not match the number of vertices"
-    );
-    G.cache.directions = L;
-);
-
-
-directions(MomentGraph) := List => G -> (
-    if G.cache.?directions then G.cache.directions
-    else error "no directions defined on this moment graph"
-);
-
 --------------------------------------< GKM varieties >-------------------------------------------
 
 
@@ -366,9 +349,6 @@ projectiveSpace(ZZ,Ring) := GKMVariety => (n,R) -> (
     L := apply(V, v -> (select(V, w -> w =!= v))/(w -> setIndicator(w,n+1) - setIndicator(v,n+1)));
     charts(X,L);
     X.cache.ampleKClass = makeKClass(X, (X.points)/(i -> R_(setIndicator(i,n+1))));
-    X.momentGraph.cache.directions = hashTable apply(subsets(V,2), i ->
-    ({i_0, i_1}, t_(first elements first i) - t_(first elements last i))
-    );
     X
     )
 
@@ -580,6 +560,11 @@ makeChowClass(GKMVariety,List) := ChowClass => (X,L) -> (
 makeGKMVariety(ChowClass) := GKMVariety => C -> C.variety
 
 
+directionPoly = method();
+directionPoly(MomentGraph,List) := RingElement => (G,L) -> (
+    sum(apply(#L, i -> L#i * (gens G.HTpt)#i))
+)
+
 --tests whether a ChowClass satisfies the edge-compatibility criterion
 isWellDefined(ChowClass) := Boolean => C -> (
     X := C.variety;
@@ -589,11 +574,6 @@ isWellDefined(ChowClass) := Boolean => C -> (
 	);
 
     G := X.momentGraph;
-
-    if not G.cache.?directions then (
-        error "directions need to be defined on the moment graph for this GKM variety "
-	);
-
     R := G.HTpt;
     x := symbol x;
     S := QQ[x_0..x_(#gens R - 1)];
@@ -601,7 +581,8 @@ isWellDefined(ChowClass) := Boolean => C -> (
     pt1 := first e;
     pt2 := last e;
     lambda := G.edges#e;
-    (C.EqnMults#pt1 - C.EqnMults#pt2) % G.cache.directions#e != 0
+    edgePoly := directionPoly(G, G.edges#e);
+    (C.EqnMults#pt1 - C.EqnMults#pt2) % edgePoly != 0
     )
     );
     if #badEdges != 0 then (
@@ -639,14 +620,12 @@ ChowClass ^ ZZ := (C,d) -> (
     if d > 0 then return product(d, i -> C)
     else if d == 0 then return trivialChowClass C.variety
     else if d < 0 then (
-	if not all(values C.EqnMults, f -> 1 == #terms f) then (
-	    error "unable to compute the inverse of this Chow class"
+	    error "second argument must be non-negative: inverse Chow Class not implemented";
 	    );
 	L := apply(C.variety.points, p -> (C.EqnMults#p)^(-1));
 	Cneg := makeChowClass(C.variety,L);
 	return product(-d, i -> Cneg)
 	)
-    )
 
 
 --adding two ChowClasses

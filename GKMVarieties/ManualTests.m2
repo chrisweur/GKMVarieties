@@ -365,4 +365,24 @@ C = tOrbitClosure(X,M); peek C
 M = matrix(QQ,{{1,2,0,0}})
 
 
+-- to fix: remove "directions"
+-- add 2 additional nontrivial Chow classes, then sums, powers, etc.
+F2 = hirzebruchSurface 2
+X = makeGKMVariety F2
+C = trivialChowClass X
+isWellDefined C
 
+C1 = ...
+C2 = ...
+
+C1 + C2
+C1 * C2
+C1^2
+
+-- tests for equiCohomologyRing and cohomologyRing
+
+
+-- tests for toric divisor -> Chow class
+
+
+-- tests for pullback, *pushforward*

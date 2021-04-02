@@ -3,3 +3,8 @@ x pullback becomes polymorphic for KClass and ChowClass
 x rename cohomologyRing as equiCohomologyRing
 implement pushforward
 remove "directions"
+add manual tests
+    * trivialChowClass well defined
+
+given toric divisor, get equivariant chow class
+
